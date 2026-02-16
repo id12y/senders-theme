@@ -64,6 +64,7 @@ function ss_hero_defaults() {
 			'enabled'          => false,
 			'target_datetime'  => '',
 		),
+		'position' => 'above',
 	);
 }
 
@@ -171,6 +172,10 @@ function ss_sanitize_hero_settings( $raw ) {
 		'target_datetime' => sanitize_text_field( $cd['target_datetime'] ?? '' ),
 	);
 
+	/* Position */
+	$clean['position'] = in_array( $raw['position'] ?? '', array( 'above', 'after_event_strip' ), true )
+		? $raw['position'] : 'above';
+
 	return $clean;
 }
 
@@ -201,7 +206,7 @@ function ss_hero_render_meta_box( $post ) {
 	$fs = 'border:1px solid #ccd0d4;padding:12px 16px;margin-bottom:16px;border-radius:4px;background:#fff;';
 	?>
 	<p class="description" style="margin-bottom:16px;">
-		<?php esc_html_e( 'Hero block renders on the front page above all other content. These settings apply when this page is set as the static front page.', 'sender-symposium' ); ?>
+		<?php esc_html_e( 'Hero block renders on the front page. Use Position to control whether it appears above all content or after the event info strip. These settings apply when this page is set as the static front page.', 'sender-symposium' ); ?>
 	</p>
 
 	<?php /* ── Enable Hero ── */ ?>
@@ -216,6 +221,13 @@ function ss_hero_render_meta_box( $post ) {
 			<select name="ss_hero[mode]">
 				<option value="simple" <?php selected( $s['mode'], 'simple' ); ?>><?php esc_html_e( 'Simple (no background image)', 'sender-symposium' ); ?></option>
 				<option value="image" <?php selected( $s['mode'], 'image' ); ?>><?php esc_html_e( 'Image (background with overlay)', 'sender-symposium' ); ?></option>
+			</select></label>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'Position', 'sender-symposium' ); ?><br>
+			<select name="ss_hero[position]">
+				<option value="above" <?php selected( $s['position'], 'above' ); ?>><?php esc_html_e( 'Position 1 — Above all content', 'sender-symposium' ); ?></option>
+				<option value="after_event_strip" <?php selected( $s['position'], 'after_event_strip' ); ?>><?php esc_html_e( 'Position 2 — After event info strip', 'sender-symposium' ); ?></option>
 			</select></label>
 		</p>
 	</fieldset>

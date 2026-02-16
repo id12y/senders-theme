@@ -106,6 +106,18 @@ function ss_render_hero( $post_id ) {
 				<div class="ss-hero__body"><?php echo wp_kses_post( $s['body'] ); ?></div>
 			<?php endif; ?>
 
+			<?php /* Countdown (above CTAs) */ ?>
+			<?php if ( $s['countdown']['enabled'] && ! empty( $s['countdown']['target_datetime'] ) ) : ?>
+			<div class="ss-hero__countdown"
+				data-target="<?php echo esc_attr( $s['countdown']['target_datetime'] ); ?>"
+				aria-label="<?php esc_attr_e( 'Time remaining until event', 'sender-symposium' ); ?>"
+				aria-live="polite">
+				<noscript>
+					<p><?php echo esc_html( $s['key_facts']['date'] ?: $s['countdown']['target_datetime'] ); ?></p>
+				</noscript>
+			</div>
+			<?php endif; ?>
+
 			<?php /* CTAs */ ?>
 			<?php
 			$has_primary   = ! empty( $s['primary_cta']['label'] ) && ! empty( $s['primary_cta']['url'] );
@@ -157,18 +169,6 @@ function ss_render_hero( $post_id ) {
 					<?php endforeach; ?>
 				</div>
 				<?php endif; ?>
-			<?php endif; ?>
-
-			<?php /* Countdown */ ?>
-			<?php if ( $s['countdown']['enabled'] && ! empty( $s['countdown']['target_datetime'] ) ) : ?>
-			<div class="ss-hero__countdown"
-				data-target="<?php echo esc_attr( $s['countdown']['target_datetime'] ); ?>"
-				aria-label="<?php esc_attr_e( 'Time remaining until event', 'sender-symposium' ); ?>"
-				aria-live="polite">
-				<noscript>
-					<p><?php echo esc_html( $s['key_facts']['date'] ?: $s['countdown']['target_datetime'] ); ?></p>
-				</noscript>
-			</div>
 			<?php endif; ?>
 
 		</div>

@@ -15,10 +15,14 @@
 
 get_header();
 
-$hp = ss_get_homepage();
+$hp            = ss_get_homepage();
+$hero_settings = ss_get_hero_settings( get_the_ID() );
+$hero_position = $hero_settings['position'] ?? 'above';
 
-/* ── Hero Block (page-level meta) ── */
-ss_render_hero( get_the_ID() );
+/* ── Hero Block — Position 1: above all content ── */
+if ( 'above' === $hero_position ) {
+	ss_render_hero( get_the_ID() );
+}
 ?>
 
 <?php /* ── Event Info Strip ── */ ?>
@@ -32,6 +36,13 @@ ss_render_hero( get_the_ID() );
 	<?php endforeach; ?>
 </section>
 <?php endif; ?>
+
+<?php
+/* ── Hero Block — Position 2: after event info strip ── */
+if ( 'after_event_strip' === $hero_position ) {
+	ss_render_hero( get_the_ID() );
+}
+?>
 
 <?php /* ── Page builder content ── */ ?>
 <?php while ( have_posts() ) : the_post(); ?>
