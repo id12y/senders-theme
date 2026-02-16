@@ -66,10 +66,14 @@ function ss_speakers_admin_notices() {
 
 	if ( 'import_done' === $msg ) {
 		$imported = absint( $_GET['imported'] ?? 0 );
+		$updated  = absint( $_GET['updated'] ?? 0 );
 		$skipped  = absint( $_GET['skipped'] ?? 0 );
 		printf(
 			'<div class="notice notice-success is-dismissible"><p>%s</p></div>',
-			esc_html( sprintf( __( 'Import complete: %1$d imported, %2$d skipped.', 'sender-symposium' ), $imported, $skipped ) )
+			esc_html( sprintf(
+				__( 'Import complete: %1$d created, %2$d updated, %3$d skipped.', 'sender-symposium' ),
+				$imported, $updated, $skipped
+			) )
 		);
 		$warnings = get_transient( 'ss_import_warnings' );
 		if ( $warnings ) {
@@ -201,7 +205,7 @@ function ss_speakers_render_form( $speaker = null ) {
 function ss_speakers_render_import() {
 	?>
 	<h2><?php esc_html_e( 'Import Speakers from CSV', 'sender-symposium' ); ?></h2>
-	<p><?php esc_html_e( 'Upload a CSV file with speaker data. All imported speakers default to "Unconfirmed" status.', 'sender-symposium' ); ?></p>
+	<p><?php esc_html_e( 'Upload a CSV file with speaker data. All imported speakers default to "Unconfirmed" status. Duplicates (same name) are updated by default.', 'sender-symposium' ); ?></p>
 	<div class="ss-csv-example">
 		<h4><?php esc_html_e( 'Expected CSV format:', 'sender-symposium' ); ?></h4>
 		<code>Name,Job Title,Company,LinkedIn,Website,Image URL</code>
@@ -213,6 +217,8 @@ function ss_speakers_render_import() {
 		<table class="form-table">
 			<tr><th><label for="csv-file"><?php esc_html_e( 'CSV File', 'sender-symposium' ); ?></label></th>
 				<td><input type="file" id="csv-file" name="csv_file" accept=".csv,text/csv" required /></td></tr>
+			<tr><th><?php esc_html_e( 'Duplicate Handling', 'sender-symposium' ); ?></th>
+				<td><label><input type="checkbox" name="always_new" value="1" /> <?php esc_html_e( 'Always create new entries (do not update existing)', 'sender-symposium' ); ?></label></td></tr>
 		</table>
 		<?php submit_button( __( 'Import', 'sender-symposium' ) ); ?>
 	</form>

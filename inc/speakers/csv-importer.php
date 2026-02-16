@@ -15,11 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Import speakers from a CSV file.
  *
- * @param string $file_path Path to the uploaded CSV file.
- * @return array {imported, skipped, warnings[]}
+ * @param string $file_path  Path to the uploaded CSV file.
+ * @param bool   $always_new If true, always create new entries (no dedup).
+ * @return array {imported, updated, skipped, warnings[]}
  */
-function ss_import_speakers_csv( $file_path ) {
-	$result = array( 'imported' => 0, 'skipped' => 0, 'warnings' => array() );
+function ss_import_speakers_csv( $file_path, $always_new = false ) {
+	$result = array( 'imported' => 0, 'updated' => 0, 'skipped' => 0, 'warnings' => array() );
 
 	$handle = fopen( $file_path, 'r' );
 	if ( ! $handle ) {
@@ -60,8 +61,17 @@ function ss_import_speakers_csv( $file_path ) {
 		return $result;
 	}
 
+	/* ─── Build existing lookup for dedup ─── */
+	$existing     = ss_get_speakers();
+	$existing_map = array();
+	if ( ! $always_new ) {
+		foreach ( $existing as $idx => $ex ) {
+			$key = strtolower( trim( $ex['name'] ) );
+			$existing_map[ $key ] = $idx;
+		}
+	}
+
 	$next_order  = ss_next_speaker_order();
-	$new         = array();
 	$row_num     = 1;
 
 	while ( ( $row = fgetcsv( $handle ) ) !== false ) {
@@ -79,18 +89,12 @@ function ss_import_speakers_csv( $file_path ) {
 		}
 
 		$data = array(
-			'id'           => ss_generate_speaker_id(),
 			'name'         => $name,
 			'job_title'    => ss_csv_cell( $row, $map, 'job_title' ),
 			'company'      => ss_csv_cell( $row, $map, 'company' ),
 			'linkedin_url' => ss_csv_cell( $row, $map, 'linkedin_url' ),
 			'website_url'  => ss_csv_cell( $row, $map, 'website_url' ),
 			'image_url'    => ss_csv_cell( $row, $map, 'image_url' ),
-			'topic'        => '',
-			'description'  => '',
-			'featured'     => false,
-			'status'       => 'unconfirmed',
-			'order'        => $next_order++,
 		);
 
 		if ( '' !== $data['linkedin_url'] && ! filter_var( $data['linkedin_url'], FILTER_VALIDATE_URL ) ) {
@@ -103,15 +107,36 @@ function ss_import_speakers_csv( $file_path ) {
 			$result['warnings'][] = sprintf( __( 'Row %1$d (%2$s): Image URL may be invalid.', 'sender-symposium' ), $row_num, $name );
 		}
 
-		$new[] = ss_sanitize_speaker( $data );
-		$result['imported']++;
+		/* Dedup check: match by name (case-insensitive, trimmed) */
+		$dedup_key = strtolower( trim( $name ) );
+
+		if ( ! $always_new && isset( $existing_map[ $dedup_key ] ) ) {
+			/* UPDATE existing speaker: preserve admin-curated fields */
+			$idx                 = $existing_map[ $dedup_key ];
+			$data['id']          = $existing[ $idx ]['id'];
+			$data['order']       = $existing[ $idx ]['order'];
+			$data['topic']       = $existing[ $idx ]['topic'];
+			$data['description'] = $existing[ $idx ]['description'];
+			$data['featured']    = $existing[ $idx ]['featured'];
+			$data['status']      = $existing[ $idx ]['status'];
+			$existing[ $idx ]    = ss_sanitize_speaker( $data );
+			$result['updated']++;
+		} else {
+			/* NEW speaker: assign fresh id, next order, default admin fields */
+			$data['id']          = ss_generate_speaker_id();
+			$data['order']       = $next_order++;
+			$data['topic']       = '';
+			$data['description'] = '';
+			$data['featured']    = false;
+			$data['status']      = 'unconfirmed';
+			$existing[]          = ss_sanitize_speaker( $data );
+			$result['imported']++;
+		}
 	}
 
 	fclose( $handle );
 
-	if ( ! empty( $new ) ) {
-		ss_save_speakers( array_merge( ss_get_speakers(), $new ) );
-	}
+	ss_save_speakers( $existing );
 
 	return $result;
 }

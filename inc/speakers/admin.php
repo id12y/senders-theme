@@ -75,9 +75,11 @@ function ss_speakers_handle_actions() {
 				$args['message'] = 'import_no_file';
 				break;
 			}
-			$result          = ss_import_speakers_csv( $_FILES['csv_file']['tmp_name'] );
+			$always_new       = ! empty( $_POST['always_new'] );
+			$result           = ss_import_speakers_csv( $_FILES['csv_file']['tmp_name'], $always_new );
 			$args['message']  = 'import_done';
 			$args['imported'] = $result['imported'];
+			$args['updated']  = $result['updated'];
 			$args['skipped']  = $result['skipped'];
 			if ( ! empty( $result['warnings'] ) ) {
 				set_transient( 'ss_import_warnings', $result['warnings'], 120 );
