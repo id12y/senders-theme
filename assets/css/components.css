@@ -80,6 +80,87 @@
   outline-offset: 2px;
 }
 
+/* --------------------------------------------------------------------------
+   DROPDOWN / SUB-MENUS (depth: 2)
+   -------------------------------------------------------------------------- */
+
+/* Parent item with children — relative anchor for dropdown */
+.site-nav__list .menu-item-has-children {
+  position: relative;
+}
+
+/* Dropdown arrow indicator */
+.site-nav__list .menu-item-has-children > a::after {
+  content: "";
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(45deg);
+  margin-left: var(--sp-1);
+  vertical-align: middle;
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+/* Sub-menu: hidden by default on desktop */
+.site-nav__list .sub-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1001;
+  min-width: 200px;
+  padding: var(--sp-2) 0;
+  background: var(--surface-page);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-elevated);
+  list-style: none;
+}
+
+/* Show dropdown on hover + focus-within */
+.site-nav__list .menu-item-has-children:hover > .sub-menu,
+.site-nav__list .menu-item-has-children:focus-within > .sub-menu,
+.site-nav__list .menu-item-has-children.ss-dropdown-open > .sub-menu {
+  display: block;
+}
+
+/* Rotate arrow when open */
+.site-nav__list .menu-item-has-children:hover > a::after,
+.site-nav__list .menu-item-has-children:focus-within > a::after,
+.site-nav__list .menu-item-has-children.ss-dropdown-open > a::after {
+  transform: rotate(-135deg);
+}
+
+/* Sub-menu items */
+.sub-menu li {
+  margin: 0;
+}
+
+.sub-menu a {
+  display: block;
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-decoration: none;
+  white-space: nowrap;
+  transition: color var(--duration-fast) var(--ease),
+              background-color var(--duration-fast) var(--ease);
+}
+
+.sub-menu a:hover,
+.sub-menu a:focus {
+  color: var(--text-primary);
+  background-color: var(--surface-section);
+}
+
+.sub-menu a:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: -3px;
+}
+
 /* Mobile menu toggle */
 .menu-toggle {
   display: none;
@@ -130,6 +211,35 @@
   .site-nav__link {
     display: block;
     padding: var(--sp-2) var(--sp-3);
+  }
+
+  /* Mobile: sub-menus are inline, not absolute */
+  .site-nav__list .sub-menu {
+    position: static;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    min-width: 0;
+    background: transparent;
+  }
+
+  /* Show mobile sub-menus when parent is toggled */
+  .site-nav__list .menu-item-has-children.ss-dropdown-open > .sub-menu {
+    display: block;
+  }
+
+  .sub-menu a {
+    padding-left: var(--sp-6);
+    font-size: var(--text-small);
+  }
+
+  /* Remove hover-show on mobile — use JS toggle only */
+  .site-nav__list .menu-item-has-children:hover > .sub-menu {
+    display: none;
+  }
+  .site-nav__list .menu-item-has-children.ss-dropdown-open > .sub-menu {
+    display: block;
   }
 }
 

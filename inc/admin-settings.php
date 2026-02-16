@@ -1,9 +1,12 @@
 <?php
 /**
- * Sender Symposium — Admin Settings Page
+ * Sender Symposium — Admin Settings Page (Tabbed)
  *
- * Appearance → Sender Symposium Settings
- * Uses the WordPress Settings API. All inputs sanitized, nonces handled by API.
+ * Appearance → Theme Settings
+ * Tabs: General | Colors | Homepage | Announcement | Dark Mode
+ *
+ * Uses a mix of Settings API (for General/Colors/DarkMode/Announcement)
+ * and custom form handling (for Homepage repeatable fields).
  *
  * @package SenderSymposium
  */
@@ -12,13 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-/**
- * Register the settings page under Appearance.
- */
+/* =========================================================================
+   ADMIN MENU
+   ========================================================================= */
+
 function ss_add_settings_page() {
 	add_theme_page(
 		esc_html__( 'Sender Symposium Settings', 'sender-symposium' ),
-		esc_html__( 'Sender Symposium Settings', 'sender-symposium' ),
+		esc_html__( 'Theme Settings', 'sender-symposium' ),
 		'manage_options',
 		'sender-symposium-settings',
 		'ss_render_settings_page'
@@ -26,201 +30,190 @@ function ss_add_settings_page() {
 }
 add_action( 'admin_menu', 'ss_add_settings_page' );
 
-/**
- * Register settings, sections, and fields.
- */
+/* =========================================================================
+   SETTINGS API REGISTRATION
+   ========================================================================= */
+
 function ss_register_settings() {
 
-	/* ---- FONTS ---- */
-	register_setting( 'ss_settings_group', 'ss_font_display', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => '',
+	/* ── General: Fonts ── */
+	register_setting( 'ss_tab_general', 'ss_font_display', array(
+		'type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => '',
 	) );
-	register_setting( 'ss_settings_group', 'ss_font_body', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'sanitize_text_field',
-		'default'           => '',
+	register_setting( 'ss_tab_general', 'ss_font_body', array(
+		'type' => 'string', 'sanitize_callback' => 'sanitize_text_field', 'default' => '',
 	) );
-	register_setting( 'ss_settings_group', 'ss_font_file_url', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'esc_url_raw',
-		'default'           => '',
+	register_setting( 'ss_tab_general', 'ss_font_file_url', array(
+		'type' => 'string', 'sanitize_callback' => 'esc_url_raw', 'default' => '',
 	) );
 
-	/* ---- COLOR OVERRIDES ---- */
+	/* ── General: Layout ── */
+	register_setting( 'ss_tab_general', 'ss_container_max', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_container_max', 'default' => '1200',
+	) );
+	register_setting( 'ss_tab_general', 'ss_section_padding', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_section_padding', 'default' => 'standard',
+	) );
+	register_setting( 'ss_tab_general', 'ss_logo_max_height', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_logo_max_height', 'default' => '40',
+	) );
+	register_setting( 'ss_tab_general', 'ss_hero_field', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_toggle', 'default' => 'on',
+	) );
+
+	/* ── General: Event ── */
+	register_setting( 'ss_tab_general', 'ss_event_start_date', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_date', 'default' => '',
+	) );
+
+	/* ── General: Debug ── */
+	register_setting( 'ss_tab_general', 'ss_hide_php_errors', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_toggle', 'default' => 'on',
+	) );
+
+	/* ── Colors ── */
 	$color_tokens = ss_get_overridable_tokens();
 	foreach ( $color_tokens as $token => $label ) {
-		register_setting( 'ss_settings_group', 'ss_color_' . $token, array(
-			'type'              => 'string',
-			'sanitize_callback' => 'sanitize_hex_color',
-			'default'           => '',
+		register_setting( 'ss_tab_colors', 'ss_color_' . $token, array(
+			'type' => 'string', 'sanitize_callback' => 'sanitize_hex_color', 'default' => '',
 		) );
 	}
 
-	/* ---- LAYOUT ---- */
-	register_setting( 'ss_settings_group', 'ss_container_max', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'ss_sanitize_container_max',
-		'default'           => '1200',
+	/* ── Announcement ── */
+	register_setting( 'ss_tab_announcement', 'ss_announcement_enabled', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_toggle', 'default' => 'off',
 	) );
-	register_setting( 'ss_settings_group', 'ss_section_padding', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'ss_sanitize_section_padding',
-		'default'           => 'standard',
+	register_setting( 'ss_tab_announcement', 'ss_announcement_text', array(
+		'type' => 'string', 'sanitize_callback' => 'wp_kses_post', 'default' => '',
 	) );
-	register_setting( 'ss_settings_group', 'ss_logo_max_height', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'ss_sanitize_logo_max_height',
-		'default'           => '40',
-	) );
-	register_setting( 'ss_settings_group', 'ss_hero_field', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'ss_sanitize_toggle',
-		'default'           => 'on',
+	register_setting( 'ss_tab_announcement', 'ss_announcement_url', array(
+		'type' => 'string', 'sanitize_callback' => 'esc_url_raw', 'default' => '',
 	) );
 
-	/* ---- ANNOUNCEMENT BAR ---- */
-	register_setting( 'ss_settings_group', 'ss_announcement_enabled', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'ss_sanitize_toggle',
-		'default'           => 'off',
+	/* ── Dark Mode ── */
+	register_setting( 'ss_tab_darkmode', 'ss_dark_mode_default', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_dark_mode_default', 'default' => 'system',
 	) );
-	register_setting( 'ss_settings_group', 'ss_announcement_text', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'wp_kses_post',
-		'default'           => '',
-	) );
-	register_setting( 'ss_settings_group', 'ss_announcement_url', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'esc_url_raw',
-		'default'           => '',
+	register_setting( 'ss_tab_darkmode', 'ss_dark_mode_toggle', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_toggle', 'default' => 'on',
 	) );
 
-	/* ---- EVENT ---- */
-	register_setting( 'ss_settings_group', 'ss_event_start_date', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'ss_sanitize_date',
-		'default'           => '',
+	/* ── Sections & Fields: General ── */
+	add_settings_section( 'ss_section_fonts', esc_html__( 'Fonts', 'sender-symposium' ), 'ss_section_fonts_cb', 'ss_page_general' );
+	add_settings_section( 'ss_section_layout', esc_html__( 'Layout', 'sender-symposium' ), '__return_false', 'ss_page_general' );
+	add_settings_section( 'ss_section_event', esc_html__( 'Event', 'sender-symposium' ), '__return_false', 'ss_page_general' );
+	add_settings_section( 'ss_section_debug', esc_html__( 'Debug', 'sender-symposium' ), '__return_false', 'ss_page_general' );
+
+	add_settings_field( 'ss_font_display', esc_html__( 'Display Font Family', 'sender-symposium' ), 'ss_field_text', 'ss_page_general', 'ss_section_fonts', array(
+		'id' => 'ss_font_display', 'placeholder' => '"Barcelona Variable", Georgia, serif',
+		'description' => esc_html__( 'CSS font-family stack for headings. Leave blank for default.', 'sender-symposium' ),
+	) );
+	add_settings_field( 'ss_font_body', esc_html__( 'Body Font Family', 'sender-symposium' ), 'ss_field_text', 'ss_page_general', 'ss_section_fonts', array(
+		'id' => 'ss_font_body', 'placeholder' => 'system-ui, -apple-system, sans-serif',
+		'description' => esc_html__( 'CSS font-family stack for body text. Leave blank for default.', 'sender-symposium' ),
+	) );
+	add_settings_field( 'ss_font_file_url', esc_html__( 'Custom Display Font File URL', 'sender-symposium' ), 'ss_field_text', 'ss_page_general', 'ss_section_fonts', array(
+		'id' => 'ss_font_file_url', 'placeholder' => '',
+		'description' => esc_html__( 'URL to a .woff2 font file. Leave blank to use bundled Barcelona Variable.', 'sender-symposium' ),
 	) );
 
-	/* ---- DARK MODE ---- */
-	register_setting( 'ss_settings_group', 'ss_dark_mode_default', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'ss_sanitize_dark_mode_default',
-		'default'           => 'system',
+	add_settings_field( 'ss_container_max', esc_html__( 'Container Max Width', 'sender-symposium' ), 'ss_field_select', 'ss_page_general', 'ss_section_layout', array(
+		'id' => 'ss_container_max', 'options' => array(
+			'1120' => '1120px', '1200' => '1200px (default)', '1280' => '1280px',
+		),
 	) );
-	register_setting( 'ss_settings_group', 'ss_dark_mode_toggle', array(
-		'type'              => 'string',
-		'sanitize_callback' => 'ss_sanitize_toggle',
-		'default'           => 'on',
+	add_settings_field( 'ss_section_padding', esc_html__( 'Section Padding Scale', 'sender-symposium' ), 'ss_field_select', 'ss_page_general', 'ss_section_layout', array(
+		'id' => 'ss_section_padding', 'options' => array(
+			'compact' => esc_html__( 'Compact (64px)', 'sender-symposium' ),
+			'standard' => esc_html__( 'Standard (96px)', 'sender-symposium' ),
+			'airy' => esc_html__( 'Airy (128px)', 'sender-symposium' ),
+		),
 	) );
-
-	/* ---- SECTIONS ---- */
-	add_settings_section( 'ss_section_fonts', esc_html__( 'Fonts', 'sender-symposium' ), 'ss_section_fonts_cb', 'sender-symposium-settings' );
-	add_settings_section( 'ss_section_colors', esc_html__( 'Color Overrides', 'sender-symposium' ), 'ss_section_colors_cb', 'sender-symposium-settings' );
-	add_settings_section( 'ss_section_layout', esc_html__( 'Layout', 'sender-symposium' ), '__return_false', 'sender-symposium-settings' );
-	add_settings_section( 'ss_section_announcement', esc_html__( 'Announcement Bar', 'sender-symposium' ), '__return_false', 'sender-symposium-settings' );
-	add_settings_section( 'ss_section_event', esc_html__( 'Event', 'sender-symposium' ), '__return_false', 'sender-symposium-settings' );
-	add_settings_section( 'ss_section_darkmode', esc_html__( 'Dark Mode', 'sender-symposium' ), '__return_false', 'sender-symposium-settings' );
-
-	/* ---- FIELDS: Fonts ---- */
-	add_settings_field( 'ss_font_display', esc_html__( 'Display Font Family', 'sender-symposium' ), 'ss_field_text', 'sender-symposium-settings', 'ss_section_fonts', array(
-		'id'          => 'ss_font_display',
-		'placeholder' => '"Barcelona Variable", Georgia, serif',
-		'description' => esc_html__( 'CSS font-family stack for headings. Leave blank for default (Barcelona Variable).', 'sender-symposium' ),
+	add_settings_field( 'ss_logo_max_height', esc_html__( 'Logo Max Height', 'sender-symposium' ), 'ss_field_select', 'ss_page_general', 'ss_section_layout', array(
+		'id' => 'ss_logo_max_height', 'options' => array(
+			'28' => '28px (compact)', '40' => '40px (default)', '56' => '56px', '72' => '72px',
+		),
 	) );
-	add_settings_field( 'ss_font_body', esc_html__( 'Body Font Family', 'sender-symposium' ), 'ss_field_text', 'sender-symposium-settings', 'ss_section_fonts', array(
-		'id'          => 'ss_font_body',
-		'placeholder' => 'system-ui, -apple-system, sans-serif',
-		'description' => esc_html__( 'CSS font-family stack for body text. Leave blank for default (system-ui).', 'sender-symposium' ),
-	) );
-	add_settings_field( 'ss_font_file_url', esc_html__( 'Custom Display Font File URL', 'sender-symposium' ), 'ss_field_text', 'sender-symposium-settings', 'ss_section_fonts', array(
-		'id'          => 'ss_font_file_url',
-		'placeholder' => '',
-		'description' => esc_html__( 'URL to a local .woff2 font file (uploaded to Media Library or theme assets). Leave blank to use bundled Barcelona Variable. Must be a local URL — no external CDNs.', 'sender-symposium' ),
+	add_settings_field( 'ss_hero_field', esc_html__( 'Hero Architectural Field', 'sender-symposium' ), 'ss_field_toggle', 'ss_page_general', 'ss_section_layout', array(
+		'id' => 'ss_hero_field',
+		'description' => esc_html__( 'Show the abstract La Pedrera linework in the hero section.', 'sender-symposium' ),
 	) );
 
-	/* ---- FIELDS: Colors ---- */
+	add_settings_field( 'ss_event_start_date', esc_html__( 'Event Start Date', 'sender-symposium' ), 'ss_field_date', 'ss_page_general', 'ss_section_event', array(
+		'id' => 'ss_event_start_date',
+		'description' => esc_html__( 'Used in Schema.org Event JSON-LD. Format: YYYY-MM-DD.', 'sender-symposium' ),
+	) );
+
+	add_settings_field( 'ss_hide_php_errors', esc_html__( 'Hide PHP Errors on Frontend', 'sender-symposium' ), 'ss_field_toggle', 'ss_page_general', 'ss_section_debug', array(
+		'id' => 'ss_hide_php_errors',
+		'description' => esc_html__( 'Suppress PHP notices/warnings from plugins on the frontend. Errors are still logged to the server error log.', 'sender-symposium' ),
+	) );
+
+	/* ── Sections & Fields: Colors ── */
+	add_settings_section( 'ss_section_colors', esc_html__( 'Color Token Overrides', 'sender-symposium' ), 'ss_section_colors_cb', 'ss_page_colors' );
 	foreach ( $color_tokens as $token => $label ) {
-		add_settings_field( 'ss_color_' . $token, esc_html( $label ), 'ss_field_color', 'sender-symposium-settings', 'ss_section_colors', array(
+		add_settings_field( 'ss_color_' . $token, esc_html( $label ), 'ss_field_color', 'ss_page_colors', 'ss_section_colors', array(
 			'id' => 'ss_color_' . $token,
 		) );
 	}
 
-	/* ---- FIELDS: Layout ---- */
-	add_settings_field( 'ss_container_max', esc_html__( 'Container Max Width', 'sender-symposium' ), 'ss_field_select', 'sender-symposium-settings', 'ss_section_layout', array(
-		'id'      => 'ss_container_max',
-		'options' => array(
-			'1120' => '1120px',
-			'1200' => '1200px (default)',
-			'1280' => '1280px',
-		),
-	) );
-	add_settings_field( 'ss_section_padding', esc_html__( 'Section Padding Scale', 'sender-symposium' ), 'ss_field_select', 'sender-symposium-settings', 'ss_section_layout', array(
-		'id'      => 'ss_section_padding',
-		'options' => array(
-			'compact'  => esc_html__( 'Compact (64px / 48px)', 'sender-symposium' ),
-			'standard' => esc_html__( 'Standard (96px / 64px)', 'sender-symposium' ),
-			'airy'     => esc_html__( 'Airy (128px / 96px)', 'sender-symposium' ),
-		),
-	) );
-	add_settings_field( 'ss_logo_max_height', esc_html__( 'Logo Max Height', 'sender-symposium' ), 'ss_field_select', 'sender-symposium-settings', 'ss_section_layout', array(
-		'id'      => 'ss_logo_max_height',
-		'options' => array(
-			'28' => '28px (compact)',
-			'40' => '40px (default)',
-			'56' => '56px',
-			'72' => '72px',
-		),
-	) );
-	add_settings_field( 'ss_hero_field', esc_html__( 'Hero Architectural Field', 'sender-symposium' ), 'ss_field_toggle', 'sender-symposium-settings', 'ss_section_layout', array(
-		'id'          => 'ss_hero_field',
-		'description' => esc_html__( 'Show the abstract La Pedrera linework in the hero section.', 'sender-symposium' ),
-	) );
-
-	/* ---- FIELDS: Announcement ---- */
-	add_settings_field( 'ss_announcement_enabled', esc_html__( 'Enable Announcement Bar', 'sender-symposium' ), 'ss_field_toggle', 'sender-symposium-settings', 'ss_section_announcement', array(
+	/* ── Sections & Fields: Announcement ── */
+	add_settings_section( 'ss_section_announcement', esc_html__( 'Announcement Bar', 'sender-symposium' ), '__return_false', 'ss_page_announcement' );
+	add_settings_field( 'ss_announcement_enabled', esc_html__( 'Enable Announcement Bar', 'sender-symposium' ), 'ss_field_toggle', 'ss_page_announcement', 'ss_section_announcement', array(
 		'id' => 'ss_announcement_enabled',
 	) );
-	add_settings_field( 'ss_announcement_text', esc_html__( 'Announcement Text', 'sender-symposium' ), 'ss_field_text', 'sender-symposium-settings', 'ss_section_announcement', array(
-		'id'          => 'ss_announcement_text',
+	add_settings_field( 'ss_announcement_text', esc_html__( 'Announcement Text', 'sender-symposium' ), 'ss_field_text', 'ss_page_announcement', 'ss_section_announcement', array(
+		'id' => 'ss_announcement_text',
 		'placeholder' => esc_attr__( 'Early bird tickets available — limited spots.', 'sender-symposium' ),
 	) );
-	add_settings_field( 'ss_announcement_url', esc_html__( 'Announcement Link URL', 'sender-symposium' ), 'ss_field_text', 'sender-symposium-settings', 'ss_section_announcement', array(
-		'id'          => 'ss_announcement_url',
-		'placeholder' => 'https://',
+	add_settings_field( 'ss_announcement_url', esc_html__( 'Announcement Link URL', 'sender-symposium' ), 'ss_field_text', 'ss_page_announcement', 'ss_section_announcement', array(
+		'id' => 'ss_announcement_url', 'placeholder' => 'https://',
 	) );
 
-	/* ---- FIELDS: Event ---- */
-	add_settings_field( 'ss_event_start_date', esc_html__( 'Event Start Date', 'sender-symposium' ), 'ss_field_date', 'sender-symposium-settings', 'ss_section_event', array(
-		'id'          => 'ss_event_start_date',
-		'description' => esc_html__( 'Used in the Schema.org Event structured data (JSON-LD). Format: YYYY-MM-DD.', 'sender-symposium' ),
-	) );
-
-	/* ---- FIELDS: Dark Mode ---- */
-	add_settings_field( 'ss_dark_mode_default', esc_html__( 'Default Mode', 'sender-symposium' ), 'ss_field_select', 'sender-symposium-settings', 'ss_section_darkmode', array(
-		'id'      => 'ss_dark_mode_default',
-		'options' => array(
+	/* ── Sections & Fields: Dark Mode ── */
+	add_settings_section( 'ss_section_darkmode', esc_html__( 'Dark Mode', 'sender-symposium' ), '__return_false', 'ss_page_darkmode' );
+	add_settings_field( 'ss_dark_mode_default', esc_html__( 'Default Mode', 'sender-symposium' ), 'ss_field_select', 'ss_page_darkmode', 'ss_section_darkmode', array(
+		'id' => 'ss_dark_mode_default', 'options' => array(
 			'system' => esc_html__( 'Follow system preference', 'sender-symposium' ),
 			'light'  => esc_html__( 'Force light', 'sender-symposium' ),
 			'dark'   => esc_html__( 'Force dark', 'sender-symposium' ),
 		),
 	) );
-	add_settings_field( 'ss_dark_mode_toggle', esc_html__( 'Show Theme Toggle', 'sender-symposium' ), 'ss_field_toggle', 'sender-symposium-settings', 'ss_section_darkmode', array(
-		'id'          => 'ss_dark_mode_toggle',
+	add_settings_field( 'ss_dark_mode_toggle', esc_html__( 'Show Theme Toggle', 'sender-symposium' ), 'ss_field_toggle', 'ss_page_darkmode', 'ss_section_darkmode', array(
+		'id' => 'ss_dark_mode_toggle',
 		'description' => esc_html__( 'Display the dark/light toggle in the header.', 'sender-symposium' ),
 	) );
 }
 add_action( 'admin_init', 'ss_register_settings' );
 
-/* ==========================================================================
-   HELPERS — tokens list, sanitizers, field renderers
-   ========================================================================== */
+/* =========================================================================
+   HOMEPAGE TAB — Custom form handler (POST → redirect)
+   ========================================================================= */
 
-/**
- * Overridable color tokens.
- */
+function ss_handle_homepage_save() {
+	if ( ! isset( $_POST['ss_homepage_action'] ) || 'save' !== $_POST['ss_homepage_action'] ) {
+		return;
+	}
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+	check_admin_referer( 'ss_save_homepage' );
+
+	ss_save_homepage( wp_unslash( $_POST['hp'] ?? array() ) );
+
+	wp_safe_redirect( add_query_arg( array(
+		'page'    => 'sender-symposium-settings',
+		'tab'     => 'homepage',
+		'updated' => 'true',
+	), admin_url( 'themes.php' ) ) );
+	exit;
+}
+add_action( 'admin_init', 'ss_handle_homepage_save' );
+
+/* =========================================================================
+   HELPERS — tokens, sanitizers, field renderers
+   ========================================================================= */
+
 function ss_get_overridable_tokens() {
 	return array(
 		'surface_page'         => __( 'Surface — Page', 'sender-symposium' ),
@@ -237,7 +230,7 @@ function ss_get_overridable_tokens() {
 	);
 }
 
-/* ---- Sanitizers ---- */
+/* ── Sanitizers ── */
 
 function ss_sanitize_logo_max_height( $value ) {
 	$allowed = array( '28', '40', '56', '72' );
@@ -263,7 +256,6 @@ function ss_sanitize_date( $value ) {
 	if ( '' === $value ) {
 		return '';
 	}
-	/* Accept YYYY-MM-DD only */
 	if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value ) && strtotime( $value ) !== false ) {
 		return $value;
 	}
@@ -275,7 +267,7 @@ function ss_sanitize_dark_mode_default( $value ) {
 	return in_array( $value, $allowed, true ) ? $value : 'system';
 }
 
-/* ---- Field renderers ---- */
+/* ── Field renderers ── */
 
 function ss_field_text( $args ) {
 	$value = get_option( $args['id'], '' );
@@ -297,30 +289,21 @@ function ss_field_color( $args ) {
 		esc_attr( $args['id'] ),
 		esc_attr( $value )
 	);
-	echo '<p class="description">' . esc_html__( 'Leave blank to use theme default. Enter a hex color (#RRGGBB). Ensure WCAG AA contrast.', 'sender-symposium' ) . '</p>';
+	echo '<p class="description">' . esc_html__( 'Leave blank for theme default. Hex color (#RRGGBB). Ensure WCAG AA contrast.', 'sender-symposium' ) . '</p>';
 }
 
 function ss_field_select( $args ) {
 	$value = get_option( $args['id'] );
 	printf( '<select id="%1$s" name="%1$s">', esc_attr( $args['id'] ) );
 	foreach ( $args['options'] as $key => $label ) {
-		printf(
-			'<option value="%s" %s>%s</option>',
-			esc_attr( $key ),
-			selected( $value, $key, false ),
-			esc_html( $label )
-		);
+		printf( '<option value="%s" %s>%s</option>', esc_attr( $key ), selected( $value, $key, false ), esc_html( $label ) );
 	}
 	echo '</select>';
 }
 
 function ss_field_date( $args ) {
 	$value = get_option( $args['id'], '' );
-	printf(
-		'<input type="date" id="%1$s" name="%1$s" value="%2$s" />',
-		esc_attr( $args['id'] ),
-		esc_attr( $value )
-	);
+	printf( '<input type="date" id="%1$s" name="%1$s" value="%2$s" />', esc_attr( $args['id'] ), esc_attr( $value ) );
 	if ( ! empty( $args['description'] ) ) {
 		printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
 	}
@@ -340,41 +323,267 @@ function ss_field_toggle( $args ) {
 	}
 }
 
-/* ---- Section callbacks ---- */
+/* ── Section callbacks ── */
 
 function ss_section_fonts_cb() {
-	echo '<p>' . esc_html__( 'Configure the font families used by the theme. The bundled Barcelona Variable font is loaded from the theme assets. To use a different display font, upload a .woff2 file and enter its URL below.', 'sender-symposium' ) . '</p>';
+	echo '<p>' . esc_html__( 'Configure the font families used by the theme.', 'sender-symposium' ) . '</p>';
 }
 
 function ss_section_colors_cb() {
-	echo '<p>' . esc_html__( 'Override individual color tokens. Leave blank to use theme defaults. These overrides apply to both light and dark mode base values. Ensure sufficient contrast for accessibility (WCAG AA: 4.5:1 for normal text).', 'sender-symposium' ) . '</p>';
+	echo '<p>' . esc_html__( 'Override individual color tokens. Leave blank to use theme defaults. Applies to both light and dark modes. Ensure WCAG AA contrast (4.5:1).', 'sender-symposium' ) . '</p>';
 }
 
-/* ==========================================================================
-   RENDER SETTINGS PAGE
-   ========================================================================== */
+/* =========================================================================
+   RENDER SETTINGS PAGE — Tabbed
+   ========================================================================= */
 
 function ss_render_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
 		return;
 	}
+
+	$tabs = array(
+		'general'      => __( 'General', 'sender-symposium' ),
+		'colors'       => __( 'Colors', 'sender-symposium' ),
+		'homepage'     => __( 'Homepage', 'sender-symposium' ),
+		'announcement' => __( 'Announcement', 'sender-symposium' ),
+		'darkmode'     => __( 'Dark Mode', 'sender-symposium' ),
+	);
+
+	$current_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general';
+	if ( ! isset( $tabs[ $current_tab ] ) ) {
+		$current_tab = 'general';
+	}
+
+	$base_url = admin_url( 'themes.php?page=sender-symposium-settings' );
+
+	/* Show updated notice for homepage tab (custom handler) */
+	if ( 'homepage' === $current_tab && ! empty( $_GET['updated'] ) ) {
+		echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Homepage settings saved.', 'sender-symposium' ) . '</p></div>';
+	}
 	?>
 	<div class="wrap">
-		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
-		<form action="options.php" method="post">
-			<?php
-			settings_fields( 'ss_settings_group' );
-			do_settings_sections( 'sender-symposium-settings' );
-			submit_button();
-			?>
-		</form>
+		<h1><?php esc_html_e( 'Sender Symposium Settings', 'sender-symposium' ); ?></h1>
+		<nav class="nav-tab-wrapper">
+			<?php foreach ( $tabs as $slug => $label ) : ?>
+				<a class="nav-tab <?php echo $current_tab === $slug ? 'nav-tab-active' : ''; ?>"
+				   href="<?php echo esc_url( add_query_arg( 'tab', $slug, $base_url ) ); ?>">
+					<?php echo esc_html( $label ); ?>
+				</a>
+			<?php endforeach; ?>
+		</nav>
+		<div style="padding-top:20px;">
+		<?php
+		switch ( $current_tab ) {
+			case 'colors':
+				ss_render_tab_settings_api( 'ss_tab_colors', 'ss_page_colors' );
+				break;
+			case 'homepage':
+				ss_render_tab_homepage();
+				break;
+			case 'announcement':
+				ss_render_tab_settings_api( 'ss_tab_announcement', 'ss_page_announcement' );
+				break;
+			case 'darkmode':
+				ss_render_tab_settings_api( 'ss_tab_darkmode', 'ss_page_darkmode' );
+				break;
+			default:
+				ss_render_tab_settings_api( 'ss_tab_general', 'ss_page_general' );
+		}
+		?>
+		</div>
 	</div>
 	<?php
 }
 
 /**
- * Enqueue color picker on settings page.
+ * Render a Settings API–based tab.
  */
+function ss_render_tab_settings_api( $group, $page ) {
+	?>
+	<form action="options.php" method="post">
+		<?php
+		settings_fields( $group );
+		do_settings_sections( $page );
+		submit_button();
+		?>
+	</form>
+	<?php
+}
+
+/**
+ * Render the Homepage content tab (custom form).
+ */
+function ss_render_tab_homepage() {
+	$hp = ss_get_homepage();
+	?>
+	<form method="post">
+		<?php wp_nonce_field( 'ss_save_homepage' ); ?>
+		<input type="hidden" name="ss_homepage_action" value="save" />
+
+		<p class="description" style="margin-bottom:20px;">
+			<?php esc_html_e( 'Edit the front-page content blocks below. Disable any section to hide it. Elementor/Gutenberg content from the homepage editor appears between the event strip and the audience block.', 'sender-symposium' ); ?>
+		</p>
+
+		<?php /* ── Event Strip ── */ ?>
+		<h2><?php esc_html_e( 'Event Info Strip', 'sender-symposium' ); ?></h2>
+		<table class="form-table">
+			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
+				<td><label><input type="checkbox" name="hp[event_strip_enabled]" value="1" <?php checked( $hp['event_strip_enabled'] ); ?> /> <?php esc_html_e( 'Show event info strip', 'sender-symposium' ); ?></label></td></tr>
+		</table>
+		<h4><?php esc_html_e( 'Items (leave both fields empty to remove an item)', 'sender-symposium' ); ?></h4>
+		<table class="widefat" style="max-width:600px;">
+			<thead><tr><th><?php esc_html_e( 'Label', 'sender-symposium' ); ?></th><th><?php esc_html_e( 'Value', 'sender-symposium' ); ?></th></tr></thead>
+			<tbody>
+			<?php
+			$strip_items = $hp['event_strip'];
+			for ( $i = 0; $i < 6; $i++ ) :
+				$label = $strip_items[ $i ]['label'] ?? '';
+				$value = $strip_items[ $i ]['value'] ?? '';
+			?>
+			<tr>
+				<td><input type="text" name="hp[event_strip][<?php echo $i; ?>][label]" value="<?php echo esc_attr( $label ); ?>" class="regular-text" /></td>
+				<td><input type="text" name="hp[event_strip][<?php echo $i; ?>][value]" value="<?php echo esc_attr( $value ); ?>" class="regular-text" /></td>
+			</tr>
+			<?php endfor; ?>
+			</tbody>
+		</table>
+
+		<hr />
+
+		<?php /* ── Audience ── */ ?>
+		<h2><?php esc_html_e( 'Audience Block', 'sender-symposium' ); ?></h2>
+		<table class="form-table">
+			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
+				<td><label><input type="checkbox" name="hp[audience_enabled]" value="1" <?php checked( $hp['audience_enabled'] ); ?> /> <?php esc_html_e( 'Show audience block', 'sender-symposium' ); ?></label></td></tr>
+			<tr><th><label><?php esc_html_e( 'Section Title', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" name="hp[audience_title]" value="<?php echo esc_attr( $hp['audience_title'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label><?php esc_html_e( '"For You" Heading', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" name="hp[audience_title_for]" value="<?php echo esc_attr( $hp['audience_title_for'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label><?php esc_html_e( '"For You" Items', 'sender-symposium' ); ?></label></th>
+				<td><textarea name="hp[audience_items_for]" class="large-text" rows="5"><?php echo esc_textarea( $hp['audience_items_for'] ); ?></textarea>
+					<p class="description"><?php esc_html_e( 'One item per line.', 'sender-symposium' ); ?></p></td></tr>
+			<tr><th><label><?php esc_html_e( '"Not For You" Heading', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" name="hp[audience_title_not]" value="<?php echo esc_attr( $hp['audience_title_not'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label><?php esc_html_e( '"Not For You" Items', 'sender-symposium' ); ?></label></th>
+				<td><textarea name="hp[audience_items_not]" class="large-text" rows="4"><?php echo esc_textarea( $hp['audience_items_not'] ); ?></textarea>
+					<p class="description"><?php esc_html_e( 'One item per line.', 'sender-symposium' ); ?></p></td></tr>
+		</table>
+
+		<hr />
+
+		<?php /* ── Values ── */ ?>
+		<h2><?php esc_html_e( 'Value / Outcome Cards', 'sender-symposium' ); ?></h2>
+		<table class="form-table">
+			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
+				<td><label><input type="checkbox" name="hp[values_enabled]" value="1" <?php checked( $hp['values_enabled'] ); ?> /> <?php esc_html_e( 'Show value cards', 'sender-symposium' ); ?></label></td></tr>
+			<tr><th><label><?php esc_html_e( 'Section Title', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" name="hp[values_title]" value="<?php echo esc_attr( $hp['values_title'] ); ?>" class="regular-text" /></td></tr>
+		</table>
+		<h4><?php esc_html_e( 'Cards (leave title empty to remove a card)', 'sender-symposium' ); ?></h4>
+		<table class="widefat" style="max-width:800px;">
+			<thead><tr><th style="width:60px;"><?php esc_html_e( '#', 'sender-symposium' ); ?></th><th><?php esc_html_e( 'Title', 'sender-symposium' ); ?></th><th><?php esc_html_e( 'Body', 'sender-symposium' ); ?></th></tr></thead>
+			<tbody>
+			<?php
+			$val_items = $hp['values'];
+			for ( $i = 0; $i < 6; $i++ ) :
+				$num   = $val_items[ $i ]['number'] ?? '';
+				$title = $val_items[ $i ]['title'] ?? '';
+				$body  = $val_items[ $i ]['body'] ?? '';
+			?>
+			<tr>
+				<td><input type="text" name="hp[values][<?php echo $i; ?>][number]" value="<?php echo esc_attr( $num ); ?>" style="width:50px;" /></td>
+				<td><input type="text" name="hp[values][<?php echo $i; ?>][title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" /></td>
+				<td><input type="text" name="hp[values][<?php echo $i; ?>][body]" value="<?php echo esc_attr( $body ); ?>" class="large-text" /></td>
+			</tr>
+			<?php endfor; ?>
+			</tbody>
+		</table>
+
+		<hr />
+
+		<?php /* ── Format ── */ ?>
+		<h2><?php esc_html_e( 'Format Block', 'sender-symposium' ); ?></h2>
+		<table class="form-table">
+			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
+				<td><label><input type="checkbox" name="hp[format_enabled]" value="1" <?php checked( $hp['format_enabled'] ); ?> /> <?php esc_html_e( 'Show format block', 'sender-symposium' ); ?></label></td></tr>
+			<tr><th><label><?php esc_html_e( 'Section Title', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" name="hp[format_title]" value="<?php echo esc_attr( $hp['format_title'] ); ?>" class="regular-text" /></td></tr>
+		</table>
+		<h4><?php esc_html_e( 'Items (leave title empty to remove)', 'sender-symposium' ); ?></h4>
+		<table class="widefat" style="max-width:700px;">
+			<thead><tr><th><?php esc_html_e( 'Title', 'sender-symposium' ); ?></th><th><?php esc_html_e( 'Description', 'sender-symposium' ); ?></th></tr></thead>
+			<tbody>
+			<?php
+			$fmt_items = $hp['format_items'];
+			for ( $i = 0; $i < 6; $i++ ) :
+				$title = $fmt_items[ $i ]['title'] ?? '';
+				$body  = $fmt_items[ $i ]['body'] ?? '';
+			?>
+			<tr>
+				<td><input type="text" name="hp[format_items][<?php echo $i; ?>][title]" value="<?php echo esc_attr( $title ); ?>" class="regular-text" /></td>
+				<td><input type="text" name="hp[format_items][<?php echo $i; ?>][body]" value="<?php echo esc_attr( $body ); ?>" class="large-text" /></td>
+			</tr>
+			<?php endfor; ?>
+			</tbody>
+		</table>
+
+		<hr />
+
+		<?php /* ── Credibility ── */ ?>
+		<h2><?php esc_html_e( 'Credibility Stats', 'sender-symposium' ); ?></h2>
+		<table class="form-table">
+			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
+				<td><label><input type="checkbox" name="hp[credibility_enabled]" value="1" <?php checked( $hp['credibility_enabled'] ); ?> /> <?php esc_html_e( 'Show credibility row', 'sender-symposium' ); ?></label></td></tr>
+		</table>
+		<h4><?php esc_html_e( 'Stats (leave both empty to remove)', 'sender-symposium' ); ?></h4>
+		<table class="widefat" style="max-width:400px;">
+			<thead><tr><th><?php esc_html_e( 'Number', 'sender-symposium' ); ?></th><th><?php esc_html_e( 'Label', 'sender-symposium' ); ?></th></tr></thead>
+			<tbody>
+			<?php
+			$cred_items = $hp['credibility_items'];
+			for ( $i = 0; $i < 6; $i++ ) :
+				$num   = $cred_items[ $i ]['number'] ?? '';
+				$label = $cred_items[ $i ]['label'] ?? '';
+			?>
+			<tr>
+				<td><input type="text" name="hp[credibility_items][<?php echo $i; ?>][number]" value="<?php echo esc_attr( $num ); ?>" style="width:80px;" /></td>
+				<td><input type="text" name="hp[credibility_items][<?php echo $i; ?>][label]" value="<?php echo esc_attr( $label ); ?>" class="regular-text" /></td>
+			</tr>
+			<?php endfor; ?>
+			</tbody>
+		</table>
+
+		<hr />
+
+		<?php /* ── CTA ── */ ?>
+		<h2><?php esc_html_e( 'Call to Action', 'sender-symposium' ); ?></h2>
+		<table class="form-table">
+			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
+				<td><label><input type="checkbox" name="hp[cta_enabled]" value="1" <?php checked( $hp['cta_enabled'] ); ?> /> <?php esc_html_e( 'Show CTA block', 'sender-symposium' ); ?></label></td></tr>
+			<tr><th><label><?php esc_html_e( 'Title', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" name="hp[cta_title]" value="<?php echo esc_attr( $hp['cta_title'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label><?php esc_html_e( 'Body Text', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" name="hp[cta_body]" value="<?php echo esc_attr( $hp['cta_body'] ); ?>" class="large-text" /></td></tr>
+			<tr><th><label><?php esc_html_e( 'Primary Button Text', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" name="hp[cta_button_text]" value="<?php echo esc_attr( $hp['cta_button_text'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label><?php esc_html_e( 'Primary Button URL', 'sender-symposium' ); ?></label></th>
+				<td><input type="url" name="hp[cta_button_url]" value="<?php echo esc_attr( $hp['cta_button_url'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label><?php esc_html_e( 'Secondary Button Text', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" name="hp[cta_secondary_text]" value="<?php echo esc_attr( $hp['cta_secondary_text'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label><?php esc_html_e( 'Secondary Button URL', 'sender-symposium' ); ?></label></th>
+				<td><input type="url" name="hp[cta_secondary_url]" value="<?php echo esc_attr( $hp['cta_secondary_url'] ); ?>" class="regular-text" /></td></tr>
+		</table>
+
+		<?php submit_button( __( 'Save Homepage Content', 'sender-symposium' ) ); ?>
+	</form>
+	<?php
+}
+
+/* =========================================================================
+   ADMIN ASSETS
+   ========================================================================= */
+
 function ss_admin_enqueue( $hook ) {
 	if ( 'appearance_page_sender-symposium-settings' !== $hook ) {
 		return;

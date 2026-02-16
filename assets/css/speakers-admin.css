@@ -1,0 +1,24 @@
+/* Speakers Admin */
+.ss-speakers-table { margin-top: 12px; }
+
+.ss-col-drag { width: 32px; text-align: center; }
+.ss-drag-handle { cursor: grab; font-size: 18px; color: #999; user-select: none; }
+.ss-drag-handle:hover { color: #333; }
+tr.ss-dragging { opacity: 0.4; background: #f0f6fc; }
+
+.ss-status-toggle {
+  padding: 4px 10px; border: 1px solid #ccc; border-radius: 4px;
+  cursor: pointer; font-size: 12px; font-weight: 600; background: #f6f7f7;
+}
+.ss-status--published { background: #d4edda; border-color: #a3d9b1; color: #155724; }
+.ss-status--unconfirmed { background: #fff3cd; border-color: #ffc107; color: #856404; }
+
+.ss-featured-toggle {
+  background: none; border: none; cursor: pointer;
+  font-size: 22px; color: #ccc; padding: 0; line-height: 1;
+}
+.ss-featured--active { color: #f0ad4e; }
+
+.ss-speaker-form-wrap { max-width: 720px; }
+.ss-csv-example { background: #f6f7f7; padding: 16px; border-radius: 4px; margin: 16px 0; }
+.ss-csv-example code { display: block; margin: 8px 0; font-size: 14px; }

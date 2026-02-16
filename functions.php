@@ -110,6 +110,16 @@ function ss_enqueue_assets() {
 		);
 	}
 
+	/* Speakers CSS — on speakers page template */
+	if ( is_page_template( 'page-speakers.php' ) || is_page( 'speakers' ) ) {
+		wp_enqueue_style(
+			'ss-speakers',
+			$uri . '/assets/css/speakers.css',
+			array( 'ss-components' ),
+			ss_asset_version( $dir . '/assets/css/speakers.css' )
+		);
+	}
+
 	/* --- JS: deferred, vanilla JS (no jQuery dependency) --- */
 	wp_enqueue_script(
 		'ss-theme-toggle',
@@ -385,6 +395,25 @@ add_action( 'wp_head', 'ss_event_schema', 10 );
 require_once get_template_directory() . '/inc/elementor.php';
 
 /* ==========================================================================
+   8b. HOMEPAGE CONTENT SETTINGS
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/homepage-settings.php';
+
+/* ==========================================================================
+   8c. SPEAKERS MODULE
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/speakers/storage.php';
+require_once get_template_directory() . '/inc/speakers/display-settings.php';
+require_once get_template_directory() . '/inc/speakers/render.php';
+require_once get_template_directory() . '/inc/speakers/csv-importer.php';
+
+if ( is_admin() ) {
+	require_once get_template_directory() . '/inc/speakers/admin.php';
+}
+
+/* ==========================================================================
    9. WIDGET AREAS
    ========================================================================== */
 
@@ -438,3 +467,33 @@ function ss_show_theme_toggle() {
 function ss_show_hero_field() {
 	return get_option( 'ss_hero_field', 'on' ) === 'on';
 }
+
+/**
+ * Convert a newline-delimited string into a trimmed array (empty lines removed).
+ */
+function ss_lines_to_array( $text ) {
+	if ( empty( $text ) ) {
+		return array();
+	}
+	return array_values( array_filter( array_map( 'trim', explode( "\n", $text ) ), 'strlen' ) );
+}
+
+/* ==========================================================================
+   13. HIDE PHP ERRORS ON FRONTEND
+   ========================================================================== */
+
+/**
+ * Suppress PHP notices/warnings on the frontend when the admin option is on.
+ * Errors are still logged to the server error log.
+ * Runs at priority 0 on template_redirect so it catches plugin output.
+ */
+function ss_maybe_hide_frontend_errors() {
+	if ( is_admin() ) {
+		return;
+	}
+	if ( get_option( 'ss_hide_php_errors', 'on' ) !== 'on' ) {
+		return;
+	}
+	@ini_set( 'display_errors', '0' );
+}
+add_action( 'template_redirect', 'ss_maybe_hide_frontend_errors', 0 );
