@@ -173,7 +173,9 @@ function ss_inline_critical_css() {
 	if ( empty( $font_file_url ) ) {
 		$font_file_url = get_template_directory_uri() . '/assets/fonts/Barcelona-Variable.woff2';
 	}
-	$font_file_url = esc_url( $font_file_url );
+	/* Use esc_url_raw(): <style> is "raw text" in HTML5, entities are NOT
+	   decoded, so esc_url()'s &#038; would break CSS url() for any URL with &. */
+	$font_file_url = esc_url_raw( $font_file_url );
 	?>
 	<style id="ss-critical">
 	@font-face {
@@ -313,7 +315,7 @@ function ss_open_graph_meta() {
 			return;
 		}
 		$og_type = is_single() ? 'article' : 'website';
-		$title   = esc_attr( get_the_title( $post ) );
+		$title   = the_title_attribute( array( 'echo' => false, 'post' => $post ) );
 		$url     = esc_url( get_permalink( $post ) );
 		$desc    = esc_attr( wp_trim_words( get_the_excerpt( $post ), 30, '...' ) );
 		$image   = '';
@@ -374,24 +376,7 @@ add_action( 'wp_head', 'ss_event_schema', 10 );
    8. ELEMENTOR COMPATIBILITY
    ========================================================================== */
 
-/**
- * Declare Elementor support and register locations for Theme Builder.
- */
-function ss_elementor_locations( $manager ) {
-	if ( method_exists( $manager, 'register_all_core_locations' ) ) {
-		$manager->register_all_core_locations();
-		return;
-	}
-
-	/* Elementor Pro 3.35+ — register each core location individually. */
-	$core_locations = array( 'header', 'footer', 'single', 'archive' );
-	foreach ( $core_locations as $location ) {
-		if ( method_exists( $manager, 'register_location' ) ) {
-			$manager->register_location( $location );
-		}
-	}
-}
-add_action( 'elementor/theme/register_locations', 'ss_elementor_locations' );
+require_once get_template_directory() . '/inc/elementor.php';
 
 /* ==========================================================================
    9. WIDGET AREAS
@@ -415,10 +400,6 @@ add_action( 'widgets_init', 'ss_widgets_init' );
 
 /* Remove WordPress version from head and feeds */
 remove_action( 'wp_head', 'wp_generator' );
-
-/* Remove wlwmanifest and RSD links */
-remove_action( 'wp_head', 'wlwmanifest_link' );
-remove_action( 'wp_head', 'rsd_link' );
 
 /* Remove shortlink */
 remove_action( 'wp_head', 'wp_shortlink_wp_head' );
