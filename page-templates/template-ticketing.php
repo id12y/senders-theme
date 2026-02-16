@@ -34,41 +34,43 @@ $re    = $s['reassurance'];
 
 				<?php
 				/* ── Logo (light + optional dark override) ── */
-				$logo_light = '';
-				$logo_dark  = '';
+				if ( $jb['show_logo'] ) :
+					$logo_light = '';
+					$logo_dark  = '';
 
-				if ( $jb['logo_id'] ) {
-					$logo_light = wp_get_attachment_image_url( $jb['logo_id'], 'medium' );
-				}
-				if ( ! $logo_light && has_custom_logo() ) {
-					$custom_logo_id = get_theme_mod( 'custom_logo' );
-					$logo_light     = wp_get_attachment_image_url( $custom_logo_id, 'medium' );
-				}
-				if ( $jb['logo_dark_id'] ) {
-					$logo_dark = wp_get_attachment_image_url( $jb['logo_dark_id'], 'medium' );
-				}
+					if ( $jb['logo_id'] ) {
+						$logo_light = wp_get_attachment_image_url( $jb['logo_id'], 'medium' );
+					}
+					if ( ! $logo_light && has_custom_logo() ) {
+						$custom_logo_id = get_theme_mod( 'custom_logo' );
+						$logo_light     = wp_get_attachment_image_url( $custom_logo_id, 'medium' );
+					}
+					if ( $jb['logo_dark_id'] ) {
+						$logo_dark = wp_get_attachment_image_url( $jb['logo_dark_id'], 'medium' );
+					}
 
-				$site_name = get_bloginfo( 'name' );
+					$site_name = get_bloginfo( 'name' );
 
-				if ( $logo_light ) :
-					$has_dark = ! empty( $logo_dark );
-				?>
-				<div class="ss-ticketing-journey__logo">
-					<img
-						class="<?php echo $has_dark ? 'ss-logo-light' : ''; ?>"
-						src="<?php echo esc_url( $logo_light ); ?>"
-						alt="<?php echo esc_attr( $site_name ); ?>"
-						loading="lazy"
-					>
-					<?php if ( $has_dark ) : ?>
-					<img
-						class="ss-logo-dark"
-						src="<?php echo esc_url( $logo_dark ); ?>"
-						alt="<?php echo esc_attr( $site_name ); ?>"
-						loading="lazy"
-					>
+					if ( $logo_light ) :
+						$has_dark = ! empty( $logo_dark );
+					?>
+					<div class="ss-ticketing-journey__logo">
+						<img
+							class="<?php echo $has_dark ? 'ss-logo-light' : ''; ?>"
+							src="<?php echo esc_url( $logo_light ); ?>"
+							alt="<?php echo esc_attr( $site_name ); ?>"
+							loading="lazy"
+						>
+						<?php if ( $has_dark ) : ?>
+						<img
+							class="ss-logo-dark"
+							src="<?php echo esc_url( $logo_dark ); ?>"
+							alt="<?php echo esc_attr( $site_name ); ?>"
+							loading="lazy"
+						>
+						<?php endif; ?>
+					</div>
 					<?php endif; ?>
-				</div>
 				<?php endif; ?>
 
 				<?php /* ── Steps ── */ ?>
@@ -156,7 +158,32 @@ $re    = $s['reassurance'];
 
 				<?php /* ── LEFT: TicketTailor Embed ── */ ?>
 				<div class="ss-ticketing-embed">
-					<?php if ( ! empty( $tt['shortcode'] ) ) : ?>
+					<?php
+					$tt_has_widget = ( 'widget_js' === $tt['embed_method'] && ! empty( $tt['event_id'] ) );
+					$tt_has_short  = ( 'shortcode' === $tt['embed_method'] && ! empty( $tt['shortcode'] ) );
+
+					if ( $tt_has_widget ) :
+						$tt_base_url = 'https://www.tickettailor.com/checkout/new-event/' . $tt['event_id'];
+						if ( ! empty( $tt['access_code'] ) ) {
+							$tt_base_url .= '?a=' . rawurlencode( $tt['access_code'] );
+						}
+					?>
+						<div class="ss-tt-wrap">
+							<div class="tt-widget"
+								data-url="<?php echo esc_url( $tt_base_url ); ?>"
+								data-type="inline"
+								data-inline-minimal="true"
+								data-inline-show-logo="false"></div>
+							<script src="https://cdn.tickettailor.com/js/widgets/min/widget.js"
+								data-tt-widget-url="<?php echo esc_url( $tt_base_url ); ?>"
+								defer></script>
+						</div>
+						<?php if ( ! empty( $tt['fallback_text'] ) ) : ?>
+						<noscript>
+							<p class="ss-ticketing-fallback"><?php echo esc_html( $tt['fallback_text'] ); ?></p>
+						</noscript>
+						<?php endif; ?>
+					<?php elseif ( $tt_has_short ) : ?>
 						<div class="ss-tt-wrap">
 							<?php echo do_shortcode( $tt['shortcode'] ); ?>
 						</div>
@@ -167,7 +194,7 @@ $re    = $s['reassurance'];
 						<?php endif; ?>
 					<?php elseif ( current_user_can( 'edit_pages' ) ) : ?>
 						<div class="ss-ticketing-notice" role="alert">
-							<p><?php esc_html_e( 'No TicketTailor shortcode configured. Add one in the page settings meta box below.', 'sender-symposium' ); ?></p>
+							<p><?php esc_html_e( 'No TicketTailor embed configured. Add your Event ID or shortcode in the page settings meta box below.', 'sender-symposium' ); ?></p>
 						</div>
 					<?php else : ?>
 						<?php if ( ! empty( $tt['fallback_text'] ) ) : ?>

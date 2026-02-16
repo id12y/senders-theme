@@ -8,6 +8,10 @@
    Journey Bar
    ---------------------------------------------------------- */
 
+.ss-ticketing {
+  padding-top: var(--sp-5);
+}
+
 .ss-ticketing-journey {
   background: var(--surface-section);
   border-bottom: 1px solid var(--border-subtle);
@@ -209,6 +213,18 @@
 
 .ss-tt-wrap {
   min-height: 200px;
+  min-width: 300px;
+  max-width: 100%;
+}
+
+/* Let widget.js iFrameResize manage the height */
+.ss-tt-wrap iframe {
+  width: 100% !important;
+  border: 0;
+}
+
+.ss-tt-wrap .tt-widget {
+  width: 100%;
 }
 
 .ss-ticketing-notice {

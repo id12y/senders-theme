@@ -20,6 +20,7 @@ function ss_ticketing_defaults() {
 	return array(
 		'journey_bar' => array(
 			'show'             => true,
+			'show_logo'        => true,
 			'logo_id'          => 0,
 			'logo_dark_id'     => 0,
 			'step_1'           => __( 'Ticket', 'sender-symposium' ),
@@ -45,6 +46,9 @@ function ss_ticketing_defaults() {
 		),
 		'tickettailor' => array(
 			'shortcode'     => '',
+			'event_id'      => '',
+			'access_code'   => '',
+			'embed_method'  => 'widget_js',
 			'fallback_text' => __( 'Tickets are available at sendersymposium.com/tickets/', 'sender-symposium' ),
 		),
 		'right_column' => array(
@@ -110,6 +114,7 @@ function ss_sanitize_ticketing_settings( $raw ) {
 	$jb = $raw['journey_bar'] ?? array();
 	$clean['journey_bar'] = array(
 		'show'             => ! empty( $jb['show'] ),
+		'show_logo'        => ! empty( $jb['show_logo'] ),
 		'logo_id'          => absint( $jb['logo_id'] ?? 0 ),
 		'logo_dark_id'     => absint( $jb['logo_dark_id'] ?? 0 ),
 		'step_1'           => sanitize_text_field( $jb['step_1'] ?? '' ),
@@ -144,6 +149,10 @@ function ss_sanitize_ticketing_settings( $raw ) {
 	$tt = $raw['tickettailor'] ?? array();
 	$clean['tickettailor'] = array(
 		'shortcode'     => sanitize_text_field( $tt['shortcode'] ?? '' ),
+		'event_id'      => sanitize_text_field( $tt['event_id'] ?? '' ),
+		'access_code'   => sanitize_text_field( $tt['access_code'] ?? '' ),
+		'embed_method'  => in_array( $tt['embed_method'] ?? '', array( 'widget_js', 'shortcode' ), true )
+			? $tt['embed_method'] : 'widget_js',
 		'fallback_text' => sanitize_text_field( $tt['fallback_text'] ?? '' ),
 	);
 
@@ -230,14 +239,18 @@ function ss_ticketing_render_meta_box( $post ) {
 			<?php esc_html_e( 'Show journey bar', 'sender-symposium' ); ?></label>
 		</p>
 		<p>
-			<label><?php esc_html_e( 'Logo Attachment ID (light mode)', 'sender-symposium' ); ?>
-			<small>(<?php esc_html_e( '0 = use site logo', 'sender-symposium' ); ?>)</small><br>
-			<input type="number" name="ss_ticketing[journey_bar][logo_id]" value="<?php echo esc_attr( $s['journey_bar']['logo_id'] ); ?>" min="0" class="small-text"></label>
+			<label><input type="checkbox" name="ss_ticketing[journey_bar][show_logo]" value="1" <?php checked( $s['journey_bar']['show_logo'] ); ?>>
+			<?php esc_html_e( 'Show logo in journey bar', 'sender-symposium' ); ?></label>
 		</p>
 		<p>
-			<label><?php esc_html_e( 'Logo Attachment ID (dark mode)', 'sender-symposium' ); ?>
-			<small>(<?php esc_html_e( '0 = use light logo for both', 'sender-symposium' ); ?>)</small><br>
-			<input type="number" name="ss_ticketing[journey_bar][logo_dark_id]" value="<?php echo esc_attr( $s['journey_bar']['logo_dark_id'] ); ?>" min="0" class="small-text"></label>
+			<label><?php esc_html_e( 'Logo (light mode)', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'leave empty to use site logo', 'sender-symposium' ); ?>)</small></label><br>
+			<?php ss_media_picker( 'ss_ticketing[journey_bar][logo_id]', $s['journey_bar']['logo_id'], __( 'Choose Light Logo', 'sender-symposium' ) ); ?>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'Logo (dark mode)', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'leave empty to use light logo for both', 'sender-symposium' ); ?>)</small></label><br>
+			<?php ss_media_picker( 'ss_ticketing[journey_bar][logo_dark_id]', $s['journey_bar']['logo_dark_id'], __( 'Choose Dark Logo', 'sender-symposium' ) ); ?>
 		</p>
 		<p>
 			<label><?php esc_html_e( 'Step 1', 'sender-symposium' ); ?><br>
@@ -325,13 +338,34 @@ function ss_ticketing_render_meta_box( $post ) {
 	<fieldset style="<?php echo $fs; ?>">
 		<legend><strong><?php esc_html_e( 'TicketTailor', 'sender-symposium' ); ?></strong></legend>
 		<p>
-			<label><?php esc_html_e( 'Shortcode', 'sender-symposium' ); ?><br>
+			<label><?php esc_html_e( 'Embed Method', 'sender-symposium' ); ?><br>
+			<select name="ss_ticketing[tickettailor][embed_method]">
+				<option value="widget_js" <?php selected( $s['tickettailor']['embed_method'], 'widget_js' ); ?>><?php esc_html_e( 'Modern widget.js (recommended)', 'sender-symposium' ); ?></option>
+				<option value="shortcode" <?php selected( $s['tickettailor']['embed_method'], 'shortcode' ); ?>><?php esc_html_e( 'Legacy shortcode', 'sender-symposium' ); ?></option>
+			</select></label>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'Event ID', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'for widget.js — find in your TicketTailor dashboard embed code', 'sender-symposium' ); ?>)</small><br>
+			<input type="text" name="ss_ticketing[tickettailor][event_id]" value="<?php echo esc_attr( $s['tickettailor']['event_id'] ); ?>" class="regular-text" placeholder="ev_123456"></label>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'Access Code', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'optional — reveals hidden ticket types via ?a=CODE', 'sender-symposium' ); ?>)</small><br>
+			<input type="text" name="ss_ticketing[tickettailor][access_code]" value="<?php echo esc_attr( $s['tickettailor']['access_code'] ); ?>" class="regular-text" placeholder=""></label>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'Shortcode', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'for legacy method only', 'sender-symposium' ); ?>)</small><br>
 			<input type="text" name="ss_ticketing[tickettailor][shortcode]" value="<?php echo esc_attr( $s['tickettailor']['shortcode'] ); ?>" class="large-text" placeholder='[ticket-tailor id="..."]'></label>
 		</p>
 		<p>
 			<label><?php esc_html_e( 'Fallback Text', 'sender-symposium' ); ?>
 			<small>(<?php esc_html_e( 'shown if embed unavailable', 'sender-symposium' ); ?>)</small><br>
 			<input type="text" name="ss_ticketing[tickettailor][fallback_text]" value="<?php echo esc_attr( $s['tickettailor']['fallback_text'] ); ?>" class="large-text"></label>
+		</p>
+		<p class="description">
+			<?php esc_html_e( 'Tip: For the best inline checkout experience (no redirects), set up a custom domain in TicketTailor (e.g. tickets.yourdomain.com via CNAME). This prevents third-party cookie issues in Safari/Firefox.', 'sender-symposium' ); ?>
 		</p>
 	</fieldset>
 
@@ -402,9 +436,8 @@ function ss_ticketing_render_meta_box( $post ) {
 			<input type="text" name="ss_ticketing[testimonial][company]" value="<?php echo esc_attr( $s['testimonial']['company'] ); ?>" class="regular-text"></label>
 		</p>
 		<p>
-			<label><?php esc_html_e( 'Avatar Attachment ID', 'sender-symposium' ); ?>
-			<small>(<?php esc_html_e( '0 = no avatar', 'sender-symposium' ); ?>)</small><br>
-			<input type="number" name="ss_ticketing[testimonial][avatar_id]" value="<?php echo esc_attr( $s['testimonial']['avatar_id'] ); ?>" min="0" class="small-text"></label>
+			<label><?php esc_html_e( 'Avatar', 'sender-symposium' ); ?></label><br>
+			<?php ss_media_picker( 'ss_ticketing[testimonial][avatar_id]', $s['testimonial']['avatar_id'], __( 'Choose Avatar', 'sender-symposium' ) ); ?>
 		</p>
 	</fieldset>
 

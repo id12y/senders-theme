@@ -542,6 +542,28 @@ function ss_lines_to_array( $text ) {
 	return array_values( array_filter( array_map( 'trim', explode( "\n", $text ) ), 'strlen' ) );
 }
 
+/**
+ * Render a media library picker field for admin meta boxes.
+ *
+ * @param string $name  The input name attribute.
+ * @param int    $value Current attachment ID (0 = none).
+ * @param string $label Button label text.
+ */
+function ss_media_picker( $name, $value, $label = '' ) {
+	if ( empty( $label ) ) {
+		$label = __( 'Choose Image', 'sender-symposium' );
+	}
+	$value = absint( $value );
+	?>
+	<div class="ss-media-picker" data-title="<?php echo esc_attr( $label ); ?>" data-button="<?php esc_attr_e( 'Use this image', 'sender-symposium' ); ?>">
+		<input type="hidden" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $value ); ?>" class="ss-media-picker__id">
+		<div class="ss-media-picker__preview"></div>
+		<button type="button" class="button ss-media-picker__choose"><?php echo esc_html( $label ); ?></button>
+		<button type="button" class="button-link ss-media-picker__remove" style="display:none;color:#a00;margin-left:8px;"><?php esc_html_e( 'Remove', 'sender-symposium' ); ?></button>
+	</div>
+	<?php
+}
+
 /* ==========================================================================
    13. HIDE PHP ERRORS ON FRONTEND
    ========================================================================== */

@@ -322,9 +322,9 @@ function ss_hero_render_meta_box( $post ) {
 	<fieldset style="<?php echo $fs; ?>">
 		<legend><strong><?php esc_html_e( 'Background', 'sender-symposium' ); ?></strong></legend>
 		<p>
-			<label><?php esc_html_e( 'Image Attachment ID', 'sender-symposium' ); ?>
-			<small>(<?php esc_html_e( '0 = no image; set mode to "Image" above to use', 'sender-symposium' ); ?>)</small><br>
-			<input type="number" name="ss_hero[background][image_id]" value="<?php echo esc_attr( $s['background']['image_id'] ); ?>" min="0" class="small-text"></label>
+			<label><?php esc_html_e( 'Background Image', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'set mode to "Image" above to use', 'sender-symposium' ); ?>)</small></label><br>
+			<?php ss_media_picker( 'ss_hero[background][image_id]', $s['background']['image_id'], __( 'Choose Background Image', 'sender-symposium' ) ); ?>
 		</p>
 		<p>
 			<label><?php esc_html_e( 'Overlay Strength', 'sender-symposium' ); ?><br>
@@ -344,14 +344,14 @@ function ss_hero_render_meta_box( $post ) {
 			<?php esc_html_e( 'Show logo in hero', 'sender-symposium' ); ?></label>
 		</p>
 		<p>
-			<label><?php esc_html_e( 'Logo Attachment ID (light)', 'sender-symposium' ); ?>
-			<small>(<?php esc_html_e( '0 = use site logo', 'sender-symposium' ); ?>)</small><br>
-			<input type="number" name="ss_hero[logo][image_id]" value="<?php echo esc_attr( $s['logo']['image_id'] ); ?>" min="0" class="small-text"></label>
+			<label><?php esc_html_e( 'Logo (light mode)', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'leave empty to use site logo', 'sender-symposium' ); ?>)</small></label><br>
+			<?php ss_media_picker( 'ss_hero[logo][image_id]', $s['logo']['image_id'], __( 'Choose Light Logo', 'sender-symposium' ) ); ?>
 		</p>
 		<p>
-			<label><?php esc_html_e( 'Logo Attachment ID (dark)', 'sender-symposium' ); ?>
-			<small>(<?php esc_html_e( '0 = use light logo for both', 'sender-symposium' ); ?>)</small><br>
-			<input type="number" name="ss_hero[logo][dark_image_id]" value="<?php echo esc_attr( $s['logo']['dark_image_id'] ); ?>" min="0" class="small-text"></label>
+			<label><?php esc_html_e( 'Logo (dark mode)', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'leave empty to use light logo for both', 'sender-symposium' ); ?>)</small></label><br>
+			<?php ss_media_picker( 'ss_hero[logo][dark_image_id]', $s['logo']['dark_image_id'], __( 'Choose Dark Logo', 'sender-symposium' ) ); ?>
 		</p>
 	</fieldset>
 

@@ -53,6 +53,19 @@
   height: auto;
 }
 
+/* Site logo — light/dark toggle (CSS only, no JS) */
+.site-logo-wrap .ss-logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] .site-logo-wrap .ss-logo-light {
+  display: none;
+}
+
+[data-theme="dark"] .site-logo-wrap .ss-logo-dark {
+  display: inline;
+}
+
 /* Navigation */
 .site-nav__list {
   display: flex;

@@ -57,6 +57,9 @@ function ss_register_settings() {
 	register_setting( 'ss_tab_general', 'ss_logo_max_height', array(
 		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_logo_max_height', 'default' => '40',
 	) );
+	register_setting( 'ss_tab_general', 'ss_logo_dark_id', array(
+		'type' => 'integer', 'sanitize_callback' => 'absint', 'default' => 0,
+	) );
 	register_setting( 'ss_tab_general', 'ss_hero_field', array(
 		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_toggle', 'default' => 'on',
 	) );
@@ -133,6 +136,11 @@ function ss_register_settings() {
 		'id' => 'ss_logo_max_height', 'options' => array(
 			'28' => '28px (compact)', '40' => '40px (default)', '56' => '56px', '72' => '72px',
 		),
+	) );
+	add_settings_field( 'ss_logo_dark_id', esc_html__( 'Dark Mode Logo', 'sender-symposium' ), 'ss_field_media', 'ss_page_general', 'ss_section_layout', array(
+		'id' => 'ss_logo_dark_id',
+		'button_label' => esc_html__( 'Choose Dark Logo', 'sender-symposium' ),
+		'description' => esc_html__( 'Logo for dark mode (white-on-dark). Leave empty to use the standard logo. Set your light logo in Appearance → Customize → Site Identity.', 'sender-symposium' ),
 	) );
 	add_settings_field( 'ss_hero_field', esc_html__( 'Hero Architectural Field', 'sender-symposium' ), 'ss_field_toggle', 'ss_page_general', 'ss_section_layout', array(
 		'id' => 'ss_hero_field',
@@ -304,6 +312,27 @@ function ss_field_select( $args ) {
 function ss_field_date( $args ) {
 	$value = get_option( $args['id'], '' );
 	printf( '<input type="date" id="%1$s" name="%1$s" value="%2$s" />', esc_attr( $args['id'] ), esc_attr( $value ) );
+	if ( ! empty( $args['description'] ) ) {
+		printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
+	}
+}
+
+function ss_field_number( $args ) {
+	$value = get_option( $args['id'], 0 );
+	printf(
+		'<input type="number" id="%1$s" name="%1$s" value="%2$s" class="small-text" min="0" />',
+		esc_attr( $args['id'] ),
+		esc_attr( $value )
+	);
+	if ( ! empty( $args['description'] ) ) {
+		printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
+	}
+}
+
+function ss_field_media( $args ) {
+	$value = absint( get_option( $args['id'], 0 ) );
+	$label = ! empty( $args['button_label'] ) ? $args['button_label'] : __( 'Choose Image', 'sender-symposium' );
+	ss_media_picker( $args['id'], $value, $label );
 	if ( ! empty( $args['description'] ) ) {
 		printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
 	}
@@ -585,16 +614,41 @@ function ss_render_tab_homepage() {
    ========================================================================= */
 
 function ss_admin_enqueue( $hook ) {
-	if ( 'appearance_page_sender-symposium-settings' !== $hook ) {
-		return;
+	$uri = get_template_directory_uri();
+	$dir = get_template_directory();
+
+	/* Theme settings page — color picker + settings JS + media picker */
+	if ( 'appearance_page_sender-symposium-settings' === $hook ) {
+		wp_enqueue_style( 'wp-color-picker' );
+		wp_enqueue_script(
+			'ss-admin-settings',
+			$uri . '/assets/js/admin-settings.js',
+			array( 'wp-color-picker' ),
+			ss_asset_version( $dir . '/assets/js/admin-settings.js' ),
+			true
+		);
+		wp_enqueue_media();
+		wp_enqueue_script(
+			'ss-admin-media-picker',
+			$uri . '/assets/js/admin-media-picker.js',
+			array( 'jquery' ),
+			ss_asset_version( $dir . '/assets/js/admin-media-picker.js' ),
+			true
+		);
 	}
-	wp_enqueue_style( 'wp-color-picker' );
-	wp_enqueue_script(
-		'ss-admin-settings',
-		get_template_directory_uri() . '/assets/js/admin-settings.js',
-		array( 'wp-color-picker' ),
-		ss_asset_version( get_template_directory() . '/assets/js/admin-settings.js' ),
-		true
-	);
+
+	/* Page editor — media picker for meta box image fields */
+	if ( 'post.php' === $hook || 'post-new.php' === $hook ) {
+		$screen = get_current_screen();
+		if ( $screen && 'page' === $screen->post_type ) {
+			wp_enqueue_script(
+				'ss-admin-media-picker',
+				$uri . '/assets/js/admin-media-picker.js',
+				array( 'jquery' ),
+				ss_asset_version( $dir . '/assets/js/admin-media-picker.js' ),
+				true
+			);
+		}
+	}
 }
 add_action( 'admin_enqueue_scripts', 'ss_admin_enqueue' );

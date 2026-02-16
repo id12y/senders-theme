@@ -39,10 +39,30 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 <header class="site-header" role="banner">
 	<div class="container site-header__inner">
 
-		<?php if ( has_custom_logo() ) : ?>
+		<?php
+		$dark_logo_id = absint( get_option( 'ss_logo_dark_id', 0 ) );
+		if ( has_custom_logo() ) :
+			if ( $dark_logo_id ) :
+				$custom_logo_id = get_theme_mod( 'custom_logo' );
+				$logo_light_url = wp_get_attachment_image_url( $custom_logo_id, 'full' );
+				$logo_dark_url  = wp_get_attachment_image_url( $dark_logo_id, 'full' );
+				$site_name      = get_bloginfo( 'name' );
+			?>
+			<div class="site-logo-wrap">
+				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="custom-logo-link" rel="home">
+					<img class="custom-logo ss-logo-light"
+						src="<?php echo esc_url( $logo_light_url ); ?>"
+						alt="<?php echo esc_attr( $site_name ); ?>">
+					<img class="custom-logo ss-logo-dark"
+						src="<?php echo esc_url( $logo_dark_url ); ?>"
+						alt="<?php echo esc_attr( $site_name ); ?>">
+				</a>
+			</div>
+			<?php else : ?>
 			<div class="site-logo-wrap">
 				<?php the_custom_logo(); ?>
 			</div>
+			<?php endif; ?>
 		<?php else : ?>
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-logo" rel="home">
 				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
