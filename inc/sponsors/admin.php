@@ -17,7 +17,8 @@ require_once __DIR__ . '/admin-views.php';
 /* ─── Menu ─── */
 
 function ss_sponsors_admin_menu() {
-	add_theme_page(
+	add_submenu_page(
+		'sender-symposium-settings',
 		esc_html__( 'Sponsors', 'sender-symposium' ),
 		esc_html__( 'Sponsors', 'sender-symposium' ),
 		'manage_options',
@@ -30,7 +31,7 @@ add_action( 'admin_menu', 'ss_sponsors_admin_menu' );
 /* ─── Enqueue ─── */
 
 function ss_sponsors_admin_enqueue( $hook ) {
-	if ( 'appearance_page_ss-sponsors' !== $hook ) {
+	if ( 'sender-symposium_page_ss-sponsors' !== $hook ) {
 		return;
 	}
 	$uri = get_template_directory_uri();
@@ -141,7 +142,7 @@ function ss_sponsors_handle_actions() {
 			return;
 	}
 
-	wp_safe_redirect( add_query_arg( $args, admin_url( 'themes.php' ) ) );
+	wp_safe_redirect( add_query_arg( $args, admin_url( 'admin.php' ) ) );
 	exit;
 }
 add_action( 'admin_init', 'ss_sponsors_handle_actions' );
