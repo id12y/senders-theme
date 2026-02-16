@@ -295,7 +295,7 @@ details.faq-item[open] > summary .faq-icon {
 
 .hotel-tag {
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border-subtle);
   background: var(--surface-card);
 }
@@ -393,13 +393,6 @@ a.hotel-visit:focus-visible {
 /* ----------------------------------------------------------
    Reduced Motion
    ---------------------------------------------------------- */
-
-@media (prefers-reduced-motion: reduce) {
-  .faq-icon,
-  .hotel-card {
-    transition: none;
-  }
-}
 
 /* ----------------------------------------------------------
    Mobile Refinements

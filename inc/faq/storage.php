@@ -166,7 +166,7 @@ function ss_faq_section_before_you_book() {
 			array(
 				'id'          => 'faq_tickets',
 				'question'    => __( 'Where can I purchase a ticket?', 'sender-symposium' ),
-				'answer_html' => '<p>Purchase online here: <a href="https://sendersymposium.com/tickets/" target="_blank" rel="noopener noreferrer">sendersymposium.com/tickets/</a></p>',
+				'answer_html' => '<p>Purchase online here: <a href="/tickets/">tickets page</a></p>',
 				'order'       => 4,
 			),
 		),

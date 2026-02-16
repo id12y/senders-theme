@@ -36,7 +36,7 @@ if ( ss_announcement_enabled() ) {
  */
 if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_location( 'header' ) ) :
 ?>
-<header class="site-header" role="banner">
+<header class="site-header">
 	<div class="container site-header__inner">
 
 		<?php
@@ -70,6 +70,7 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 		<?php endif; ?>
 
 		<button
+			type="button"
 			class="menu-toggle"
 			aria-controls="primary-nav"
 			aria-expanded="false"
@@ -128,4 +129,4 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 </header>
 <?php endif; ?>
 
-<main id="main-content" role="main">
+<main id="main-content">

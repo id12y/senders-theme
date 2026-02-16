@@ -465,7 +465,7 @@ function ss_hero_save_meta_box( $post_id ) {
 		return;
 	}
 
-	$raw   = $_POST['ss_hero'] ?? array();
+	$raw   = wp_unslash( $_POST['ss_hero'] ?? array() );
 	$clean = ss_sanitize_hero_settings( $raw );
 	update_post_meta( $post_id, 'ss_hero_settings', $clean );
 }

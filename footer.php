@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_location( 'footer' ) ) :
 ?>
-<footer class="site-footer" role="contentinfo">
+<footer class="site-footer">
 	<div class="container">
 		<div class="footer-grid">
 
