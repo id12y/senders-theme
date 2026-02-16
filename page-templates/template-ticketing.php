@@ -159,39 +159,58 @@ $re    = $s['reassurance'];
 				<?php /* ── LEFT: TicketTailor Embed ── */ ?>
 				<div class="ss-ticketing-embed">
 					<?php
-					$tt_has_widget = ( 'widget_js' === $tt['embed_method'] && ! empty( $tt['event_id'] ) );
-					$tt_has_short  = ( 'shortcode' === $tt['embed_method'] && ! empty( $tt['shortcode'] ) );
+					$tt_mode       = $tt['embed_method'];
+					$tt_has_event  = ! empty( $tt['event_id'] );
+					$tt_has_short  = ! empty( $tt['shortcode'] );
 
-					if ( $tt_has_widget ) :
+					/* Build checkout URL for widget_js / auto modes */
+					$tt_base_url = '';
+					if ( $tt_has_event ) {
 						$tt_base_url = 'https://www.tickettailor.com/checkout/new-event/' . $tt['event_id'];
 						if ( ! empty( $tt['access_code'] ) ) {
 							$tt_base_url .= '?a=' . rawurlencode( $tt['access_code'] );
 						}
+					}
+
+					/* Determine what to render */
+					$use_widget_js = ( 'widget_js' === $tt_mode && $tt_has_event )
+						|| ( 'auto' === $tt_mode && $tt_has_event );
+					$use_shortcode = ( 'shortcode' === $tt_mode && $tt_has_short );
+					$auto_shortcode_fallback = ( 'auto' === $tt_mode && $tt_has_short );
+
+					if ( $use_widget_js ) :
+						/*
+						 * JS embed — widget.js is enqueued via wp_enqueue_script,
+						 * tickettailor-init.js reads the data attributes and builds
+						 * the .tt-widget div. No inline <script> tag.
+						 */
 					?>
-						<div class="ss-tt-wrap">
-							<div class="tt-widget"
-								data-url="<?php echo esc_url( $tt_base_url ); ?>"
-								data-type="inline"
-								data-inline-minimal="true"
-								data-inline-show-logo="false"></div>
-							<script src="https://cdn.tickettailor.com/js/widgets/min/widget.js"
-								data-tt-widget-url="<?php echo esc_url( $tt_base_url ); ?>"
-								defer></script>
+						<div class="ss-tt-wrap"
+							data-tt-checkout-url="<?php echo esc_url( $tt_base_url ); ?>"
+							data-tt-minimal="true"
+							data-tt-show-logo="false">
+
+							<?php /* Fallback: shortcode (auto mode) or plain text */ ?>
+							<div class="ss-tt-fallback" hidden>
+								<?php if ( $auto_shortcode_fallback ) : ?>
+									<?php echo do_shortcode( $tt['shortcode'] ); ?>
+								<?php elseif ( ! empty( $tt['fallback_text'] ) ) : ?>
+									<p class="ss-ticketing-fallback"><?php echo esc_html( $tt['fallback_text'] ); ?></p>
+								<?php endif; ?>
+							</div>
+
+							<noscript>
+								<?php if ( $tt_has_short ) : ?>
+									<?php echo do_shortcode( $tt['shortcode'] ); ?>
+								<?php elseif ( ! empty( $tt['fallback_text'] ) ) : ?>
+									<p class="ss-ticketing-fallback"><?php echo esc_html( $tt['fallback_text'] ); ?></p>
+								<?php endif; ?>
+							</noscript>
 						</div>
-						<?php if ( ! empty( $tt['fallback_text'] ) ) : ?>
-						<noscript>
-							<p class="ss-ticketing-fallback"><?php echo esc_html( $tt['fallback_text'] ); ?></p>
-						</noscript>
-						<?php endif; ?>
-					<?php elseif ( $tt_has_short ) : ?>
-						<div class="ss-tt-wrap">
+					<?php elseif ( $use_shortcode ) : ?>
+						<div class="ss-tt-wrap ss-tt-wrap--shortcode">
 							<?php echo do_shortcode( $tt['shortcode'] ); ?>
 						</div>
-						<?php if ( ! empty( $tt['fallback_text'] ) ) : ?>
-						<noscript>
-							<p class="ss-ticketing-fallback"><?php echo esc_html( $tt['fallback_text'] ); ?></p>
-						</noscript>
-						<?php endif; ?>
 					<?php elseif ( current_user_can( 'edit_pages' ) ) : ?>
 						<div class="ss-ticketing-notice" role="alert">
 							<p><?php esc_html_e( 'No TicketTailor embed configured. Add your Event ID or shortcode in the page settings meta box below.', 'sender-symposium' ); ?></p>

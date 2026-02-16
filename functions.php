@@ -134,7 +134,7 @@ function ss_enqueue_assets() {
 		);
 	}
 
-	/* Ticketing CSS — on ticketing page template */
+	/* Ticketing CSS + JS — on ticketing page template */
 	if ( is_page_template( 'page-templates/template-ticketing.php' ) ) {
 		wp_enqueue_style(
 			'ss-ticketing',
@@ -142,6 +142,26 @@ function ss_enqueue_assets() {
 			array( 'ss-components' ),
 			ss_asset_version( $dir . '/assets/css/ticketing.css' )
 		);
+
+		/* TicketTailor widget.js from CDN + our init script */
+		$tt_settings = ss_get_ticketing_settings( get_the_ID() );
+		$tt_mode     = $tt_settings['tickettailor']['embed_method'] ?? 'auto';
+		if ( in_array( $tt_mode, array( 'auto', 'widget_js' ), true ) && ! empty( $tt_settings['tickettailor']['event_id'] ) ) {
+			wp_enqueue_script(
+				'tt-widget',
+				'https://cdn.tickettailor.com/js/widgets/min/widget.js',
+				array(),
+				null,
+				array( 'strategy' => 'defer', 'in_footer' => true )
+			);
+			wp_enqueue_script(
+				'ss-tt-init',
+				$uri . '/assets/js/tickettailor-init.js',
+				array( 'tt-widget' ),
+				ss_asset_version( $dir . '/assets/js/tickettailor-init.js' ),
+				array( 'strategy' => 'defer', 'in_footer' => true )
+			);
+		}
 	}
 
 	/* About CSS — on about page template */

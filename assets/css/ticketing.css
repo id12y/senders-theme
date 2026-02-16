@@ -242,6 +242,21 @@
   font-size: var(--text-small);
 }
 
+/* Hidden fallback container — revealed by JS on widget failure */
+.ss-tt-fallback[hidden] {
+  display: none;
+}
+
+/* When fallback is revealed, let shortcode output behave naturally */
+.ss-tt-fallback {
+  width: 100%;
+}
+
+/* Shortcode-only mode: no extra constraints */
+.ss-tt-wrap--shortcode {
+  min-height: auto;
+}
+
 /* ----------------------------------------------------------
    Sidebar (Right Column)
    ---------------------------------------------------------- */

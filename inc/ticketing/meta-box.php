@@ -48,7 +48,7 @@ function ss_ticketing_defaults() {
 			'shortcode'     => '',
 			'event_id'      => '',
 			'access_code'   => '',
-			'embed_method'  => 'widget_js',
+			'embed_method'  => 'auto',
 			'fallback_text' => __( 'Tickets are available at sendersymposium.com/tickets/', 'sender-symposium' ),
 		),
 		'right_column' => array(
@@ -151,8 +151,8 @@ function ss_sanitize_ticketing_settings( $raw ) {
 		'shortcode'     => sanitize_text_field( $tt['shortcode'] ?? '' ),
 		'event_id'      => sanitize_text_field( $tt['event_id'] ?? '' ),
 		'access_code'   => sanitize_text_field( $tt['access_code'] ?? '' ),
-		'embed_method'  => in_array( $tt['embed_method'] ?? '', array( 'widget_js', 'shortcode' ), true )
-			? $tt['embed_method'] : 'widget_js',
+		'embed_method'  => in_array( $tt['embed_method'] ?? '', array( 'auto', 'widget_js', 'shortcode' ), true )
+			? $tt['embed_method'] : 'auto',
 		'fallback_text' => sanitize_text_field( $tt['fallback_text'] ?? '' ),
 	);
 
@@ -340,13 +340,14 @@ function ss_ticketing_render_meta_box( $post ) {
 		<p>
 			<label><?php esc_html_e( 'Embed Method', 'sender-symposium' ); ?><br>
 			<select name="ss_ticketing[tickettailor][embed_method]">
-				<option value="widget_js" <?php selected( $s['tickettailor']['embed_method'], 'widget_js' ); ?>><?php esc_html_e( 'Modern widget.js (recommended)', 'sender-symposium' ); ?></option>
-				<option value="shortcode" <?php selected( $s['tickettailor']['embed_method'], 'shortcode' ); ?>><?php esc_html_e( 'Legacy shortcode', 'sender-symposium' ); ?></option>
+				<option value="auto" <?php selected( $s['tickettailor']['embed_method'], 'auto' ); ?>><?php esc_html_e( 'Auto — JS embed with shortcode fallback (recommended)', 'sender-symposium' ); ?></option>
+				<option value="widget_js" <?php selected( $s['tickettailor']['embed_method'], 'widget_js' ); ?>><?php esc_html_e( 'JS embed only (widget.js)', 'sender-symposium' ); ?></option>
+				<option value="shortcode" <?php selected( $s['tickettailor']['embed_method'], 'shortcode' ); ?>><?php esc_html_e( 'Shortcode only', 'sender-symposium' ); ?></option>
 			</select></label>
 		</p>
 		<p>
 			<label><?php esc_html_e( 'Event ID', 'sender-symposium' ); ?>
-			<small>(<?php esc_html_e( 'for widget.js — find in your TicketTailor dashboard embed code', 'sender-symposium' ); ?>)</small><br>
+			<small>(<?php esc_html_e( 'for JS embed / auto — find in your TicketTailor dashboard embed code', 'sender-symposium' ); ?>)</small><br>
 			<input type="text" name="ss_ticketing[tickettailor][event_id]" value="<?php echo esc_attr( $s['tickettailor']['event_id'] ); ?>" class="regular-text" placeholder="ev_123456"></label>
 		</p>
 		<p>
@@ -356,7 +357,7 @@ function ss_ticketing_render_meta_box( $post ) {
 		</p>
 		<p>
 			<label><?php esc_html_e( 'Shortcode', 'sender-symposium' ); ?>
-			<small>(<?php esc_html_e( 'for legacy method only', 'sender-symposium' ); ?>)</small><br>
+			<small>(<?php esc_html_e( 'used by shortcode mode, or as fallback in auto mode', 'sender-symposium' ); ?>)</small><br>
 			<input type="text" name="ss_ticketing[tickettailor][shortcode]" value="<?php echo esc_attr( $s['tickettailor']['shortcode'] ); ?>" class="large-text" placeholder='[ticket-tailor id="..."]'></label>
 		</p>
 		<p>
