@@ -834,7 +834,7 @@
 .footer-text-line {
   width: 100%;
   margin: 0;
-  font-size: 0.92rem;
+  font-size: calc(var(--text-caption) + 1.2px);
   line-height: var(--lh-caption);
 }
 
