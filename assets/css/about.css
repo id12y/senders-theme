@@ -10,7 +10,7 @@
 
 .ss-about__intro {
   text-align: center;
-  padding: var(--sp-8) 0 var(--sp-6);
+  padding: var(--sp-9) 0 var(--sp-7);
 }
 
 .ss-about__overline {
@@ -19,7 +19,7 @@
   text-transform: uppercase;
   color: var(--text-muted);
   margin-bottom: var(--sp-3);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .ss-about__headline {
@@ -27,15 +27,15 @@
   font-size: var(--text-h1);
   line-height: var(--lh-h1);
   letter-spacing: var(--ls-h1);
-  font-weight: 650;
+  font-weight: 550;
   color: var(--text-primary);
-  margin-bottom: var(--sp-4);
-  max-width: 48ch;
+  margin-bottom: var(--sp-5);
+  max-width: 44ch;
   margin-inline: auto;
 }
 
 .ss-about__body {
-  max-width: 60ch;
+  max-width: 68ch;
   margin-inline: auto;
   color: var(--text-secondary);
   line-height: var(--lh-body);
@@ -56,14 +56,14 @@
 
 .ss-about__stats {
   background: var(--surface-section);
-  padding: var(--sp-7) 0;
+  padding: var(--sp-8) 0;
 }
 
 .ss-about__stats-row {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: var(--sp-6);
+  gap: var(--sp-7);
 }
 
 .ss-about__stat {
@@ -74,9 +74,9 @@
 .ss-about__stat-number {
   display: block;
   font-family: var(--font-display);
-  font-size: var(--text-h2);
-  line-height: var(--lh-h2);
-  font-weight: 700;
+  font-size: var(--text-h1);
+  line-height: var(--lh-h1);
+  font-weight: 550;
   color: var(--text-primary);
   letter-spacing: -0.02em;
 }
@@ -86,9 +86,9 @@
   font-size: var(--text-caption);
   line-height: var(--lh-caption);
   color: var(--text-muted);
-  margin-top: var(--sp-1);
+  margin-top: var(--sp-2);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 /* ----------------------------------------------------------
@@ -96,7 +96,7 @@
    ---------------------------------------------------------- */
 
 .ss-about__section {
-  padding: var(--section-padding-block) 0;
+  padding: var(--sp-8) 0;
 }
 
 .ss-about__section--alt {
@@ -108,14 +108,14 @@
   font-size: var(--text-h2);
   line-height: var(--lh-h2);
   letter-spacing: var(--ls-h2);
-  font-weight: 650;
+  font-weight: 550;
   color: var(--text-primary);
   margin-bottom: var(--sp-5);
 }
 
 .ss-about__section-subtitle {
   color: var(--text-secondary);
-  max-width: 55ch;
+  max-width: 68ch;
   line-height: var(--lh-body);
   margin-bottom: var(--sp-6);
 }
@@ -128,10 +128,11 @@
   display: flex;
   flex-direction: column;
   gap: 0;
+  max-width: 68ch;
 }
 
 .ss-about__track-item {
-  padding: var(--sp-4) 0;
+  padding: var(--sp-5) 0;
   border-bottom: 1px solid var(--border-subtle);
 }
 
@@ -148,7 +149,7 @@
   font-family: var(--font-display);
   font-size: var(--text-h4);
   line-height: var(--lh-h4);
-  font-weight: 600;
+  font-weight: 550;
   color: var(--text-primary);
   margin-bottom: var(--sp-1);
 }
@@ -172,8 +173,8 @@
 
 .ss-about__contributors {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--sp-5);
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--sp-6);
 }
 
 .ss-about__contributor {
@@ -205,7 +206,7 @@
   border-radius: 50%;
   font-family: var(--font-display);
   font-size: var(--text-h4);
-  font-weight: 600;
+  font-weight: 550;
   color: var(--text-muted);
 }
 
@@ -227,7 +228,7 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
-  font-weight: 500;
+  font-weight: 600;
   margin-top: var(--sp-2);
 }
 
@@ -248,7 +249,7 @@
   list-style: none;
   margin: 0;
   padding: 0;
-  max-width: 55ch;
+  max-width: 60ch;
 }
 
 .ss-about__philosophy li {
@@ -270,8 +271,8 @@
 
 .ss-about__gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: var(--sp-3);
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-4);
 }
 
 .ss-about__gallery-item {
@@ -387,11 +388,11 @@
   }
 
   .ss-about__stats {
-    padding: var(--sp-6) 0;
+    padding: var(--sp-7) 0;
   }
 
   .ss-about__stats-row {
-    gap: var(--sp-4);
+    gap: var(--sp-5);
   }
 
   .ss-about__stat {
@@ -399,17 +400,21 @@
   }
 
   .ss-about__stat-number {
-    font-size: var(--text-h3);
+    font-size: var(--text-h2);
+  }
+
+  .ss-about__section {
+    padding: var(--sp-7) 0;
   }
 
   .ss-about__contributors {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: var(--sp-4);
+    grid-template-columns: 1fr;
+    gap: var(--sp-5);
   }
 
   .ss-about__gallery {
-    grid-template-columns: 1fr 1fr;
-    gap: var(--sp-2);
+    grid-template-columns: 1fr;
+    gap: var(--sp-3);
   }
 
   .ss-about__closing {

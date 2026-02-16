@@ -22,14 +22,14 @@ function ss_about_defaults() {
 			'enabled'  => true,
 			'overline' => '',
 			'headline' => __( 'Built by operators. For operators.', 'sender-symposium' ),
-			'body'     => '<p>Emailexpert has delivered 16 in-person industry events across 8 countries, alongside numerous online conferences and workshops. More than 3,500 professionals have participated, with speakers and delegates representing over 40 countries worldwide. Across our events, we have hosted more than 400 expert speakers from across the email, CRM, lifecycle, and deliverability ecosystem.</p>',
+			'body'     => '<p>Emailexpert has delivered 16 in-person industry events across 8 countries, alongside multiple online conferences and working sessions. More than 3,500 professionals have participated, with speakers and delegates representing over 40 countries. Across these events, over 400 expert speakers have contributed to programme discussions covering deliverability, lifecycle messaging, CRM, compliance, and revenue strategy.</p>',
 		),
 		'stats' => array(
 			'enabled' => true,
 			'items'   => array(
 				array( 'number' => '16',    'label' => __( 'In-Person Events', 'sender-symposium' ) ),
-				array( 'number' => '3,500+', 'label' => __( 'Professionals', 'sender-symposium' ) ),
-				array( 'number' => '8',     'label' => __( 'Countries', 'sender-symposium' ) ),
+				array( 'number' => '3,500+', 'label' => __( 'Professionals Engaged', 'sender-symposium' ) ),
+				array( 'number' => '8',     'label' => __( 'Countries Hosted', 'sender-symposium' ) ),
 				array( 'number' => '40+',   'label' => __( 'Countries Represented', 'sender-symposium' ) ),
 				array( 'number' => '400+',  'label' => __( 'Speakers Hosted', 'sender-symposium' ) ),
 			),
@@ -39,26 +39,31 @@ function ss_about_defaults() {
 			'title'   => __( 'Our Track Record', 'sender-symposium' ),
 			'items'   => array(
 				array(
-					'name' => 'Inbox Expo',
-					'meta' => '2018–2023 · London, Barcelona, Vienna · 500+ delegates',
-					'desc' => __( 'The flagship event for deliverability, inbox placement, and email operations.', 'sender-symposium' ),
+					'name' => 'Deliverability Summit',
+					'meta' => __( 'Amsterdam · 2024–2025', 'sender-symposium' ),
+					'desc' => __( 'Full-venue in-person conference focused on infrastructure, compliance, and measurable email performance.', 'sender-symposium' ),
 				),
 				array(
-					'name' => 'Email Innovations Summit',
-					'meta' => '2019–2023 · Las Vegas, London · 400+ delegates',
-					'desc' => __( 'Strategy-level conference for email marketers and lifecycle teams.', 'sender-symposium' ),
+					'name' => 'Emailexpert User Conference',
+					'meta' => __( 'Alicante · 2025', 'sender-symposium' ),
+					'desc' => __( 'Working-format event for CRM, lifecycle, and messaging platform leaders.', 'sender-symposium' ),
 				),
 				array(
-					'name' => 'Emailexpert Online',
-					'meta' => '2020–2024 · Virtual · 2,000+ registrants',
-					'desc' => __( 'Online workshops and deep-dive sessions during the pandemic years.', 'sender-symposium' ),
+					'name' => __( 'Industry Roundtables', 'sender-symposium' ),
+					'meta' => __( 'Multi-city', 'sender-symposium' ),
+					'desc' => __( 'Small-format peer sessions designed for senior operators in the email ecosystem.', 'sender-symposium' ),
+				),
+				array(
+					'name' => __( 'Industry Awards Dinners', 'sender-symposium' ),
+					'meta' => __( 'International', 'sender-symposium' ),
+					'desc' => __( 'Recognition events acknowledging measurable achievement across email and lifecycle strategy.', 'sender-symposium' ),
 				),
 			),
 		),
 		'contributors' => array(
 			'enabled'     => true,
 			'title'       => __( 'Curated by Practitioners', 'sender-symposium' ),
-			'subtitle'    => __( 'The people behind Sender Symposium are active operators, not event producers.', 'sender-symposium' ),
+			'subtitle'    => __( 'Sender Symposium is structured and moderated by experienced operators drawn from across the CRM, lifecycle, and email ecosystem. Programme contributors bring practical experience from within complex messaging environments.', 'sender-symposium' ),
 			'speaker_ids' => array(),
 		),
 		'philosophy' => array(
@@ -74,11 +79,11 @@ function ss_about_defaults() {
 		'location' => array(
 			'enabled' => true,
 			'title'   => __( 'Why La Pedrera', 'sender-symposium' ),
-			'body'    => '<p>La Pedrera offers an intimate architectural scale that encourages conversation. Centrally located on Passeig de Gr&agrave;cia, it is easily accessible from anywhere in Barcelona. The building&rsquo;s sculptural spaces create a designed environment where interaction happens naturally&mdash;not in convention-centre corridors, but in rooms that were made for human presence.</p>',
+			'body'    => '<p>La Pedrera provides an architectural setting designed for conversation rather than scale. Its structure supports proximity, clarity, and focused exchange &mdash; aligned with the format of a working conference.</p>',
 		),
 		'closing' => array(
 			'enabled'     => true,
-			'statement'   => __( 'Sender Symposium is intentionally limited. If you are accountable for lifecycle revenue, retention, or CRM performance, we would value your participation.', 'sender-symposium' ),
+			'statement'   => __( 'Sender Symposium is intentionally limited. If you are accountable for lifecycle revenue, CRM performance, or messaging infrastructure, we would value your participation.', 'sender-symposium' ),
 			'button_text' => __( 'Secure your seat', 'sender-symposium' ),
 			'button_url'  => '/tickets/',
 		),
