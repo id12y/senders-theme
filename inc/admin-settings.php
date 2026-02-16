@@ -371,13 +371,13 @@ function ss_render_settings_page() {
 		return;
 	}
 
-	$tabs = array(
+	$tabs = apply_filters( 'ss_settings_tabs', array(
 		'general'      => __( 'General', 'sender-symposium' ),
 		'colors'       => __( 'Colors', 'sender-symposium' ),
 		'homepage'     => __( 'Homepage', 'sender-symposium' ),
 		'announcement' => __( 'Announcement', 'sender-symposium' ),
 		'darkmode'     => __( 'Dark Mode', 'sender-symposium' ),
-	);
+	) );
 
 	$current_tab = isset( $_GET['tab'] ) ? sanitize_key( $_GET['tab'] ) : 'general';
 	if ( ! isset( $tabs[ $current_tab ] ) ) {
@@ -404,6 +404,9 @@ function ss_render_settings_page() {
 		<div style="padding-top:20px;">
 		<?php
 		switch ( $current_tab ) {
+			case 'general':
+				ss_render_tab_settings_api( 'ss_tab_general', 'ss_page_general' );
+				break;
 			case 'colors':
 				ss_render_tab_settings_api( 'ss_tab_colors', 'ss_page_colors' );
 				break;
@@ -417,7 +420,13 @@ function ss_render_settings_page() {
 				ss_render_tab_settings_api( 'ss_tab_darkmode', 'ss_page_darkmode' );
 				break;
 			default:
-				ss_render_tab_settings_api( 'ss_tab_general', 'ss_page_general' );
+				/**
+				 * Fires when rendering a tab not handled by the core switch.
+				 * Used by inc/admin/settings-page.php to render site settings tabs.
+				 *
+				 * @param string $current_tab The active tab slug.
+				 */
+				do_action( 'ss_render_settings_tab', $current_tab );
 		}
 		?>
 		</div>
