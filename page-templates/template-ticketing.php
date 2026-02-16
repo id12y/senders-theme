@@ -22,9 +22,18 @@ $wd    = $s['why_different'];
 $ic    = $s['info_card'];
 $tm    = $s['testimonial'];
 $re    = $s['reassurance'];
+
+/* Build root modifier classes */
+$root_classes = array( 'ss-ticketing' );
+if ( 'compact' === $rc['spacing'] ) {
+	$root_classes[] = 'ss-ticketing--compact';
+}
+if ( ! $rc['show'] ) {
+	$root_classes[] = 'ss-ticketing--full-width';
+}
 ?>
 
-<div class="ss-ticketing">
+<div class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>">
 
 	<?php /* ═══ 1. JOURNEY BAR ═══ */ ?>
 	<?php if ( $jb['show'] ) : ?>
@@ -111,6 +120,7 @@ $re    = $s['reassurance'];
 	<?php endif; ?>
 
 	<?php /* ═══ 2. CONVERSION INTRO ═══ */ ?>
+	<?php if ( $intro['show'] ) : ?>
 	<section class="ss-ticketing-intro">
 		<div class="container">
 			<?php if ( ! empty( $intro['overline'] ) ) : ?>
@@ -141,6 +151,7 @@ $re    = $s['reassurance'];
 			<?php endif; ?>
 		</div>
 	</section>
+	<?php endif; ?>
 
 	<?php /* ═══ 3. SCARCITY LINE ═══ */ ?>
 	<?php if ( $sc['show'] && ! empty( $sc['text'] ) ) : ?>
@@ -157,7 +168,7 @@ $re    = $s['reassurance'];
 			<div class="ss-ticketing-columns">
 
 				<?php /* ── LEFT: TicketTailor Embed ── */ ?>
-				<div class="ss-ticketing-embed">
+				<div class="ss-ticketing-embed ss-ticketing-embed--surface">
 					<?php
 					$tt_mode       = $tt['embed_method'];
 					$tt_has_event  = ! empty( $tt['event_id'] );
@@ -256,7 +267,8 @@ $re    = $s['reassurance'];
 				</div>
 
 				<?php /* ── RIGHT: Sidebar Blocks ── */ ?>
-				<aside class="ss-ticketing-sidebar">
+				<?php if ( $rc['show'] ) : ?>
+				<aside class="ss-ticketing-sidebar<?php echo $rc['sticky'] ? ' ss-ticketing-sidebar--sticky' : ''; ?>">
 					<?php
 					/* Build ordered block list */
 					$blocks = array();
@@ -305,12 +317,15 @@ $re    = $s['reassurance'];
 								<?php break;
 
 							case 'info_card': ?>
-								<div class="ss-ticketing-info-card">
+								<div class="ss-ticketing-info-card<?php echo $ic['highlight'] ? ' ss-ticketing-info-card--highlight' : ''; ?>">
 									<?php if ( ! empty( $ic['heading'] ) ) : ?>
 										<h3><?php echo esc_html( $ic['heading'] ); ?></h3>
 									<?php endif; ?>
 									<?php if ( ! empty( $ic['body'] ) ) : ?>
 										<div class="ss-ticketing-info-card__body"><?php echo wp_kses_post( $ic['body'] ); ?></div>
+									<?php endif; ?>
+									<?php if ( ! empty( $ic['cta_label'] ) && ! empty( $ic['cta_url'] ) ) : ?>
+										<a class="ss-ticketing-info-card__cta" href="<?php echo esc_url( $ic['cta_url'] ); ?>"><?php echo esc_html( $ic['cta_label'] ); ?></a>
 									<?php endif; ?>
 								</div>
 								<?php break;
@@ -349,6 +364,7 @@ $re    = $s['reassurance'];
 					endforeach;
 					?>
 				</aside>
+				<?php endif; ?>
 
 			</div>
 		</div>

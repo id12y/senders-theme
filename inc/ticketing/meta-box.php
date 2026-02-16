@@ -32,6 +32,7 @@ function ss_ticketing_defaults() {
 			'trust_badge_text' => __( 'Secured checkout', 'sender-symposium' ),
 		),
 		'intro' => array(
+			'show'             => true,
 			'overline'         => __( 'Founder Delegate Access', 'sender-symposium' ),
 			'headline'         => __( 'Join 120 Leadership-Level Operators in Barcelona', 'sender-symposium' ),
 			'body'             => '<p>Sender Symposium is a high-interaction working room for CRM, Lifecycle, Growth, and Marketing Ops leaders. No fluff. No spectators. Just real orchestration, measurement, and revenue conversations.</p>',
@@ -55,7 +56,10 @@ function ss_ticketing_defaults() {
 			'domain_mismatch_note'   => __( 'If checkout opens in a new tab, please complete your purchase there.', 'sender-symposium' ),
 		),
 		'right_column' => array(
-			'order' => 'info_first',
+			'order'   => 'info_first',
+			'show'    => true,
+			'sticky'  => true,
+			'spacing' => 'relaxed',
 		),
 		'why_different' => array(
 			'show'    => true,
@@ -63,9 +67,12 @@ function ss_ticketing_defaults() {
 			'bullets' => "Working sessions, not passive talks\nExtended Q&A with practitioners\nPeer-level discussion, not vendor pitches",
 		),
 		'info_card' => array(
-			'show'    => true,
-			'heading' => __( 'Become a Founder Delegate', 'sender-symposium' ),
-			'body'    => '<p>Secure your place in Barcelona and join a community of operators who shape lifecycle strategy across Europe and beyond.</p>',
+			'show'      => true,
+			'heading'   => __( 'Become a Founder Delegate', 'sender-symposium' ),
+			'body'      => '<p>Secure your place in Barcelona and join a community of operators who shape lifecycle strategy across Europe and beyond.</p>',
+			'cta_label' => '',
+			'cta_url'   => '',
+			'highlight' => false,
 		),
 		'testimonial' => array(
 			'show'      => true,
@@ -132,6 +139,7 @@ function ss_sanitize_ticketing_settings( $raw ) {
 	/* Intro */
 	$intro = $raw['intro'] ?? array();
 	$clean['intro'] = array(
+		'show'             => ! empty( $intro['show'] ),
 		'overline'         => sanitize_text_field( $intro['overline'] ?? '' ),
 		'headline'         => sanitize_text_field( $intro['headline'] ?? '' ),
 		'body'             => wp_kses_post( $intro['body'] ?? '' ),
@@ -162,11 +170,15 @@ function ss_sanitize_ticketing_settings( $raw ) {
 		'domain_mismatch_note'   => sanitize_text_field( $tt['domain_mismatch_note'] ?? '' ),
 	);
 
-	/* Right column order */
+	/* Right column */
 	$rc = $raw['right_column'] ?? array();
 	$clean['right_column'] = array(
-		'order' => in_array( $rc['order'] ?? '', array( 'info_first', 'testimonial_first' ), true )
+		'order'   => in_array( $rc['order'] ?? '', array( 'info_first', 'testimonial_first' ), true )
 			? $rc['order'] : 'info_first',
+		'show'    => ! empty( $rc['show'] ),
+		'sticky'  => ! empty( $rc['sticky'] ),
+		'spacing' => in_array( $rc['spacing'] ?? '', array( 'compact', 'relaxed' ), true )
+			? $rc['spacing'] : 'relaxed',
 	);
 
 	/* Why Different */
@@ -180,9 +192,12 @@ function ss_sanitize_ticketing_settings( $raw ) {
 	/* Info Card */
 	$ic = $raw['info_card'] ?? array();
 	$clean['info_card'] = array(
-		'show'    => ! empty( $ic['show'] ),
-		'heading' => sanitize_text_field( $ic['heading'] ?? '' ),
-		'body'    => wp_kses_post( $ic['body'] ?? '' ),
+		'show'      => ! empty( $ic['show'] ),
+		'heading'   => sanitize_text_field( $ic['heading'] ?? '' ),
+		'body'      => wp_kses_post( $ic['body'] ?? '' ),
+		'cta_label' => sanitize_text_field( $ic['cta_label'] ?? '' ),
+		'cta_url'   => esc_url_raw( $ic['cta_url'] ?? '' ),
+		'highlight' => ! empty( $ic['highlight'] ),
 	);
 
 	/* Testimonial */
@@ -295,6 +310,10 @@ function ss_ticketing_render_meta_box( $post ) {
 	<?php /* ── Conversion Intro ── */ ?>
 	<fieldset style="<?php echo $fs; ?>">
 		<legend><strong><?php esc_html_e( 'Conversion Intro', 'sender-symposium' ); ?></strong></legend>
+		<p>
+			<label><input type="checkbox" name="ss_ticketing[intro][show]" value="1" <?php checked( $s['intro']['show'] ); ?>>
+			<?php esc_html_e( 'Show intro section', 'sender-symposium' ); ?></label>
+		</p>
 		<p>
 			<label><?php esc_html_e( 'Overline', 'sender-symposium' ); ?>
 			<small>(<?php esc_html_e( 'optional', 'sender-symposium' ); ?>)</small><br>
@@ -423,7 +442,21 @@ function ss_ticketing_render_meta_box( $post ) {
 	<?php /* ── Right Column ── */ ?>
 	<fieldset style="<?php echo $fs; ?>">
 		<legend><strong><?php esc_html_e( 'Right Column', 'sender-symposium' ); ?></strong></legend>
-
+		<p>
+			<label><input type="checkbox" name="ss_ticketing[right_column][show]" value="1" <?php checked( $s['right_column']['show'] ); ?>>
+			<?php esc_html_e( 'Show right column', 'sender-symposium' ); ?></label>
+		</p>
+		<p>
+			<label><input type="checkbox" name="ss_ticketing[right_column][sticky]" value="1" <?php checked( $s['right_column']['sticky'] ); ?>>
+			<?php esc_html_e( 'Sticky right column on desktop', 'sender-symposium' ); ?></label>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'Spacing', 'sender-symposium' ); ?><br>
+			<select name="ss_ticketing[right_column][spacing]">
+				<option value="relaxed" <?php selected( $s['right_column']['spacing'], 'relaxed' ); ?>><?php esc_html_e( 'Relaxed (generous whitespace)', 'sender-symposium' ); ?></option>
+				<option value="compact" <?php selected( $s['right_column']['spacing'], 'compact' ); ?>><?php esc_html_e( 'Compact', 'sender-symposium' ); ?></option>
+			</select></label>
+		</p>
 		<p>
 			<label><?php esc_html_e( 'Block Order', 'sender-symposium' ); ?><br>
 			<select name="ss_ticketing[right_column][order]">
@@ -461,6 +494,19 @@ function ss_ticketing_render_meta_box( $post ) {
 			<label><?php esc_html_e( 'Body', 'sender-symposium' ); ?>
 			<small>(<?php esc_html_e( 'HTML allowed', 'sender-symposium' ); ?>)</small><br>
 			<textarea name="ss_ticketing[info_card][body]" rows="4" class="large-text"><?php echo esc_textarea( $s['info_card']['body'] ); ?></textarea></label>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'CTA Label', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'optional — leave empty to hide', 'sender-symposium' ); ?>)</small><br>
+			<input type="text" name="ss_ticketing[info_card][cta_label]" value="<?php echo esc_attr( $s['info_card']['cta_label'] ); ?>" class="regular-text"></label>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'CTA URL', 'sender-symposium' ); ?><br>
+			<input type="url" name="ss_ticketing[info_card][cta_url]" value="<?php echo esc_url( $s['info_card']['cta_url'] ); ?>" class="regular-text"></label>
+		</p>
+		<p>
+			<label><input type="checkbox" name="ss_ticketing[info_card][highlight]" value="1" <?php checked( $s['info_card']['highlight'] ); ?>>
+			<?php esc_html_e( 'Highlight card (subtle surface emphasis)', 'sender-symposium' ); ?></label>
 		</p>
 
 		<hr>

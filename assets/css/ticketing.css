@@ -1,16 +1,20 @@
 /* ==========================================================================
    TICKETING PAGE — Sender Symposium
-   Conversion-optimised · Executive · Token-driven
+   Architectural · Premium · Token-driven
    Scoped to .ss-ticketing to avoid Elementor conflicts
    ========================================================================== */
 
 /* ----------------------------------------------------------
-   Journey Bar
+   Page Root
    ---------------------------------------------------------- */
 
 .ss-ticketing {
   padding-top: var(--sp-5);
 }
+
+/* ----------------------------------------------------------
+   Journey Bar
+   ---------------------------------------------------------- */
 
 .ss-ticketing-journey {
   background: var(--surface-section);
@@ -101,20 +105,21 @@
 }
 
 /* ----------------------------------------------------------
-   Conversion Intro
+   Conversion Intro — Architectural, restrained
    ---------------------------------------------------------- */
 
 .ss-ticketing-intro {
   text-align: center;
-  padding: var(--sp-7) 0 var(--sp-5);
+  padding: var(--sp-8) 0 var(--sp-6);
 }
 
 .ss-ticketing-overline {
   font-size: var(--text-caption);
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
   color: var(--text-muted);
-  margin-bottom: var(--sp-2);
+  font-weight: 600;
+  margin-bottom: var(--sp-3);
 }
 
 .ss-ticketing-headline {
@@ -122,16 +127,17 @@
   font-size: var(--text-h2);
   line-height: var(--lh-h2);
   letter-spacing: var(--ls-h2);
-  font-weight: 650;
-  margin-bottom: var(--sp-3);
-  max-width: 48ch;
+  font-weight: 550;
+  margin-bottom: var(--sp-4);
+  max-width: 44ch;
   margin-inline: auto;
 }
 
 .ss-ticketing-body {
-  max-width: 60ch;
+  max-width: 56ch;
   margin-inline: auto;
   color: var(--text-secondary);
+  font-size: var(--text-body);
   line-height: var(--lh-body);
 }
 
@@ -143,14 +149,14 @@
   margin-bottom: 0;
 }
 
-/* Micro trust row */
+/* Micro trust row — text-only, no badges */
 .ss-ticketing-micro-trust {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
   gap: var(--sp-3);
   list-style: none;
-  margin: var(--sp-4) 0 0;
+  margin: var(--sp-5) 0 0;
   padding: 0;
   font-size: var(--text-small);
   color: var(--text-muted);
@@ -190,7 +196,7 @@
    ---------------------------------------------------------- */
 
 .ss-ticketing-layout {
-  padding: var(--sp-6) 0 var(--sp-8);
+  padding: var(--sp-7) 0 var(--sp-8);
 }
 
 .ss-ticketing-columns {
@@ -201,15 +207,42 @@
 
 @media (min-width: 900px) {
   .ss-ticketing-columns {
-    grid-template-columns: 62% 1fr;
+    grid-template-columns: 60% 1fr;
     gap: var(--sp-7);
     align-items: start;
   }
+
+  /* Full-width when right column hidden */
+  .ss-ticketing--full-width .ss-ticketing-columns {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+  }
+}
+
+/* Compact spacing modifier */
+.ss-ticketing--compact .ss-ticketing-intro {
+  padding: var(--sp-6) 0 var(--sp-4);
+}
+
+.ss-ticketing--compact .ss-ticketing-layout {
+  padding: var(--sp-5) 0 var(--sp-6);
+}
+
+.ss-ticketing--compact .ss-ticketing-sidebar {
+  gap: var(--sp-4);
 }
 
 /* ----------------------------------------------------------
    TicketTailor Embed (Left Column)
    ---------------------------------------------------------- */
+
+/* Subtle elevated surface for the embed */
+.ss-ticketing-embed--surface {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: var(--sp-4);
+}
 
 .ss-tt-wrap {
   min-height: 200px;
@@ -259,13 +292,10 @@
 
 /* Domain mismatch buyer note */
 .ss-ticketing-domain-note {
-  margin-top: var(--sp-2);
+  margin-top: var(--sp-3);
   padding: var(--sp-2) var(--sp-3);
   font-size: var(--text-caption);
   color: var(--text-muted);
-  background: var(--surface-card);
-  border: 1px solid var(--border-subtle);
-  border-radius: var(--radius-card);
   text-align: center;
 }
 
@@ -279,12 +309,20 @@
   gap: var(--sp-5);
 }
 
+/* Sticky sidebar — desktop only */
+@media (min-width: 900px) {
+  .ss-ticketing-sidebar--sticky {
+    position: sticky;
+    top: var(--sp-5);
+  }
+}
+
 /* Why Different */
 .ss-ticketing-why h3 {
   font-family: var(--font-display);
   font-size: var(--text-h4);
   line-height: var(--lh-h4);
-  font-weight: 600;
+  font-weight: 550;
   margin-bottom: var(--sp-3);
 }
 
@@ -308,17 +346,23 @@
 
 /* Information Card */
 .ss-ticketing-info-card {
-  padding: var(--sp-4);
+  padding: var(--sp-5);
   background: var(--surface-card);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-card);
+}
+
+/* Highlighted variant — slightly elevated */
+.ss-ticketing-info-card--highlight {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-soft);
 }
 
 .ss-ticketing-info-card h3 {
   font-family: var(--font-display);
   font-size: var(--text-h4);
   line-height: var(--lh-h4);
-  font-weight: 600;
+  font-weight: 550;
   margin-bottom: var(--sp-2);
 }
 
@@ -336,10 +380,26 @@
   margin-bottom: 0;
 }
 
+/* Info card CTA */
+.ss-ticketing-info-card__cta {
+  display: inline-block;
+  margin-top: var(--sp-3);
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--action-primary-bg);
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 1px;
+}
+
+.ss-ticketing-info-card__cta:hover {
+  color: var(--action-primary-hover);
+}
+
 /* Testimonial Card */
 .ss-ticketing-testimonial {
-  padding: var(--sp-4);
-  padding-left: calc(var(--sp-4) + 3px);
+  padding: var(--sp-5);
+  padding-left: calc(var(--sp-5) + 3px);
   margin: 0;
   border-left: 3px solid var(--focus-ring);
   background: var(--surface-card);
@@ -347,9 +407,11 @@
 }
 
 .ss-ticketing-testimonial__quote {
+  font-family: var(--font-display);
   font-size: var(--text-body-lg);
   line-height: var(--lh-body-lg);
   font-style: italic;
+  font-weight: 450;
   color: var(--text-primary);
   margin-bottom: var(--sp-3);
 }
@@ -425,13 +487,26 @@
   border-bottom-color: var(--border-strong);
 }
 
+[data-theme="dark"] .ss-ticketing-embed--surface {
+  background: var(--surface-elevated);
+  border-color: var(--border-strong);
+}
+
 [data-theme="dark"] .ss-ticketing-info-card,
 [data-theme="dark"] .ss-ticketing-testimonial {
   background: var(--surface-elevated);
 }
 
+[data-theme="dark"] .ss-ticketing-info-card--highlight {
+  border-color: var(--border-strong);
+}
+
 [data-theme="dark"] .ss-ticketing-notice {
   background: var(--surface-elevated);
+}
+
+[data-theme="dark"] .ss-ticketing-info-card__cta {
+  color: var(--action-primary-bg);
 }
 
 /* ----------------------------------------------------------
@@ -480,5 +555,10 @@
 
   .ss-ticketing-layout {
     padding: var(--sp-5) 0 var(--sp-6);
+  }
+
+  /* Embed surface: tighter padding on mobile */
+  .ss-ticketing-embed--surface {
+    padding: var(--sp-3);
   }
 }
