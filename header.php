@@ -81,14 +81,33 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 			<span class="menu-toggle__bar"></span>
 		</button>
 
-		<nav id="primary-nav" class="site-nav" aria-label="<?php esc_attr_e( 'Primary navigation', 'sender-symposium' ); ?>" data-open="false">
+		<?php
+		$ss_nav_preset   = function_exists( 'ss_get_setting' ) ? ss_get_setting( 'nav_preset', 'baseline' ) : 'baseline';
+		$ss_nav_density  = function_exists( 'ss_get_setting' ) ? ss_get_setting( 'nav_density', 'comfortable' ) : 'comfortable';
+		$ss_nav_radius   = function_exists( 'ss_get_setting' ) ? ss_get_setting( 'nav_radius', 'm' ) : 'm';
+		$ss_nav_underline = function_exists( 'ss_get_setting' ) ? ss_get_setting( 'nav_underline', 'off' ) : 'off';
+		$ss_nav_animation = function_exists( 'ss_get_setting' ) ? ss_get_setting( 'nav_animation', 'subtle' ) : 'subtle';
+		$ss_nav_indicator = function_exists( 'ss_get_setting' ) ? ss_get_setting( 'nav_indicator', 'caret' ) : 'caret';
+
+		$ss_nav_classes = 'site-nav ee-menu--' . esc_attr( $ss_nav_preset );
+		?>
+		<nav id="primary-nav"
+			class="<?php echo esc_attr( $ss_nav_classes ); ?>"
+			aria-label="<?php esc_attr_e( 'Primary navigation', 'sender-symposium' ); ?>"
+			data-open="false"
+			data-density="<?php echo esc_attr( $ss_nav_density ); ?>"
+			data-radius="<?php echo esc_attr( $ss_nav_radius ); ?>"
+			data-underline="<?php echo esc_attr( $ss_nav_underline ); ?>"
+			data-animation="<?php echo esc_attr( $ss_nav_animation ); ?>"
+			data-indicator="<?php echo esc_attr( $ss_nav_indicator ); ?>"
+		>
 			<?php
 			if ( has_nav_menu( 'primary' ) ) {
 				wp_nav_menu( array(
 					'theme_location' => 'primary',
 					'container'      => false,
 					'menu_class'     => 'site-nav__list',
-					'depth'          => 2,
+					'depth'          => 3,
 					'link_before'    => '<span class="site-nav__link-text">',
 					'link_after'     => '</span>',
 					'fallback_cb'    => false,

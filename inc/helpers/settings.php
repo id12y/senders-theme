@@ -244,6 +244,56 @@ function ss_site_settings_schema() {
 			'allowed'     => array( 'theme-default', 'premium' ),
 		),
 
+		/* ── Navigation ── */
+		'nav_preset' => array(
+			'type'        => 'select',
+			'default'     => 'baseline',
+			'tab'         => 'site_navigation',
+			'label'       => __( 'Menu Preset', 'sender-symposium' ),
+			'description' => __( 'Visual style applied to the primary navigation.', 'sender-symposium' ),
+			'allowed'     => array( 'baseline', 'gaudi', 'modern-lite', 'modern-plus', 'signature' ),
+		),
+		'nav_density' => array(
+			'type'        => 'select',
+			'default'     => 'comfortable',
+			'tab'         => 'site_navigation',
+			'label'       => __( 'Density', 'sender-symposium' ),
+			'description' => __( 'Spacing between menu items.', 'sender-symposium' ),
+			'allowed'     => array( 'compact', 'comfortable' ),
+		),
+		'nav_radius' => array(
+			'type'        => 'select',
+			'default'     => 'm',
+			'tab'         => 'site_navigation',
+			'label'       => __( 'Border Radius', 'sender-symposium' ),
+			'description' => __( 'Corner rounding for dropdown panels and hover backgrounds.', 'sender-symposium' ),
+			'allowed'     => array( 's', 'm', 'l' ),
+		),
+		'nav_underline' => array(
+			'type'        => 'select',
+			'default'     => 'off',
+			'tab'         => 'site_navigation',
+			'label'       => __( 'Underline', 'sender-symposium' ),
+			'description' => __( 'Show underline on active and hovered menu items.', 'sender-symposium' ),
+			'allowed'     => array( 'on', 'off' ),
+		),
+		'nav_animation' => array(
+			'type'        => 'select',
+			'default'     => 'subtle',
+			'tab'         => 'site_navigation',
+			'label'       => __( 'Animation', 'sender-symposium' ),
+			'description' => __( 'Transition effects on hover and dropdown open.', 'sender-symposium' ),
+			'allowed'     => array( 'off', 'subtle' ),
+		),
+		'nav_indicator' => array(
+			'type'        => 'select',
+			'default'     => 'caret',
+			'tab'         => 'site_navigation',
+			'label'       => __( 'Submenu Indicator', 'sender-symposium' ),
+			'description' => __( 'Icon style for parent items with submenus.', 'sender-symposium' ),
+			'allowed'     => array( 'caret', 'plus' ),
+		),
+
 		/* ── Integrations ── */
 		'tt_mode' => array(
 			'type'        => 'select',
