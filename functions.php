@@ -378,7 +378,18 @@ add_action( 'wp_head', 'ss_event_schema', 10 );
  * Declare Elementor support and register locations for Theme Builder.
  */
 function ss_elementor_locations( $manager ) {
-	$manager->register_all_core_locations();
+	if ( method_exists( $manager, 'register_all_core_locations' ) ) {
+		$manager->register_all_core_locations();
+		return;
+	}
+
+	/* Elementor Pro 3.35+ — register each core location individually. */
+	$core_locations = array( 'header', 'footer', 'single', 'archive' );
+	foreach ( $core_locations as $location ) {
+		if ( method_exists( $manager, 'register_location' ) ) {
+			$manager->register_location( $location );
+		}
+	}
 }
 add_action( 'elementor/theme/register_locations', 'ss_elementor_locations' );
 
