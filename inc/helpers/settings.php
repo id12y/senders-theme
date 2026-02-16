@@ -81,6 +81,13 @@ function ss_site_settings_schema() {
 			'label'       => __( 'Footer Text — Line 2', 'sender-symposium' ),
 			'description' => __( 'Optional second line above the copyright notice. HTML allowed.', 'sender-symposium' ),
 		),
+		'geek_layer_enabled' => array(
+			'type'        => 'checkbox',
+			'default'     => 1,
+			'tab'         => 'site_branding',
+			'label'       => __( 'Geek Layer', 'sender-symposium' ),
+			'description' => __( 'Show hidden easter eggs for technically curious visitors (HTML comments, console messages, robots.txt). Can also be disabled via wp-config.php: define( \'SS_GEEK_LAYER_ENABLED\', false );', 'sender-symposium' ),
+		),
 
 		/* ── Event Defaults ── */
 		'event_name' => array(
