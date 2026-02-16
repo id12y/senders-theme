@@ -184,8 +184,8 @@ function ss_enqueue_assets() {
 		);
 	}
 
-	/* Sponsors CSS — on any page containing [ss_sponsors] shortcode or sponsors slug */
-	if ( is_page( 'sponsors' ) || is_page( 'partners' ) || ( is_singular() && has_shortcode( get_post()->post_content ?? '', 'ss_sponsors' ) ) ) {
+	/* Sponsors CSS — on sponsors template, slug match, or shortcode usage */
+	if ( is_page_template( 'page-sponsors.php' ) || is_page( 'sponsors' ) || is_page( 'partners' ) || ( is_singular() && has_shortcode( get_post()->post_content ?? '', 'ss_sponsors' ) ) ) {
 		wp_enqueue_style(
 			'ss-sponsors',
 			$uri . '/assets/css/sponsors.css',
