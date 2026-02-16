@@ -16,7 +16,7 @@ function ss_faq_render_page() {
 		return;
 	}
 	$tab = sanitize_key( $_GET['tab'] ?? 'settings' );
-	$url = admin_url( 'themes.php?page=ss-faq' );
+	$url = admin_url( 'admin.php?page=ss-faq' );
 
 	ss_faq_admin_notices();
 	?>
@@ -116,7 +116,7 @@ function ss_faq_render_settings() {
 
 function ss_faq_render_sections_list() {
 	$faq = ss_get_faq();
-	$url = admin_url( 'themes.php?page=ss-faq&tab=sections' );
+	$url = admin_url( 'admin.php?page=ss-faq&tab=sections' );
 	?>
 	<p><a href="<?php echo esc_url( $url . '&action=add' ); ?>" class="button button-primary"><?php esc_html_e( 'Add Section', 'sender-symposium' ); ?></a></p>
 
@@ -183,7 +183,7 @@ function ss_faq_render_section_editor() {
 		$section = array( 'id' => '', 'title' => '', 'subtitle' => '', 'order' => 0, 'items' => array() );
 	}
 
-	$url = admin_url( 'themes.php?page=ss-faq&tab=sections' );
+	$url = admin_url( 'admin.php?page=ss-faq&tab=sections' );
 	?>
 	<p><a href="<?php echo esc_url( $url ); ?>">&larr; <?php esc_html_e( 'Back to Sections', 'sender-symposium' ); ?></a></p>
 

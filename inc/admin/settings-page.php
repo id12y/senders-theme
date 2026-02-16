@@ -496,6 +496,44 @@ function ss_site_render_tab_fields( $tab_slug ) {
 function ss_site_render_tab_branding() {
 	ss_site_form_open( 'site_branding' );
 	echo '<h2>' . esc_html__( 'Branding', 'sender-symposium' ) . '</h2>';
+
+	/* Logo guidance — single canonical system, no duplicate fields. */
+	$settings_url = admin_url( 'admin.php?page=sender-symposium-settings&tab=general' );
+	$customize_url = admin_url( 'customize.php?autofocus[section]=title_tagline' );
+	?>
+	<table class="form-table">
+		<tr>
+			<th><?php esc_html_e( 'Primary Logo (Light Mode)', 'sender-symposium' ); ?></th>
+			<td>
+				<p><?php
+					printf(
+						/* translators: %s: link to Customizer */
+						esc_html__( 'Configured in %s.', 'sender-symposium' ),
+						'<a href="' . esc_url( $customize_url ) . '">'
+						. esc_html__( 'Appearance → Customize → Site Identity', 'sender-symposium' ) . '</a>'
+					);
+				?></p>
+			</td>
+		</tr>
+		<tr>
+			<th><?php esc_html_e( 'Optional Dark Mode Logo', 'sender-symposium' ); ?></th>
+			<td>
+				<p><?php
+					printf(
+						/* translators: %s: link to General settings tab */
+						esc_html__( 'Configured in the %s tab (Layout section).', 'sender-symposium' ),
+						'<a href="' . esc_url( $settings_url ) . '">'
+						. esc_html__( 'General', 'sender-symposium' ) . '</a>'
+					);
+				?></p>
+				<p class="description">
+					<?php esc_html_e( 'If no dark logo is set, the primary logo is used in both modes.', 'sender-symposium' ); ?>
+				</p>
+			</td>
+		</tr>
+	</table>
+	<?php
+
 	ss_site_render_tab_fields( 'site_branding' );
 	ss_site_form_close();
 }

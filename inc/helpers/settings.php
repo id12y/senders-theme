@@ -39,21 +39,13 @@ function ss_site_settings_schema() {
 			'label'   => '',
 		),
 
-		/* ── Branding ── */
-		'brand_logo_light' => array(
-			'type'        => 'int',
-			'default'     => 0,
-			'tab'         => 'site_branding',
-			'label'       => __( 'Logo (Light Mode)', 'sender-symposium' ),
-			'description' => __( 'Global light-mode logo. Falls back to Customizer logo if empty.', 'sender-symposium' ),
-		),
-		'brand_logo_dark' => array(
-			'type'        => 'int',
-			'default'     => 0,
-			'tab'         => 'site_branding',
-			'label'       => __( 'Logo (Dark Mode)', 'sender-symposium' ),
-			'description' => __( 'Global dark-mode logo. Leave empty for single-logo behaviour.', 'sender-symposium' ),
-		),
+		/* ── Branding ──
+		 * Logo fields intentionally omitted — canonical sources are:
+		 *   Light logo → Customizer (custom_logo theme mod)
+		 *   Dark logo  → General tab (ss_logo_dark_id option)
+		 * Any previously saved brand_logo_light / brand_logo_dark values
+		 * remain in the DB but are no longer rendered or sanitised.
+		 */
 		'brand_wordmark_alt' => array(
 			'type'        => 'text',
 			'default'     => '',

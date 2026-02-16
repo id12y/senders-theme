@@ -18,7 +18,7 @@ function ss_sponsors_render_page() {
 		return;
 	}
 	$tab = sanitize_key( $_GET['tab'] ?? 'sponsors' );
-	$url = admin_url( 'themes.php?page=ss-sponsors' );
+	$url = admin_url( 'admin.php?page=ss-sponsors' );
 
 	ss_sponsors_admin_notices();
 	?>
@@ -95,7 +95,7 @@ function ss_sponsors_admin_notices() {
 function ss_sponsors_render_list() {
 	$action  = sanitize_key( $_GET['action'] ?? '' );
 	$edit_id = sanitize_key( $_GET['id'] ?? '' );
-	$url     = admin_url( 'themes.php?page=ss-sponsors&tab=sponsors' );
+	$url     = admin_url( 'admin.php?page=ss-sponsors&tab=sponsors' );
 
 	/* Filter parameters */
 	$filter_level  = sanitize_key( $_GET['level'] ?? '' );

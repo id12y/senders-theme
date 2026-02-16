@@ -20,15 +20,28 @@ if ( ! defined( 'ABSPATH' ) ) {
    ========================================================================= */
 
 function ss_add_settings_page() {
-	add_theme_page(
-		esc_html__( 'Sender Symposium Settings', 'sender-symposium' ),
-		esc_html__( 'Theme Settings', 'sender-symposium' ),
+	/* Top-level menu — settings page is the parent.
+	 * Priority 5 so the parent exists before submenus register at 10. */
+	add_menu_page(
+		esc_html__( 'Sender Symposium', 'sender-symposium' ),
+		esc_html__( 'Sender Symposium', 'sender-symposium' ),
+		'manage_options',
+		'sender-symposium-settings',
+		'ss_render_settings_page',
+		'dashicons-admin-site-alt3',
+		59
+	);
+	/* First submenu replaces the auto-generated parent link. */
+	add_submenu_page(
+		'sender-symposium-settings',
+		esc_html__( 'Settings', 'sender-symposium' ),
+		esc_html__( 'Settings', 'sender-symposium' ),
 		'manage_options',
 		'sender-symposium-settings',
 		'ss_render_settings_page'
 	);
 }
-add_action( 'admin_menu', 'ss_add_settings_page' );
+add_action( 'admin_menu', 'ss_add_settings_page', 5 );
 
 /* =========================================================================
    SETTINGS API REGISTRATION
@@ -213,7 +226,7 @@ function ss_handle_homepage_save() {
 		'page'    => 'sender-symposium-settings',
 		'tab'     => 'homepage',
 		'updated' => 'true',
-	), admin_url( 'themes.php' ) ) );
+	), admin_url( 'admin.php' ) ) );
 	exit;
 }
 add_action( 'admin_init', 'ss_handle_homepage_save' );
@@ -384,7 +397,7 @@ function ss_render_settings_page() {
 		$current_tab = 'general';
 	}
 
-	$base_url = admin_url( 'themes.php?page=sender-symposium-settings' );
+	$base_url = admin_url( 'admin.php?page=sender-symposium-settings' );
 
 	/* Show updated notice for homepage tab (custom handler) */
 	if ( 'homepage' === $current_tab && ! empty( $_GET['updated'] ) ) {
@@ -627,7 +640,7 @@ function ss_admin_enqueue( $hook ) {
 	$dir = get_template_directory();
 
 	/* Theme settings page — color picker + settings JS + media picker */
-	if ( 'appearance_page_sender-symposium-settings' === $hook ) {
+	if ( 'toplevel_page_sender-symposium-settings' === $hook ) {
 		wp_enqueue_style( 'wp-color-picker' );
 		wp_enqueue_script(
 			'ss-admin-settings',

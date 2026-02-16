@@ -18,7 +18,7 @@ function ss_speakers_render_page() {
 		return;
 	}
 	$tab = sanitize_key( $_GET['tab'] ?? 'speakers' );
-	$url = admin_url( 'themes.php?page=ss-speakers' );
+	$url = admin_url( 'admin.php?page=ss-speakers' );
 
 	ss_speakers_admin_notices();
 	?>
@@ -90,7 +90,7 @@ function ss_speakers_admin_notices() {
 function ss_speakers_render_list() {
 	$action  = sanitize_key( $_GET['action'] ?? '' );
 	$edit_id = sanitize_key( $_GET['id'] ?? '' );
-	$url     = admin_url( 'themes.php?page=ss-speakers&tab=speakers' );
+	$url     = admin_url( 'admin.php?page=ss-speakers&tab=speakers' );
 
 	if ( 'add' === $action || ( 'edit' === $action && $edit_id ) ) {
 		$speaker = 'edit' === $action ? ss_get_speaker( $edit_id ) : null;
