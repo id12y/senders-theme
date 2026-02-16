@@ -64,9 +64,6 @@ function ss_theme_setup() {
 		$GLOBALS['content_width'] = 1200;
 	}
 
-	/* Elementor Theme Builder support */
-	add_theme_support( 'elementor' );
-
 	/* Responsive embeds */
 	add_theme_support( 'responsive-embeds' );
 }
@@ -492,10 +489,22 @@ function ss_event_schema() {
 add_action( 'wp_head', 'ss_event_schema', 10 );
 
 /* ==========================================================================
-   8. ELEMENTOR COMPATIBILITY
+   8. ELEMENTOR COMPATIBILITY (conditional)
    ========================================================================== */
 
-require_once get_template_directory() . '/inc/elementor.php';
+/**
+ * Load Elementor integration only when the plugin is active.
+ *
+ * Hooked to plugins_loaded because ELEMENTOR_VERSION is not defined during
+ * after_setup_theme (plugins load after themes).
+ */
+function ss_maybe_support_elementor() {
+	if ( defined( 'ELEMENTOR_VERSION' ) ) {
+		add_theme_support( 'elementor' );
+		require_once get_template_directory() . '/inc/elementor.php';
+	}
+}
+add_action( 'plugins_loaded', 'ss_maybe_support_elementor' );
 
 /* ==========================================================================
    8b. HOMEPAGE CONTENT SETTINGS

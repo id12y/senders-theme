@@ -480,7 +480,7 @@ function ss_render_tab_homepage() {
 		<h2><?php esc_html_e( 'Event Info Strip', 'sender-symposium' ); ?></h2>
 		<table class="form-table">
 			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
-				<td><label><input type="checkbox" name="hp[event_strip_enabled]" value="1" <?php checked( $hp['event_strip_enabled'] ); ?> /> <?php esc_html_e( 'Show event info strip', 'sender-symposium' ); ?></label></td></tr>
+				<td><input type="hidden" name="hp[event_strip_enabled]" value="0" /><label><input type="checkbox" name="hp[event_strip_enabled]" value="1" <?php checked( $hp['event_strip_enabled'] ); ?> /> <?php esc_html_e( 'Show event info strip', 'sender-symposium' ); ?></label></td></tr>
 		</table>
 		<h4><?php esc_html_e( 'Items (leave both fields empty to remove an item)', 'sender-symposium' ); ?></h4>
 		<table class="widefat" style="max-width:600px;">
@@ -506,7 +506,7 @@ function ss_render_tab_homepage() {
 		<h2><?php esc_html_e( 'Audience Block', 'sender-symposium' ); ?></h2>
 		<table class="form-table">
 			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
-				<td><label><input type="checkbox" name="hp[audience_enabled]" value="1" <?php checked( $hp['audience_enabled'] ); ?> /> <?php esc_html_e( 'Show audience block', 'sender-symposium' ); ?></label></td></tr>
+				<td><input type="hidden" name="hp[audience_enabled]" value="0" /><label><input type="checkbox" name="hp[audience_enabled]" value="1" <?php checked( $hp['audience_enabled'] ); ?> /> <?php esc_html_e( 'Show audience block', 'sender-symposium' ); ?></label></td></tr>
 			<tr><th><label><?php esc_html_e( 'Section Title', 'sender-symposium' ); ?></label></th>
 				<td><input type="text" name="hp[audience_title]" value="<?php echo esc_attr( $hp['audience_title'] ); ?>" class="regular-text" /></td></tr>
 			<tr><th><label><?php esc_html_e( '"For You" Heading', 'sender-symposium' ); ?></label></th>
@@ -527,7 +527,7 @@ function ss_render_tab_homepage() {
 		<h2><?php esc_html_e( 'Value / Outcome Cards', 'sender-symposium' ); ?></h2>
 		<table class="form-table">
 			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
-				<td><label><input type="checkbox" name="hp[values_enabled]" value="1" <?php checked( $hp['values_enabled'] ); ?> /> <?php esc_html_e( 'Show value cards', 'sender-symposium' ); ?></label></td></tr>
+				<td><input type="hidden" name="hp[values_enabled]" value="0" /><label><input type="checkbox" name="hp[values_enabled]" value="1" <?php checked( $hp['values_enabled'] ); ?> /> <?php esc_html_e( 'Show value cards', 'sender-symposium' ); ?></label></td></tr>
 			<tr><th><label><?php esc_html_e( 'Section Title', 'sender-symposium' ); ?></label></th>
 				<td><input type="text" name="hp[values_title]" value="<?php echo esc_attr( $hp['values_title'] ); ?>" class="regular-text" /></td></tr>
 		</table>
@@ -557,7 +557,7 @@ function ss_render_tab_homepage() {
 		<h2><?php esc_html_e( 'Format Block', 'sender-symposium' ); ?></h2>
 		<table class="form-table">
 			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
-				<td><label><input type="checkbox" name="hp[format_enabled]" value="1" <?php checked( $hp['format_enabled'] ); ?> /> <?php esc_html_e( 'Show format block', 'sender-symposium' ); ?></label></td></tr>
+				<td><input type="hidden" name="hp[format_enabled]" value="0" /><label><input type="checkbox" name="hp[format_enabled]" value="1" <?php checked( $hp['format_enabled'] ); ?> /> <?php esc_html_e( 'Show format block', 'sender-symposium' ); ?></label></td></tr>
 			<tr><th><label><?php esc_html_e( 'Section Title', 'sender-symposium' ); ?></label></th>
 				<td><input type="text" name="hp[format_title]" value="<?php echo esc_attr( $hp['format_title'] ); ?>" class="regular-text" /></td></tr>
 		</table>
@@ -585,7 +585,7 @@ function ss_render_tab_homepage() {
 		<h2><?php esc_html_e( 'Credibility Stats', 'sender-symposium' ); ?></h2>
 		<table class="form-table">
 			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
-				<td><label><input type="checkbox" name="hp[credibility_enabled]" value="1" <?php checked( $hp['credibility_enabled'] ); ?> /> <?php esc_html_e( 'Show credibility row', 'sender-symposium' ); ?></label></td></tr>
+				<td><input type="hidden" name="hp[credibility_enabled]" value="0" /><label><input type="checkbox" name="hp[credibility_enabled]" value="1" <?php checked( $hp['credibility_enabled'] ); ?> /> <?php esc_html_e( 'Show credibility row', 'sender-symposium' ); ?></label></td></tr>
 		</table>
 		<h4><?php esc_html_e( 'Stats (leave both empty to remove)', 'sender-symposium' ); ?></h4>
 		<table class="widefat" style="max-width:400px;">
@@ -611,7 +611,7 @@ function ss_render_tab_homepage() {
 		<h2><?php esc_html_e( 'Call to Action', 'sender-symposium' ); ?></h2>
 		<table class="form-table">
 			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
-				<td><label><input type="checkbox" name="hp[cta_enabled]" value="1" <?php checked( $hp['cta_enabled'] ); ?> /> <?php esc_html_e( 'Show CTA block', 'sender-symposium' ); ?></label></td></tr>
+				<td><input type="hidden" name="hp[cta_enabled]" value="0" /><label><input type="checkbox" name="hp[cta_enabled]" value="1" <?php checked( $hp['cta_enabled'] ); ?> /> <?php esc_html_e( 'Show CTA block', 'sender-symposium' ); ?></label></td></tr>
 			<tr><th><label><?php esc_html_e( 'Title', 'sender-symposium' ); ?></label></th>
 				<td><input type="text" name="hp[cta_title]" value="<?php echo esc_attr( $hp['cta_title'] ); ?>" class="regular-text" /></td></tr>
 			<tr><th><label><?php esc_html_e( 'Body Text', 'sender-symposium' ); ?></label></th>
