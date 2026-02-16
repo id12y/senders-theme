@@ -1,0 +1,296 @@
+/* ==========================================================================
+   SPONSORS — Frontend
+   Premium, restrained, La Pedrera-inspired. Consistent with theme tokens.
+   ========================================================================== */
+
+/* ─── Page header ─── */
+.ss-sponsors__header {
+  text-align: center;
+  margin-bottom: var(--sp-7);
+}
+
+.ss-sponsors__title {
+  font-family: var(--font-display);
+  font-size: var(--text-h1);
+  line-height: var(--lh-h1);
+  letter-spacing: var(--ls-h1);
+  font-weight: 550;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+}
+
+.ss-sponsors__subtitle {
+  font-size: var(--text-body-lg);
+  line-height: var(--lh-body-lg);
+  color: var(--text-secondary);
+  max-width: 54ch;
+  margin-inline: auto;
+}
+
+.ss-sponsors__intro {
+  max-width: 64ch;
+  margin-inline: auto;
+  margin-top: var(--sp-3);
+  color: var(--text-secondary);
+  line-height: var(--lh-body);
+}
+
+/* ─── Sections ─── */
+.ss-sponsors__section {
+  margin-bottom: var(--sp-7);
+}
+
+.ss-sponsors__section-title {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  line-height: var(--lh-h3);
+  font-weight: 550;
+  color: var(--text-primary);
+  text-align: center;
+  margin-bottom: var(--sp-5);
+  letter-spacing: -0.01em;
+}
+
+/* Overline-style micro-label for section context */
+.ss-sponsors__section-title::before {
+  content: "";
+  display: block;
+  width: 40px;
+  height: 2px;
+  background: var(--border-strong);
+  margin: 0 auto var(--sp-3);
+}
+
+/* ─── Sponsor grid ─── */
+.sponsor-grid {
+  display: grid;
+  grid-template-columns: repeat(var(--spr-cols-d, 4), 1fr);
+  gap: var(--sp-4);
+}
+
+.sponsor-grid--platinum {
+  grid-template-columns: 1fr;
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+@media (max-width: 991px) {
+  .sponsor-grid {
+    grid-template-columns: repeat(var(--spr-cols-t, 3), 1fr);
+  }
+}
+
+@media (max-width: 599px) {
+  .sponsor-grid {
+    grid-template-columns: repeat(var(--spr-cols-m, 2), 1fr);
+  }
+  .sponsor-grid--platinum {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Sponsor card ─── */
+.sponsor-card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  transition: box-shadow var(--duration-base) var(--ease),
+              border-color var(--duration-base) var(--ease);
+}
+
+.sponsor-card:hover,
+.sponsor-card:focus-within {
+  box-shadow: var(--shadow-soft);
+  border-color: var(--border-strong);
+}
+
+.sponsor-card--compact {
+  padding: var(--sp-3);
+}
+
+/* ─── Logo ─── */
+.sponsor-card__logo-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--logo-max-h, 64px);
+  margin-bottom: var(--sp-3);
+  width: 100%;
+}
+
+.sponsor-card__logo {
+  max-height: var(--logo-max-h, 64px);
+  max-width: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Dark mode logo switching — CSS only, no JS required */
+.sponsor-card__logo--dark {
+  display: none;
+}
+
+[data-theme="dark"] .sponsor-card__logo--light:not(.sponsor-card__logo--only) {
+  display: none;
+}
+
+[data-theme="dark"] .sponsor-card__logo--dark {
+  display: block;
+}
+
+/* ─── Card body ─── */
+.sponsor-card__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+
+.sponsor-card__name {
+  font-family: var(--font-display);
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-1);
+  line-height: var(--lh-h3);
+}
+
+.sponsor-card__desc {
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-2);
+  max-width: 40ch;
+}
+
+.sponsor-card__link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-size: var(--text-caption);
+  font-weight: 500;
+  color: var(--text-muted);
+  text-decoration: none;
+  margin-top: auto;
+  padding-top: var(--sp-2);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.sponsor-card__link:hover {
+  color: var(--text-primary);
+}
+
+.sponsor-card__link:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+.sponsor-card__link svg {
+  flex-shrink: 0;
+}
+
+/* ─── Platinum empty state ─── */
+.ss-sponsors__platinum-empty {
+  text-align: center;
+  background: var(--surface-section);
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: var(--sp-6) var(--sp-4);
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.ss-sponsors__platinum-empty-text {
+  font-family: var(--font-display);
+  font-size: var(--text-body-lg);
+  font-weight: 550;
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-3);
+}
+
+.ss-sponsors__platinum-cta {
+  display: inline-block;
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--link-default);
+  text-decoration: none;
+  border-bottom: 1px solid var(--border-subtle);
+  padding-bottom: 2px;
+  transition: color var(--duration-fast) var(--ease),
+              border-color var(--duration-fast) var(--ease);
+}
+
+.ss-sponsors__platinum-cta:hover {
+  color: var(--link-hover);
+  border-color: var(--link-hover);
+}
+
+.ss-sponsors__platinum-cta-text {
+  font-size: var(--text-small);
+  color: var(--text-muted);
+}
+
+/* ─── CTA section ─── */
+.ss-sponsors__cta {
+  text-align: center;
+  padding: var(--sp-7) var(--sp-4);
+  margin-top: var(--sp-4);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.ss-sponsors__cta-heading {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  line-height: var(--lh-h3);
+  font-weight: 550;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-3);
+}
+
+.ss-sponsors__cta-text {
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+  max-width: 54ch;
+  margin-inline: auto;
+  margin-bottom: var(--sp-4);
+}
+
+.ss-sponsors__cta-btn {
+  display: inline-block;
+  padding: var(--sp-2) var(--sp-5);
+  background: var(--action-primary-bg);
+  color: var(--action-primary-text);
+  font-family: var(--font-display);
+  font-size: var(--text-body);
+  font-weight: 550;
+  text-decoration: none;
+  border-radius: var(--radius-btn);
+  transition: background var(--duration-fast) var(--ease);
+}
+
+.ss-sponsors__cta-btn:hover {
+  background: var(--action-primary-hover);
+  color: var(--action-primary-text);
+}
+
+.ss-sponsors__cta-btn:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* ─── Reduced motion ─── */
+@media (prefers-reduced-motion: reduce) {
+  .sponsor-card,
+  .sponsor-card__link,
+  .ss-sponsors__cta-btn,
+  .ss-sponsors__platinum-cta {
+    transition: none;
+  }
+}

@@ -174,6 +174,16 @@ function ss_enqueue_assets() {
 		);
 	}
 
+	/* Sponsors CSS — on any page containing [ss_sponsors] shortcode or sponsors slug */
+	if ( is_page( 'sponsors' ) || is_page( 'partners' ) || ( is_singular() && has_shortcode( get_post()->post_content ?? '', 'ss_sponsors' ) ) ) {
+		wp_enqueue_style(
+			'ss-sponsors',
+			$uri . '/assets/css/sponsors.css',
+			array( 'ss-components' ),
+			ss_asset_version( $dir . '/assets/css/sponsors.css' )
+		);
+	}
+
 	/* FAQ CSS + JS — on FAQ page template */
 	if ( is_page_template( 'page-faq.php' ) || is_page( 'faq' ) ) {
 		wp_enqueue_style(
@@ -512,6 +522,19 @@ require_once get_template_directory() . '/inc/hero/render.php';
    ========================================================================== */
 
 require_once get_template_directory() . '/inc/about/meta-box.php';
+
+/* ==========================================================================
+   8h. SPONSORS MODULE
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/sponsors/storage.php';
+require_once get_template_directory() . '/inc/sponsors/display-settings.php';
+require_once get_template_directory() . '/inc/sponsors/render.php';
+require_once get_template_directory() . '/inc/sponsors/csv-importer.php';
+
+if ( is_admin() ) {
+	require_once get_template_directory() . '/inc/sponsors/admin.php';
+}
 
 /* ==========================================================================
    9. WIDGET AREAS
