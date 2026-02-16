@@ -1,0 +1,441 @@
+/* ==========================================================================
+   TICKETING PAGE — Sender Symposium
+   Conversion-optimised · Executive · Token-driven
+   Scoped to .ss-ticketing to avoid Elementor conflicts
+   ========================================================================== */
+
+/* ----------------------------------------------------------
+   Journey Bar
+   ---------------------------------------------------------- */
+
+.ss-ticketing-journey {
+  background: var(--surface-section);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: var(--sp-3) 0;
+}
+
+.ss-ticketing-journey__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+/* Logo — light / dark toggle via CSS only */
+.ss-ticketing-journey__logo img {
+  max-height: 32px;
+  width: auto;
+}
+
+.ss-ticketing-journey__logo .ss-logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] .ss-ticketing-journey__logo .ss-logo-light {
+  display: none;
+}
+
+[data-theme="dark"] .ss-ticketing-journey__logo .ss-logo-dark {
+  display: inline;
+}
+
+/* Steps (ordered list) */
+.ss-ticketing-steps {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ss-ticketing-step {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  color: var(--text-muted);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+}
+
+.ss-ticketing-step--active {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.ss-ticketing-step--complete {
+  color: var(--text-secondary);
+}
+
+.ss-ticketing-step__number {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  font-size: var(--text-caption);
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.ss-ticketing-step--active .ss-ticketing-step__number {
+  background: var(--action-primary-bg);
+  color: var(--action-primary-text);
+  border-color: var(--action-primary-bg);
+}
+
+/* Trust badge */
+.ss-ticketing-trust {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-1);
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+  line-height: var(--lh-caption);
+}
+
+/* ----------------------------------------------------------
+   Conversion Intro
+   ---------------------------------------------------------- */
+
+.ss-ticketing-intro {
+  text-align: center;
+  padding: var(--sp-7) 0 var(--sp-5);
+}
+
+.ss-ticketing-overline {
+  font-size: var(--text-caption);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-2);
+}
+
+.ss-ticketing-headline {
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+  font-weight: 650;
+  margin-bottom: var(--sp-3);
+  max-width: 48ch;
+  margin-inline: auto;
+}
+
+.ss-ticketing-body {
+  max-width: 60ch;
+  margin-inline: auto;
+  color: var(--text-secondary);
+  line-height: var(--lh-body);
+}
+
+.ss-ticketing-body p {
+  margin-bottom: var(--sp-3);
+}
+
+.ss-ticketing-body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Micro trust row */
+.ss-ticketing-micro-trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--sp-3);
+  list-style: none;
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+  font-size: var(--text-small);
+  color: var(--text-muted);
+}
+
+.ss-ticketing-micro-trust li {
+  display: flex;
+  align-items: center;
+}
+
+.ss-ticketing-micro-trust li + li::before {
+  content: "\B7";
+  margin-right: var(--sp-3);
+  color: var(--border-strong);
+  font-size: 1.4em;
+  line-height: 1;
+}
+
+/* ----------------------------------------------------------
+   Scarcity Line
+   ---------------------------------------------------------- */
+
+.ss-ticketing-scarcity {
+  text-align: center;
+  padding: var(--sp-3) 0;
+}
+
+.ss-ticketing-scarcity p {
+  font-style: italic;
+  color: var(--text-muted);
+  font-size: var(--text-small);
+  margin: 0;
+}
+
+/* ----------------------------------------------------------
+   Two-Column Layout
+   ---------------------------------------------------------- */
+
+.ss-ticketing-layout {
+  padding: var(--sp-6) 0 var(--sp-8);
+}
+
+.ss-ticketing-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+}
+
+@media (min-width: 900px) {
+  .ss-ticketing-columns {
+    grid-template-columns: 62% 1fr;
+    gap: var(--sp-7);
+    align-items: start;
+  }
+}
+
+/* ----------------------------------------------------------
+   TicketTailor Embed (Left Column)
+   ---------------------------------------------------------- */
+
+.ss-tt-wrap {
+  min-height: 200px;
+}
+
+.ss-ticketing-notice {
+  padding: var(--sp-4);
+  background: var(--surface-card);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-card);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.ss-ticketing-fallback {
+  margin-top: var(--sp-3);
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}
+
+/* ----------------------------------------------------------
+   Sidebar (Right Column)
+   ---------------------------------------------------------- */
+
+.ss-ticketing-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+/* Why Different */
+.ss-ticketing-why h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-h4);
+  line-height: var(--lh-h4);
+  font-weight: 600;
+  margin-bottom: var(--sp-3);
+}
+
+.ss-ticketing-why ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ss-ticketing-why li {
+  padding: var(--sp-2) 0;
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+}
+
+.ss-ticketing-why li:last-child {
+  border-bottom: 0;
+}
+
+/* Information Card */
+.ss-ticketing-info-card {
+  padding: var(--sp-4);
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+}
+
+.ss-ticketing-info-card h3 {
+  font-family: var(--font-display);
+  font-size: var(--text-h4);
+  line-height: var(--lh-h4);
+  font-weight: 600;
+  margin-bottom: var(--sp-2);
+}
+
+.ss-ticketing-info-card__body {
+  color: var(--text-secondary);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+}
+
+.ss-ticketing-info-card__body p {
+  margin-bottom: var(--sp-2);
+}
+
+.ss-ticketing-info-card__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* Testimonial Card */
+.ss-ticketing-testimonial {
+  padding: var(--sp-4);
+  padding-left: calc(var(--sp-4) + 3px);
+  margin: 0;
+  border-left: 3px solid var(--focus-ring);
+  background: var(--surface-card);
+  border-radius: 0 var(--radius-card) var(--radius-card) 0;
+}
+
+.ss-ticketing-testimonial__quote {
+  font-size: var(--text-body-lg);
+  line-height: var(--lh-body-lg);
+  font-style: italic;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-3);
+}
+
+.ss-ticketing-testimonial__footer {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+}
+
+.ss-ticketing-testimonial__avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ss-ticketing-testimonial__name {
+  display: block;
+  font-weight: 600;
+  font-style: normal;
+  font-size: var(--text-small);
+}
+
+.ss-ticketing-testimonial__meta {
+  display: block;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+/* ----------------------------------------------------------
+   Reassurance Micro Line
+   ---------------------------------------------------------- */
+
+.ss-ticketing-reassurance {
+  text-align: center;
+  padding: var(--sp-4) 0 var(--sp-7);
+}
+
+.ss-ticketing-reassurance p {
+  font-size: var(--text-small);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.ss-ticketing-reassurance a {
+  color: var(--link-default);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.ss-ticketing-reassurance a:hover {
+  color: var(--link-hover);
+}
+
+/* ----------------------------------------------------------
+   Focus States (scoped)
+   ---------------------------------------------------------- */
+
+.ss-ticketing a:focus-visible,
+.ss-ticketing button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------
+   Dark Mode
+   ---------------------------------------------------------- */
+
+[data-theme="dark"] .ss-ticketing-journey {
+  background: var(--surface-elevated);
+  border-bottom-color: var(--border-strong);
+}
+
+[data-theme="dark"] .ss-ticketing-info-card,
+[data-theme="dark"] .ss-ticketing-testimonial {
+  background: var(--surface-elevated);
+}
+
+[data-theme="dark"] .ss-ticketing-notice {
+  background: var(--surface-elevated);
+}
+
+/* ----------------------------------------------------------
+   Reduced Motion
+   ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-ticketing,
+  .ss-ticketing * {
+    transition-duration: 0ms !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   Mobile
+   ---------------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .ss-ticketing-journey__inner {
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+
+  .ss-ticketing-steps {
+    gap: var(--sp-3);
+  }
+
+  .ss-ticketing-intro {
+    padding: var(--sp-6) 0 var(--sp-4);
+  }
+
+  .ss-ticketing-headline {
+    font-size: var(--text-h3);
+    line-height: var(--lh-h3);
+  }
+
+  .ss-ticketing-micro-trust {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+
+  .ss-ticketing-micro-trust li + li::before {
+    display: none;
+  }
+
+  .ss-ticketing-layout {
+    padding: var(--sp-5) 0 var(--sp-6);
+  }
+}

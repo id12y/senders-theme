@@ -120,6 +120,16 @@ function ss_enqueue_assets() {
 		);
 	}
 
+	/* Ticketing CSS — on ticketing page template */
+	if ( is_page_template( 'page-templates/template-ticketing.php' ) ) {
+		wp_enqueue_style(
+			'ss-ticketing',
+			$uri . '/assets/css/ticketing.css',
+			array( 'ss-components' ),
+			ss_asset_version( $dir . '/assets/css/ticketing.css' )
+		);
+	}
+
 	/* FAQ CSS + JS — on FAQ page template */
 	if ( is_page_template( 'page-faq.php' ) || is_page( 'faq' ) ) {
 		wp_enqueue_style(
@@ -439,6 +449,12 @@ require_once get_template_directory() . '/inc/faq/storage.php';
 if ( is_admin() ) {
 	require_once get_template_directory() . '/inc/faq/admin.php';
 }
+
+/* ==========================================================================
+   8e. TICKETING MODULE
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/ticketing/meta-box.php';
 
 /* ==========================================================================
    9. WIDGET AREAS
