@@ -97,6 +97,16 @@ function ss_enqueue_assets() {
 		ss_asset_version( $dir . '/assets/css/components.css' )
 	);
 
+	/* Elementor fallback — only when Elementor is not active */
+	if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
+		wp_enqueue_style(
+			'ss-elementor-fallback',
+			$uri . '/assets/css/elementor-fallback.css',
+			array( 'ss-base' ),
+			ss_asset_version( $dir . '/assets/css/elementor-fallback.css' )
+		);
+	}
+
 	/* Hero Block CSS + optional countdown JS — front page */
 	if ( is_front_page() ) {
 		wp_enqueue_style(
