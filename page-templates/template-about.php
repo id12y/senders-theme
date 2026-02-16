@@ -162,6 +162,9 @@ $cls   = $s['closing'];
 				<?php foreach ( $gal['image_ids'] as $img_id ) :
 					$img_url = wp_get_attachment_image_url( $img_id, 'large' );
 					$img_alt = get_post_meta( $img_id, '_wp_attachment_image_alt', true );
+					if ( empty( $img_alt ) ) {
+						$img_alt = get_the_title( $img_id );
+					}
 					if ( ! $img_url ) {
 						continue;
 					}

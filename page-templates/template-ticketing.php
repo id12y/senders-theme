@@ -171,7 +171,7 @@ if ( function_exists( 'ss_get_setting' ) && 'premium' === ss_get_setting( 'card_
 			<div class="ss-ticketing-columns">
 
 				<?php /* ── LEFT: TicketTailor Embed ── */ ?>
-				<div class="ss-ticketing-embed ss-ticketing-embed--surface">
+				<div class="ss-ticketing-embed ss-ticketing-embed--surface<?php echo ! empty( $tt['widget_bg_transparent'] ) ? ' ss-ticketing-embed--tt-transparent' : ''; ?>">
 					<?php
 					$tt_mode       = $tt['embed_method'];
 					$tt_has_event  = ! empty( $tt['event_id'] );
@@ -304,7 +304,7 @@ if ( function_exists( 'ss_get_setting' ) && 'premium' === ss_get_setting( 'card_
 							case 'why_different': ?>
 								<div class="ss-ticketing-why">
 									<?php if ( ! empty( $wd['title'] ) ) : ?>
-										<h3><?php echo esc_html( $wd['title'] ); ?></h3>
+										<h2><?php echo esc_html( $wd['title'] ); ?></h2>
 									<?php endif; ?>
 									<?php
 									$bullets = ss_lines_to_array( $wd['bullets'] );
@@ -322,7 +322,7 @@ if ( function_exists( 'ss_get_setting' ) && 'premium' === ss_get_setting( 'card_
 							case 'info_card': ?>
 								<div class="ss-ticketing-info-card<?php echo $ic['highlight'] ? ' ss-ticketing-info-card--highlight' : ''; ?>">
 									<?php if ( ! empty( $ic['heading'] ) ) : ?>
-										<h3><?php echo esc_html( $ic['heading'] ); ?></h3>
+										<h2><?php echo esc_html( $ic['heading'] ); ?></h2>
 									<?php endif; ?>
 									<?php if ( ! empty( $ic['body'] ) ) : ?>
 										<div class="ss-ticketing-info-card__body"><?php echo wp_kses_post( $ic['body'] ); ?></div>
