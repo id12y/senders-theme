@@ -143,6 +143,16 @@ function ss_enqueue_assets() {
 			ss_asset_version( $dir . '/assets/css/ticketing.css' )
 		);
 
+		/* Premium card style CSS (conditional) */
+		if ( function_exists( 'ss_get_setting' ) && 'premium' === ss_get_setting( 'card_style' ) ) {
+			wp_enqueue_style(
+				'ss-premium-overrides',
+				$uri . '/assets/css/premium-overrides.css',
+				array( 'ss-ticketing' ),
+				ss_asset_version( $dir . '/assets/css/premium-overrides.css' )
+			);
+		}
+
 		/* TicketTailor widget.js from CDN + our init script */
 		$tt_settings = ss_get_ticketing_settings( get_the_ID() );
 		$tt_mode     = $tt_settings['tickettailor']['embed_method'] ?? 'auto';
@@ -356,6 +366,18 @@ function ss_output_custom_properties() {
 		}
 	}
 
+	/* Site settings: accent colour + premium shadow tokens */
+	if ( function_exists( 'ss_get_setting_nonempty' ) ) {
+		$accent = ss_get_setting_nonempty( 'accent_color', '' );
+		if ( '' !== $accent && preg_match( '/^#([A-Fa-f0-9]{3}){1,2}$/', $accent ) ) {
+			$color_lines[] = '--accent-color: ' . $accent . ';';
+		}
+		if ( 'premium' === ss_get_setting( 'card_style' ) ) {
+			$root_lines[] = '--ss-shadow-elevated: 0 10px 30px rgba(0,0,0,.06);';
+			$root_lines[] = '--ss-shadow-elevated-dark: 0 10px 30px rgba(0,0,0,.35);';
+		}
+	}
+
 	$output = '';
 	if ( ! empty( $root_lines ) ) {
 		$output .= ':root{' . "\n" . implode( "\n", $root_lines ) . "\n" . '}' . "\n";
@@ -505,6 +527,14 @@ if ( is_admin() ) {
 }
 
 /* ==========================================================================
+   8d2. SITE SETTINGS HELPERS
+   Loaded before ticketing/hero so ss_get_setting_nonempty() is available
+   when their defaults functions are called.
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/helpers/settings.php';
+
+/* ==========================================================================
    8e. TICKETING MODULE
    ========================================================================== */
 
@@ -567,6 +597,14 @@ remove_action( 'wp_head', 'wp_shortlink_wp_head' );
    ========================================================================== */
 
 require_once get_template_directory() . '/inc/admin-settings.php';
+
+/* ==========================================================================
+   11b. SITE SETTINGS ADMIN (Control Panel)
+   ========================================================================== */
+
+if ( is_admin() ) {
+	require_once get_template_directory() . '/inc/admin/settings-page.php';
+}
 
 /* ==========================================================================
    12. HELPER FUNCTIONS

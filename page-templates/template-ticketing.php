@@ -31,6 +31,9 @@ if ( 'compact' === $rc['spacing'] ) {
 if ( ! $rc['show'] ) {
 	$root_classes[] = 'ss-ticketing--full-width';
 }
+if ( function_exists( 'ss_get_setting' ) && 'premium' === ss_get_setting( 'card_style' ) ) {
+	$root_classes[] = 'ss-ticketing--premium';
+}
 ?>
 
 <div class="<?php echo esc_attr( implode( ' ', $root_classes ) ); ?>">

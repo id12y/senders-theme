@@ -1,0 +1,68 @@
+/* ==========================================================================
+   PREMIUM CARD STYLE — Ticketing Sidebar Overrides
+   Loaded conditionally when Design Defaults > Card Style = Premium
+   Scoped to .ss-ticketing--premium to avoid any bleed.
+   ========================================================================== */
+
+/* ----------------------------------------------------------
+   Info Card — elevated with accent top border
+   ---------------------------------------------------------- */
+
+.ss-ticketing--premium .ss-ticketing-info-card {
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--ss-shadow-elevated, 0 10px 30px rgba(0, 0, 0, .06));
+  border-top: 3px solid var(--accent-color, var(--focus-ring));
+}
+
+.ss-ticketing--premium .ss-ticketing-info-card--highlight {
+  border-top-color: var(--accent-color, var(--focus-ring));
+}
+
+/* ----------------------------------------------------------
+   Testimonial — elevated with accent left border
+   ---------------------------------------------------------- */
+
+.ss-ticketing--premium .ss-ticketing-testimonial {
+  border-radius: 0 var(--radius-lg, 12px) var(--radius-lg, 12px) 0;
+  box-shadow: var(--ss-shadow-elevated, 0 10px 30px rgba(0, 0, 0, .06));
+  border-left-color: var(--accent-color, var(--focus-ring));
+}
+
+/* ----------------------------------------------------------
+   Why Different — card treatment
+   ---------------------------------------------------------- */
+
+.ss-ticketing--premium .ss-ticketing-why {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg, 12px);
+  padding: var(--sp-5);
+}
+
+/* ----------------------------------------------------------
+   Embed surface — premium elevation
+   ---------------------------------------------------------- */
+
+.ss-ticketing--premium .ss-ticketing-embed--surface {
+  border-radius: var(--radius-lg, 12px);
+  box-shadow: var(--ss-shadow-elevated, 0 10px 30px rgba(0, 0, 0, .06));
+}
+
+/* ----------------------------------------------------------
+   Dark Mode
+   Uses --ss-shadow-elevated-dark token injected inline.
+   Falls back to literal value if token absent.
+   ---------------------------------------------------------- */
+
+[data-theme="dark"] .ss-ticketing--premium .ss-ticketing-info-card,
+[data-theme="dark"] .ss-ticketing--premium .ss-ticketing-embed--surface {
+  box-shadow: var(--ss-shadow-elevated-dark, 0 10px 30px rgba(0, 0, 0, .35));
+}
+
+[data-theme="dark"] .ss-ticketing--premium .ss-ticketing-testimonial {
+  box-shadow: var(--ss-shadow-elevated-dark, 0 10px 30px rgba(0, 0, 0, .35));
+}
+
+[data-theme="dark"] .ss-ticketing--premium .ss-ticketing-why {
+  background: var(--surface-elevated);
+}

@@ -17,19 +17,22 @@ if ( ! defined( 'ABSPATH' ) ) {
    ═══════════════════════════════════════════════════════════ */
 
 function ss_ticketing_defaults() {
+	/* Global site settings as middle-layer defaults (page meta → global → hardcoded). */
+	$g = function_exists( 'ss_get_setting_nonempty' ) ? 'ss_get_setting_nonempty' : null;
+
 	return array(
 		'journey_bar' => array(
 			'show'             => true,
 			'show_logo'        => true,
 			'logo_id'          => 0,
 			'logo_dark_id'     => 0,
-			'step_1'           => __( 'Ticket', 'sender-symposium' ),
-			'step_2'           => __( 'Information', 'sender-symposium' ),
-			'step_3'           => __( 'Confirm', 'sender-symposium' ),
+			'step_1'           => $g ? $g( 'ticketing_journey_step_1', __( 'Ticket', 'sender-symposium' ) ) : __( 'Ticket', 'sender-symposium' ),
+			'step_2'           => $g ? $g( 'ticketing_journey_step_2', __( 'Information', 'sender-symposium' ) ) : __( 'Information', 'sender-symposium' ),
+			'step_3'           => $g ? $g( 'ticketing_journey_step_3', __( 'Confirm', 'sender-symposium' ) ) : __( 'Confirm', 'sender-symposium' ),
 			'active_step'      => 1,
 			'show_numbers'     => true,
 			'show_trust_badge' => true,
-			'trust_badge_text' => __( 'Secured checkout', 'sender-symposium' ),
+			'trust_badge_text' => $g ? $g( 'ticketing_security_label', __( 'Secured checkout', 'sender-symposium' ) ) : __( 'Secured checkout', 'sender-symposium' ),
 		),
 		'intro' => array(
 			'show'             => true,
@@ -63,13 +66,13 @@ function ss_ticketing_defaults() {
 		),
 		'why_different' => array(
 			'show'    => true,
-			'title'   => __( 'Why This Event Is Different', 'sender-symposium' ),
+			'title'   => $g ? $g( 'ticketing_rightcard_2_title', __( 'Why This Event Is Different', 'sender-symposium' ) ) : __( 'Why This Event Is Different', 'sender-symposium' ),
 			'bullets' => "Working sessions, not passive talks\nExtended Q&A with practitioners\nPeer-level discussion, not vendor pitches",
 		),
 		'info_card' => array(
 			'show'      => true,
-			'heading'   => __( 'Become a Founder Delegate', 'sender-symposium' ),
-			'body'      => '<p>Secure your place in Barcelona and join a community of operators who shape lifecycle strategy across Europe and beyond.</p>',
+			'heading'   => $g ? $g( 'ticketing_rightcard_1_title', __( 'Become a Founder Delegate', 'sender-symposium' ) ) : __( 'Become a Founder Delegate', 'sender-symposium' ),
+			'body'      => $g ? $g( 'ticketing_rightcard_1_body', '<p>Secure your place in Barcelona and join a community of operators who shape lifecycle strategy across Europe and beyond.</p>' ) : '<p>Secure your place in Barcelona and join a community of operators who shape lifecycle strategy across Europe and beyond.</p>',
 			'cta_label' => '',
 			'cta_url'   => '',
 			'highlight' => false,
@@ -84,7 +87,7 @@ function ss_ticketing_defaults() {
 		),
 		'reassurance' => array(
 			'show' => true,
-			'text' => __( 'Need help or booking for a team? Contact us.', 'sender-symposium' ),
+			'text' => $g ? $g( 'ticketing_footer_help_text', __( 'Need help or booking for a team? Contact us.', 'sender-symposium' ) ) : __( 'Need help or booking for a team? Contact us.', 'sender-symposium' ),
 			'link' => '',
 		),
 	);

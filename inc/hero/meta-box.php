@@ -19,6 +19,42 @@ if ( ! defined( 'ABSPATH' ) ) {
    DEFAULTS
    ═══════════════════════════════════════════════════════════ */
 
+/**
+ * Derive a human-readable date display from ss_site_settings.
+ * Falls back to the provided hardcoded default if no global date is set.
+ */
+function ss_hero_derive_date_display( $hardcoded ) {
+	if ( ! function_exists( 'ss_get_setting_nonempty' ) ) {
+		return $hardcoded;
+	}
+	$date_raw = ss_get_setting_nonempty( 'event_date', '' );
+	if ( '' === $date_raw ) {
+		return $hardcoded;
+	}
+	$dt = DateTime::createFromFormat( 'Y-m-d', $date_raw );
+	if ( ! $dt || $dt->format( 'Y-m-d' ) !== $date_raw ) {
+		return $hardcoded;
+	}
+	return wp_date( 'j F Y', $dt->getTimestamp() );
+}
+
+/**
+ * Derive "City, Country" location string from ss_site_settings.
+ * Falls back to the provided hardcoded default if no global city is set.
+ */
+function ss_hero_derive_location( $hardcoded ) {
+	if ( ! function_exists( 'ss_get_setting_nonempty' ) ) {
+		return $hardcoded;
+	}
+	$city    = ss_get_setting_nonempty( 'event_city', '' );
+	$country = ss_get_setting_nonempty( 'event_country', '' );
+	if ( '' === $city && '' === $country ) {
+		return $hardcoded;
+	}
+	$parts = array_filter( array( $city, $country ) );
+	return ! empty( $parts ) ? implode( ', ', $parts ) : $hardcoded;
+}
+
 function ss_hero_defaults() {
 	return array(
 		'enabled'     => true,
@@ -40,9 +76,9 @@ function ss_hero_defaults() {
 		),
 		'key_facts' => array(
 			'enabled'  => true,
-			'date'     => '24 April 2026',
-			'location' => 'Barcelona, Spain',
-			'venue'    => 'La Pedrera (Casa Milà)',
+			'date'     => ss_hero_derive_date_display( '24 April 2026' ),
+			'location' => ss_hero_derive_location( 'Barcelona, Spain' ),
+			'venue'    => function_exists( 'ss_get_setting_nonempty' ) ? ss_get_setting_nonempty( 'event_venue_name', 'La Pedrera (Casa Milà)' ) : 'La Pedrera (Casa Milà)',
 			'format'   => 'High-interaction · Limited seats',
 		),
 		'microcopy' => __( 'Tickets are intentionally limited.', 'sender-symposium' ),
