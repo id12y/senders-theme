@@ -68,6 +68,14 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 </footer>
 <?php endif; ?>
 
+<?php if ( defined( 'SS_GEEK_LAYER_ENABLED' ) && SS_GEEK_LAYER_ENABLED ) : ?>
+<!--
+  Curious minds tend to run better pipelines.
+  If you are reading this, you probably segment with intent.
+  emailexpert.io
+-->
+<?php endif; ?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

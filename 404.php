@@ -7,6 +7,9 @@
 
 get_header();
 ?>
+<?php if ( defined( 'SS_GEEK_LAYER_ENABLED' ) && SS_GEEK_LAYER_ENABLED ) : ?>
+<!-- This page returned nothing. Much like a lifecycle with no nurture sequence. -->
+<?php endif; ?>
 
 <div class="container section" style="text-align: center; min-height: 50vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
 

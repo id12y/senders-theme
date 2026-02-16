@@ -678,7 +678,58 @@ function ss_media_picker( $name, $value, $label = '' ) {
 }
 
 /* ==========================================================================
-   13. HIDE PHP ERRORS ON FRONTEND
+   13. GEEK LAYER (console easter egg for technically curious visitors)
+   ========================================================================== */
+
+if ( ! defined( 'SS_GEEK_LAYER_ENABLED' ) ) {
+	define( 'SS_GEEK_LAYER_ENABLED', true );
+}
+
+/**
+ * Enqueue the Geek Layer script and pass the feature flag.
+ * No DOM manipulation, no network calls, no layout impact.
+ */
+function ss_enqueue_geek_layer() {
+	if ( ! SS_GEEK_LAYER_ENABLED || is_admin() ) {
+		return;
+	}
+	$uri = get_template_directory_uri();
+	$dir = get_template_directory();
+	wp_enqueue_script(
+		'ss-geek-layer',
+		$uri . '/assets/js/geek-layer.js',
+		array(),
+		ss_asset_version( $dir . '/assets/js/geek-layer.js' ),
+		array( 'strategy' => 'defer', 'in_footer' => true )
+	);
+	wp_add_inline_script(
+		'ss-geek-layer',
+		'window.SS_GEEK_LAYER_ENABLED=true;',
+		'before'
+	);
+}
+add_action( 'wp_enqueue_scripts', 'ss_enqueue_geek_layer', 20 );
+
+/**
+ * Append CRM-themed lines to the WordPress virtual robots.txt.
+ */
+function ss_geek_layer_robots( $output ) {
+	if ( ! SS_GEEK_LAYER_ENABLED ) {
+		return $output;
+	}
+	$output .= "\n";
+	$output .= "# ----------------------------------------------------------\n";
+	$output .= "# If you are reading this, you probably automate with intent.\n";
+	$output .= "# Good bots segment before they crawl.\n";
+	$output .= "# The best pipelines are the ones nobody has to babysit.\n";
+	$output .= "# emailexpert.io — systems that compound.\n";
+	$output .= "# ----------------------------------------------------------\n";
+	return $output;
+}
+add_filter( 'robots_txt', 'ss_geek_layer_robots', 99 );
+
+/* ==========================================================================
+   14. HIDE PHP ERRORS ON FRONTEND
    ========================================================================== */
 
 /**
