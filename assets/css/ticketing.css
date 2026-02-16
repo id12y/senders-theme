@@ -257,6 +257,18 @@
   min-height: auto;
 }
 
+/* Domain mismatch buyer note */
+.ss-ticketing-domain-note {
+  margin-top: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  text-align: center;
+}
+
 /* ----------------------------------------------------------
    Sidebar (Right Column)
    ---------------------------------------------------------- */

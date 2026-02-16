@@ -45,11 +45,14 @@ function ss_ticketing_defaults() {
 			'text' => __( 'Tickets are intentionally limited to maintain depth and interaction.', 'sender-symposium' ),
 		),
 		'tickettailor' => array(
-			'shortcode'     => '',
-			'event_id'      => '',
-			'access_code'   => '',
-			'embed_method'  => 'auto',
-			'fallback_text' => __( 'Tickets are available at sendersymposium.com/tickets/', 'sender-symposium' ),
+			'shortcode'              => '',
+			'event_id'               => '',
+			'access_code'            => '',
+			'custom_domain'          => '',
+			'embed_method'           => 'auto',
+			'fallback_text'          => __( 'Tickets are available at sendersymposium.com/tickets/', 'sender-symposium' ),
+			'widget_bg_transparent'  => true,
+			'domain_mismatch_note'   => __( 'If checkout opens in a new tab, please complete your purchase there.', 'sender-symposium' ),
 		),
 		'right_column' => array(
 			'order' => 'info_first',
@@ -148,12 +151,15 @@ function ss_sanitize_ticketing_settings( $raw ) {
 	/* TicketTailor */
 	$tt = $raw['tickettailor'] ?? array();
 	$clean['tickettailor'] = array(
-		'shortcode'     => sanitize_text_field( $tt['shortcode'] ?? '' ),
-		'event_id'      => sanitize_text_field( $tt['event_id'] ?? '' ),
-		'access_code'   => sanitize_text_field( $tt['access_code'] ?? '' ),
-		'embed_method'  => in_array( $tt['embed_method'] ?? '', array( 'auto', 'widget_js', 'shortcode' ), true )
+		'shortcode'              => sanitize_text_field( $tt['shortcode'] ?? '' ),
+		'event_id'               => sanitize_text_field( $tt['event_id'] ?? '' ),
+		'access_code'            => sanitize_text_field( $tt['access_code'] ?? '' ),
+		'custom_domain'          => sanitize_text_field( $tt['custom_domain'] ?? '' ),
+		'embed_method'           => in_array( $tt['embed_method'] ?? '', array( 'auto', 'widget_js', 'shortcode' ), true )
 			? $tt['embed_method'] : 'auto',
-		'fallback_text' => sanitize_text_field( $tt['fallback_text'] ?? '' ),
+		'fallback_text'          => sanitize_text_field( $tt['fallback_text'] ?? '' ),
+		'widget_bg_transparent'  => ! empty( $tt['widget_bg_transparent'] ),
+		'domain_mismatch_note'   => sanitize_text_field( $tt['domain_mismatch_note'] ?? '' ),
 	);
 
 	/* Right column order */
@@ -356,6 +362,11 @@ function ss_ticketing_render_meta_box( $post ) {
 			<input type="text" name="ss_ticketing[tickettailor][access_code]" value="<?php echo esc_attr( $s['tickettailor']['access_code'] ); ?>" class="regular-text" placeholder=""></label>
 		</p>
 		<p>
+			<label><?php esc_html_e( 'Custom Checkout Domain', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'if you configured a CNAME in TicketTailor, e.g. tickets.sendersymposium.com — leave empty for default', 'sender-symposium' ); ?>)</small><br>
+			<input type="text" name="ss_ticketing[tickettailor][custom_domain]" value="<?php echo esc_attr( $s['tickettailor']['custom_domain'] ); ?>" class="regular-text" placeholder="tickets.yourdomain.com"></label>
+		</p>
+		<p>
 			<label><?php esc_html_e( 'Shortcode', 'sender-symposium' ); ?>
 			<small>(<?php esc_html_e( 'used by shortcode mode, or as fallback in auto mode', 'sender-symposium' ); ?>)</small><br>
 			<input type="text" name="ss_ticketing[tickettailor][shortcode]" value="<?php echo esc_attr( $s['tickettailor']['shortcode'] ); ?>" class="large-text" placeholder='[ticket-tailor id="..."]'></label>
@@ -365,6 +376,45 @@ function ss_ticketing_render_meta_box( $post ) {
 			<small>(<?php esc_html_e( 'shown if embed unavailable', 'sender-symposium' ); ?>)</small><br>
 			<input type="text" name="ss_ticketing[tickettailor][fallback_text]" value="<?php echo esc_attr( $s['tickettailor']['fallback_text'] ); ?>" class="large-text"></label>
 		</p>
+		<p>
+			<label><input type="checkbox" name="ss_ticketing[tickettailor][widget_bg_transparent]" value="1" <?php checked( $s['tickettailor']['widget_bg_transparent'] ); ?>>
+			<?php esc_html_e( 'Transparent widget background (recommended for dark mode)', 'sender-symposium' ); ?></label>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'Domain Mismatch Note', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'shown on page when TT domain differs from site domain — leave empty to hide', 'sender-symposium' ); ?>)</small><br>
+			<input type="text" name="ss_ticketing[tickettailor][domain_mismatch_note]" value="<?php echo esc_attr( $s['tickettailor']['domain_mismatch_note'] ); ?>" class="large-text"></label>
+		</p>
+
+		<?php
+		/* ── Domain Status Warning ── */
+		$tt_event_id = $s['tickettailor']['event_id'];
+		if ( ! empty( $tt_event_id ) ) :
+			$tt_host   = ! empty( $s['tickettailor']['custom_domain'] )
+				? $s['tickettailor']['custom_domain']
+				: 'www.tickettailor.com';
+			$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+			$site_reg      = implode( '.', array_slice( explode( '.', $site_host ?: '' ), -2 ) );
+			$tt_reg        = implode( '.', array_slice( explode( '.', $tt_host ?: '' ), -2 ) );
+			$domains_match = ( $site_reg === $tt_reg );
+		?>
+		<div class="notice notice-<?php echo $domains_match ? 'success' : 'warning'; ?> inline" style="margin:8px 0;padding:8px 12px;">
+			<?php if ( $domains_match ) : ?>
+				<p><strong><?php esc_html_e( 'Domain status:', 'sender-symposium' ); ?></strong>
+				<?php
+				/* translators: %1$s: TT host, %2$s: site host */
+				printf( esc_html__( 'TicketTailor domain (%1$s) matches site domain (%2$s). Embedded checkout should work in all browsers.', 'sender-symposium' ), '<code>' . esc_html( $tt_host ) . '</code>', '<code>' . esc_html( $site_host ) . '</code>' );
+				?></p>
+			<?php else : ?>
+				<p><strong><?php esc_html_e( 'Domain mismatch detected:', 'sender-symposium' ); ?></strong>
+				<?php
+				printf( esc_html__( 'TicketTailor domain (%1$s) differs from site domain (%2$s).', 'sender-symposium' ), '<code>' . esc_html( $tt_host ) . '</code>', '<code>' . esc_html( $site_host ) . '</code>' );
+				?></p>
+				<p><?php esc_html_e( 'Browsers may open checkout in a new page/window due to third-party cookie restrictions. To keep checkout embedded, set up a TicketTailor custom domain under your site domain (e.g. tickets.sendersymposium.com via CNAME).', 'sender-symposium' ); ?></p>
+			<?php endif; ?>
+		</div>
+		<?php endif; ?>
+
 		<p class="description">
 			<?php esc_html_e( 'Tip: For the best inline checkout experience (no redirects), set up a custom domain in TicketTailor (e.g. tickets.yourdomain.com via CNAME). This prevents third-party cookie issues in Safari/Firefox.', 'sender-symposium' ); ?>
 		</p>

@@ -162,11 +162,15 @@ $re    = $s['reassurance'];
 					$tt_mode       = $tt['embed_method'];
 					$tt_has_event  = ! empty( $tt['event_id'] );
 					$tt_has_short  = ! empty( $tt['shortcode'] );
+					$tt_bg_fill    = ! empty( $tt['widget_bg_transparent'] ) ? 'false' : 'true';
 
 					/* Build checkout URL for widget_js / auto modes */
 					$tt_base_url = '';
 					if ( $tt_has_event ) {
-						$tt_base_url = 'https://www.tickettailor.com/checkout/new-event/' . $tt['event_id'];
+						$tt_checkout_host = ! empty( $tt['custom_domain'] )
+							? $tt['custom_domain']
+							: 'www.tickettailor.com';
+						$tt_base_url = 'https://' . $tt_checkout_host . '/checkout/new-event/' . $tt['event_id'];
 						if ( ! empty( $tt['access_code'] ) ) {
 							$tt_base_url .= '?a=' . rawurlencode( $tt['access_code'] );
 						}
@@ -178,19 +182,42 @@ $re    = $s['reassurance'];
 					$use_shortcode = ( 'shortcode' === $tt_mode && $tt_has_short );
 					$auto_shortcode_fallback = ( 'auto' === $tt_mode && $tt_has_short );
 
+					/*
+					 * Domain mismatch detection:
+					 * If the Ticket Tailor URL domain differs from the site domain,
+					 * the checkout may break out of the iframe due to third-party
+					 * cookie restrictions in Safari/Firefox.
+					 */
+					$tt_domain_mismatch = false;
+					if ( $tt_base_url ) {
+						$site_host = wp_parse_url( home_url(), PHP_URL_HOST );
+						$tt_host   = wp_parse_url( $tt_base_url, PHP_URL_HOST );
+						if ( $site_host && $tt_host ) {
+							/* Compare registrable domains (last two segments) */
+							$site_parts = array_slice( explode( '.', $site_host ), -2 );
+							$tt_parts   = array_slice( explode( '.', $tt_host ), -2 );
+							$tt_domain_mismatch = ( implode( '.', $site_parts ) !== implode( '.', $tt_parts ) );
+						}
+					}
+
 					if ( $use_widget_js ) :
 						/*
-						 * JS embed — widget.js is enqueued via wp_enqueue_script,
-						 * tickettailor-init.js reads the data attributes and builds
-						 * the .tt-widget div. No inline <script> tag.
+						 * JS embed — widget.js is enqueued via wp_enqueue_script.
+						 * The .tt-widget div MUST exist in the HTML before widget.js
+						 * runs, because widget.js does a one-time DOM scan.
+						 * Our init script only handles fallback detection.
 						 */
 					?>
-						<div class="ss-tt-wrap"
-							data-tt-checkout-url="<?php echo esc_url( $tt_base_url ); ?>"
-							data-tt-minimal="true"
-							data-tt-show-logo="false">
+						<div class="ss-tt-wrap" data-ss-tt-fallback>
+							<div class="tt-widget"
+								data-url="<?php echo esc_url( $tt_base_url ); ?>"
+								data-type="inline"
+								data-inline-minimal="true"
+								data-inline-show-logo="false"
+								data-inline-bg-fill="<?php echo esc_attr( $tt_bg_fill ); ?>"></div>
 
-							<?php /* Fallback: shortcode (auto mode) or plain text */ ?>
+							<?php /* Hidden fallback: shortcode (auto mode) or plain text.
+							         Revealed by init.js if widget.js fails to render. */ ?>
 							<div class="ss-tt-fallback" hidden>
 								<?php if ( $auto_shortcode_fallback ) : ?>
 									<?php echo do_shortcode( $tt['shortcode'] ); ?>
@@ -207,6 +234,12 @@ $re    = $s['reassurance'];
 								<?php endif; ?>
 							</noscript>
 						</div>
+
+						<?php /* On-page buyer note when TT domain differs from site domain */ ?>
+						<?php if ( $tt_domain_mismatch && ! empty( $tt['domain_mismatch_note'] ) ) : ?>
+						<p class="ss-ticketing-domain-note"><?php echo esc_html( $tt['domain_mismatch_note'] ); ?></p>
+						<?php endif; ?>
+
 					<?php elseif ( $use_shortcode ) : ?>
 						<div class="ss-tt-wrap ss-tt-wrap--shortcode">
 							<?php echo do_shortcode( $tt['shortcode'] ); ?>

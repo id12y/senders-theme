@@ -1,67 +1,43 @@
 /**
- * TicketTailor — Reliable Init
+ * TicketTailor — Fallback Detection
  *
- * Loads after widget.js (enqueued via wp_enqueue_script).
- * Finds containers with [data-tt-checkout-url], waits for the widget
- * to render, and reveals a fallback if it doesn't within a timeout.
+ * Runs after widget.js (declared as dependency via wp_enqueue_script).
+ * Polls for an iframe inside each [data-ss-tt-fallback] container.
+ * If widget.js fails to inject one within the timeout (e.g. ad blocker,
+ * CDN down, third-party cookie block), reveals the hidden .ss-tt-fallback.
+ *
+ * Does NOT create or modify the .tt-widget div — that must exist in the
+ * server-rendered HTML so widget.js can find it during its one-time scan.
  *
  * @package SenderSymposium
  */
 (function () {
 	'use strict';
 
-	var containers = document.querySelectorAll('[data-tt-checkout-url]');
+	var containers = document.querySelectorAll('[data-ss-tt-fallback]');
 	if (!containers.length) return;
 
 	containers.forEach(function (wrap) {
-		/* Prevent double-init */
-		if (wrap.getAttribute('data-tt-loaded') === '1') return;
+		var fallback = wrap.querySelector('.ss-tt-fallback');
+		if (!fallback) return;
 
-		var url       = wrap.getAttribute('data-tt-checkout-url');
-		var minimal   = wrap.getAttribute('data-tt-minimal') !== 'false';
-		var showLogo  = wrap.getAttribute('data-tt-show-logo') === 'true';
-		var fallback  = wrap.querySelector('.ss-tt-fallback');
-
-		if (!url) {
-			if (fallback) fallback.hidden = false;
-			return;
-		}
-
-		/* Build the widget div that widget.js looks for */
-		var widget = document.createElement('div');
-		widget.className = 'tt-widget';
-		widget.setAttribute('data-url', url);
-		widget.setAttribute('data-type', 'inline');
-		widget.setAttribute('data-inline-minimal', minimal ? 'true' : 'false');
-		widget.setAttribute('data-inline-show-logo', showLogo ? 'true' : 'false');
-
-		/* Insert before fallback (if present) or append */
-		if (fallback) {
-			wrap.insertBefore(widget, fallback);
-		} else {
-			wrap.appendChild(widget);
-		}
-
-		wrap.setAttribute('data-tt-loaded', '1');
-
-		/* Check widget rendered: look for iframe injected by widget.js */
-		var checkCount = 0;
-		var maxChecks  = 10;         /* 10 × 500ms = 5s total wait */
+		var checkCount    = 0;
+		var maxChecks     = 10;   /* 10 × 500ms = 5 s total wait */
 		var checkInterval = 500;
 
 		var checker = setInterval(function () {
 			checkCount++;
-			var iframe = wrap.querySelector('iframe');
-			if (iframe) {
+
+			/* widget.js injects an iframe inside .tt-widget */
+			if (wrap.querySelector('iframe')) {
 				clearInterval(checker);
 				return;
 			}
+
 			if (checkCount >= maxChecks) {
 				clearInterval(checker);
-				/* widget.js didn't render — show fallback */
-				if (fallback) {
-					fallback.hidden = false;
-				}
+				/* Widget didn't render — show fallback content */
+				fallback.hidden = false;
 			}
 		}, checkInterval);
 	});
