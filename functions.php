@@ -100,8 +100,8 @@ function ss_enqueue_assets() {
 		ss_asset_version( $dir . '/assets/css/components.css' )
 	);
 
-	/* Hero CSS — only on front page or pages using hero template */
-	if ( is_front_page() || is_page_template( 'templates/template-hero.php' ) ) {
+	/* Hero CSS — only on pages using the hero template */
+	if ( is_page_template( 'templates/template-hero.php' ) ) {
 		wp_enqueue_style(
 			'ss-hero',
 			$uri . '/assets/css/hero.css',
@@ -218,6 +218,12 @@ function ss_output_custom_properties() {
 	}
 	if ( ! empty( $font_body ) && preg_match( '/^[a-zA-Z0-9\s,"\'\-\.]+$/', $font_body ) ) {
 		$root_lines[] = '--font-body: ' . $font_body . ';';
+	}
+
+	/* Logo max height */
+	$logo_height = get_option( 'ss_logo_max_height', '40' );
+	if ( '40' !== $logo_height ) {
+		$root_lines[] = '--logo-max-height: ' . absint( $logo_height ) . 'px;';
 	}
 
 	/* Container max width */

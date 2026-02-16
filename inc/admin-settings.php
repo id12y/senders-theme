@@ -69,6 +69,11 @@ function ss_register_settings() {
 		'sanitize_callback' => 'ss_sanitize_section_padding',
 		'default'           => 'standard',
 	) );
+	register_setting( 'ss_settings_group', 'ss_logo_max_height', array(
+		'type'              => 'string',
+		'sanitize_callback' => 'ss_sanitize_logo_max_height',
+		'default'           => '40',
+	) );
 	register_setting( 'ss_settings_group', 'ss_hero_field', array(
 		'type'              => 'string',
 		'sanitize_callback' => 'ss_sanitize_toggle',
@@ -160,6 +165,15 @@ function ss_register_settings() {
 			'airy'     => esc_html__( 'Airy (128px / 96px)', 'sender-symposium' ),
 		),
 	) );
+	add_settings_field( 'ss_logo_max_height', esc_html__( 'Logo Max Height', 'sender-symposium' ), 'ss_field_select', 'sender-symposium-settings', 'ss_section_layout', array(
+		'id'      => 'ss_logo_max_height',
+		'options' => array(
+			'28' => '28px (compact)',
+			'40' => '40px (default)',
+			'56' => '56px',
+			'72' => '72px',
+		),
+	) );
 	add_settings_field( 'ss_hero_field', esc_html__( 'Hero Architectural Field', 'sender-symposium' ), 'ss_field_toggle', 'sender-symposium-settings', 'ss_section_layout', array(
 		'id'          => 'ss_hero_field',
 		'description' => esc_html__( 'Show the abstract La Pedrera linework in the hero section.', 'sender-symposium' ),
@@ -224,6 +238,11 @@ function ss_get_overridable_tokens() {
 }
 
 /* ---- Sanitizers ---- */
+
+function ss_sanitize_logo_max_height( $value ) {
+	$allowed = array( '28', '40', '56', '72' );
+	return in_array( $value, $allowed, true ) ? $value : '40';
+}
 
 function ss_sanitize_container_max( $value ) {
 	$allowed = array( '1120', '1200', '1280' );

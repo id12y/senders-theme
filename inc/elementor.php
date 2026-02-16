@@ -2,8 +2,8 @@
 /**
  * Sender Symposium — Elementor Integration
  *
- * Theme Builder location registration. Guarded so the theme loads
- * cleanly whether Elementor (free or Pro) is active or not.
+ * Theme Builder location registration and custom widgets.
+ * Guarded so the theme loads cleanly whether Elementor is active or not.
  *
  * @package SenderSymposium
  */
@@ -11,6 +11,10 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+/* =========================================================================
+   THEME BUILDER LOCATIONS
+   ========================================================================= */
 
 /**
  * Register Theme Builder locations.
@@ -35,3 +39,32 @@ function ss_elementor_locations( $manager ) {
 	}
 }
 add_action( 'elementor/theme/register_locations', 'ss_elementor_locations' );
+
+/* =========================================================================
+   CUSTOM WIDGETS — Theme Toggle
+   ========================================================================= */
+
+/**
+ * Register custom Elementor widgets.
+ *
+ * Uses elementor/widgets/register which fires only when Elementor is active.
+ */
+function ss_register_elementor_widgets( $widgets_manager ) {
+	require_once get_template_directory() . '/inc/widgets/class-ss-theme-toggle-widget.php';
+
+	if ( class_exists( 'SS_Theme_Toggle_Widget' ) ) {
+		$widgets_manager->register( new SS_Theme_Toggle_Widget() );
+	}
+}
+add_action( 'elementor/widgets/register', 'ss_register_elementor_widgets' );
+
+/**
+ * Register a custom widget category for the theme.
+ */
+function ss_elementor_widget_categories( $elements_manager ) {
+	$elements_manager->add_category( 'sender-symposium', array(
+		'title' => esc_html__( 'Sender Symposium', 'sender-symposium' ),
+		'icon'  => 'eicon-globe',
+	) );
+}
+add_action( 'elementor/elements/categories_registered', 'ss_elementor_widget_categories' );
