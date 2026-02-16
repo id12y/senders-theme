@@ -51,14 +51,14 @@ if ( function_exists( 'ss_get_setting' ) && 'premium' === ss_get_setting( 'card_
 					$logo_dark  = '';
 
 					if ( $jb['logo_id'] ) {
-						$logo_light = wp_get_attachment_image_url( $jb['logo_id'], 'medium' );
+						$logo_light = wp_get_attachment_image_url( $jb['logo_id'], 'full' );
 					}
 					if ( ! $logo_light && has_custom_logo() ) {
 						$custom_logo_id = get_theme_mod( 'custom_logo' );
-						$logo_light     = wp_get_attachment_image_url( $custom_logo_id, 'medium' );
+						$logo_light     = wp_get_attachment_image_url( $custom_logo_id, 'full' );
 					}
 					if ( $jb['logo_dark_id'] ) {
-						$logo_dark = wp_get_attachment_image_url( $jb['logo_dark_id'], 'medium' );
+						$logo_dark = wp_get_attachment_image_url( $jb['logo_dark_id'], 'full' );
 					}
 
 					$site_name = get_bloginfo( 'name' );

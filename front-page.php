@@ -46,7 +46,16 @@ if ( 'after_event_strip' === $hero_position ) {
 
 <?php /* ── Page builder content ── */ ?>
 <?php while ( have_posts() ) : the_post(); ?>
-	<?php if ( trim( get_the_content() ) ) : ?>
+	<?php
+	$is_elementor_page = get_post_meta( get_the_ID(), '_elementor_edit_mode', true );
+	$elementor_active  = defined( 'ELEMENTOR_VERSION' );
+	/*
+	 * Render the_content() only when Elementor can process its own markup,
+	 * or when the page was never built with Elementor (plain Gutenberg/classic).
+	 * This prevents raw Elementor storage data from dumping as unstyled HTML.
+	 */
+	if ( ( $elementor_active || ! $is_elementor_page ) && trim( get_the_content() ) ) :
+	?>
 	<div class="entry-content">
 		<?php the_content(); ?>
 	</div>

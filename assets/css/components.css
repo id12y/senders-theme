@@ -146,6 +146,75 @@
   transform: rotate(-135deg);
 }
 
+/* --------------------------------------------------------------------------
+   SUB-SUBMENU (depth: 3) — Desktop flyout
+   -------------------------------------------------------------------------- */
+
+/* Sub-submenu: fly out to the right */
+.sub-menu .menu-item-has-children {
+  position: relative;
+}
+
+/* Arrow indicator for sub-submenu parent — points right */
+.sub-menu .menu-item-has-children > a::after {
+  content: "";
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  transform: rotate(-45deg);
+  margin-left: auto;
+  padding-left: var(--sp-3);
+  vertical-align: middle;
+  transition: transform var(--duration-fast) var(--ease);
+  flex-shrink: 0;
+}
+
+/* Sub-submenu panel */
+.sub-menu .sub-menu {
+  top: 0;
+  left: 100%;
+}
+
+/* Show sub-submenu on hover/focus-within/open */
+.sub-menu .menu-item-has-children:hover > .sub-menu,
+.sub-menu .menu-item-has-children:focus-within > .sub-menu,
+.sub-menu .menu-item-has-children.ss-dropdown-open > .sub-menu {
+  display: block;
+}
+
+/* Rotate arrow when sub-submenu is open */
+.sub-menu .menu-item-has-children:hover > a::after,
+.sub-menu .menu-item-has-children:focus-within > a::after,
+.sub-menu .menu-item-has-children.ss-dropdown-open > a::after {
+  transform: rotate(45deg);
+}
+
+/* Sub-submenu parent link: flex layout for arrow alignment */
+.sub-menu .menu-item-has-children > a {
+  display: flex;
+  align-items: center;
+}
+
+/* RTL: sub-submenu flies out to the left */
+[dir="rtl"] .sub-menu .sub-menu {
+  left: auto;
+  right: 100%;
+}
+
+[dir="rtl"] .sub-menu .menu-item-has-children > a::after {
+  transform: rotate(135deg);
+  margin-left: 0;
+  margin-right: auto;
+}
+
+[dir="rtl"] .sub-menu .menu-item-has-children:hover > a::after,
+[dir="rtl"] .sub-menu .menu-item-has-children:focus-within > a::after,
+[dir="rtl"] .sub-menu .menu-item-has-children.ss-dropdown-open > a::after {
+  transform: rotate(-135deg);
+}
+
 /* Sub-menu items */
 .sub-menu li {
   margin: 0;
@@ -247,11 +316,26 @@
     font-size: var(--text-small);
   }
 
-  /* Remove hover-show on mobile — use JS toggle only */
-  .site-nav__list .menu-item-has-children:hover > .sub-menu {
+  /* Mobile sub-submenu: always visible when parent sub-menu is open, deeper indent */
+  .sub-menu .sub-menu {
+    position: static;
+    display: block;
+  }
+
+  .sub-menu .sub-menu a {
+    padding-left: var(--sp-8);
+  }
+
+  /* Hide sub-submenu arrow indicator on mobile — no separate toggle */
+  .sub-menu .menu-item-has-children > a::after {
     display: none;
   }
-  .site-nav__list .menu-item-has-children.ss-dropdown-open > .sub-menu {
+
+  /* Remove hover-show on mobile — use JS toggle only (top-level parents) */
+  .site-nav__list > .menu-item-has-children:hover > .sub-menu {
+    display: none;
+  }
+  .site-nav__list > .menu-item-has-children.ss-dropdown-open > .sub-menu {
     display: block;
   }
 }

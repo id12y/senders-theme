@@ -64,9 +64,6 @@ function ss_theme_setup() {
 		$GLOBALS['content_width'] = 1200;
 	}
 
-	/* Elementor Theme Builder support */
-	add_theme_support( 'elementor' );
-
 	/* Responsive embeds */
 	add_theme_support( 'responsive-embeds' );
 }
@@ -99,6 +96,24 @@ function ss_enqueue_assets() {
 		array( 'ss-base' ),
 		ss_asset_version( $dir . '/assets/css/components.css' )
 	);
+
+	/* Menu presets — loaded after components so preset classes override base nav */
+	wp_enqueue_style(
+		'ss-menu-presets',
+		$uri . '/assets/css/menu-presets.css',
+		array( 'ss-components' ),
+		ss_asset_version( $dir . '/assets/css/menu-presets.css' )
+	);
+
+	/* Elementor fallback — only when Elementor is not active */
+	if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
+		wp_enqueue_style(
+			'ss-elementor-fallback',
+			$uri . '/assets/css/elementor-fallback.css',
+			array( 'ss-base' ),
+			ss_asset_version( $dir . '/assets/css/elementor-fallback.css' )
+		);
+	}
 
 	/* Hero Block CSS + optional countdown JS — front page */
 	if ( is_front_page() ) {
@@ -311,7 +326,7 @@ function ss_output_custom_properties() {
 	$root_lines  = array();
 	$color_lines = array();
 
-	/* Font overrides — validate against CSS injection */
+	/* Font overrides */
 	$font_display = get_option( 'ss_font_display', '' );
 	$font_body    = get_option( 'ss_font_body', '' );
 	if ( ! empty( $font_display ) && preg_match( '/^[a-zA-Z0-9\s,"\'\-\.]+$/', $font_display ) ) {
@@ -492,10 +507,22 @@ function ss_event_schema() {
 add_action( 'wp_head', 'ss_event_schema', 10 );
 
 /* ==========================================================================
-   8. ELEMENTOR COMPATIBILITY
+   8. ELEMENTOR COMPATIBILITY (conditional)
    ========================================================================== */
 
-require_once get_template_directory() . '/inc/elementor.php';
+/**
+ * Load Elementor integration only when the plugin is active.
+ *
+ * Hooked to plugins_loaded because ELEMENTOR_VERSION is not defined during
+ * after_setup_theme (plugins load after themes).
+ */
+function ss_maybe_support_elementor() {
+	if ( defined( 'ELEMENTOR_VERSION' ) ) {
+		add_theme_support( 'elementor' );
+		require_once get_template_directory() . '/inc/elementor.php';
+	}
+}
+add_action( 'plugins_loaded', 'ss_maybe_support_elementor' );
 
 /* ==========================================================================
    8b. HOMEPAGE CONTENT SETTINGS
@@ -583,13 +610,10 @@ function ss_widgets_init() {
 add_action( 'widgets_init', 'ss_widgets_init' );
 
 /* ==========================================================================
-   10. SECURITY — Clean up wp_head output
+   10. CLEAN UP wp_head OUTPUT
    ========================================================================== */
 
-/* Remove WordPress version from head and feeds */
 remove_action( 'wp_head', 'wp_generator' );
-
-/* Remove shortlink */
 remove_action( 'wp_head', 'wp_shortlink_wp_head' );
 
 /* ==========================================================================
