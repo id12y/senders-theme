@@ -120,6 +120,23 @@ function ss_enqueue_assets() {
 		);
 	}
 
+	/* FAQ CSS + JS — on FAQ page template */
+	if ( is_page_template( 'page-faq.php' ) || is_page( 'faq' ) ) {
+		wp_enqueue_style(
+			'ss-faq',
+			$uri . '/assets/css/faq.css',
+			array( 'ss-components' ),
+			ss_asset_version( $dir . '/assets/css/faq.css' )
+		);
+		wp_enqueue_script(
+			'ss-faq',
+			$uri . '/assets/js/faq.js',
+			array(),
+			ss_asset_version( $dir . '/assets/js/faq.js' ),
+			array( 'strategy' => 'defer', 'in_footer' => true )
+		);
+	}
+
 	/* --- JS: deferred, vanilla JS (no jQuery dependency) --- */
 	wp_enqueue_script(
 		'ss-theme-toggle',
@@ -411,6 +428,16 @@ require_once get_template_directory() . '/inc/speakers/csv-importer.php';
 
 if ( is_admin() ) {
 	require_once get_template_directory() . '/inc/speakers/admin.php';
+}
+
+/* ==========================================================================
+   8d. FAQ MODULE
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/faq/storage.php';
+
+if ( is_admin() ) {
+	require_once get_template_directory() . '/inc/faq/admin.php';
 }
 
 /* ==========================================================================

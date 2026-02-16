@@ -1,0 +1,29 @@
+/* ==========================================================================
+   FAQ Admin — Sender Symposium
+   ========================================================================== */
+
+.ss-faq-items {
+  margin-top: 12px;
+}
+
+.ss-faq-item-fieldset {
+  border: 1px solid #ccd0d4;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  background: #fff;
+  border-radius: 4px;
+}
+
+.ss-faq-item-fieldset legend {
+  font-weight: 600;
+  padding: 0 4px;
+}
+
+.ss-faq-item-fieldset .large-text {
+  width: 100%;
+}
+
+.ss-faq-item-fieldset textarea {
+  font-family: monospace;
+  font-size: 13px;
+}
