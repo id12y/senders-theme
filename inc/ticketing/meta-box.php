@@ -566,7 +566,7 @@ function ss_ticketing_render_meta_box( $post ) {
    ═══════════════════════════════════════════════════════════ */
 
 function ss_ticketing_save_meta_box( $post_id ) {
-	/* Security checks */
+	/* Verify request */
 	if ( ! isset( $_POST['ss_ticketing_nonce'] )
 		|| ! wp_verify_nonce( $_POST['ss_ticketing_nonce'], 'ss_ticketing_save' ) ) {
 		return;

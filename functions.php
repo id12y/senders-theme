@@ -311,7 +311,7 @@ function ss_output_custom_properties() {
 	$root_lines  = array();
 	$color_lines = array();
 
-	/* Font overrides — validate against CSS injection */
+	/* Font overrides */
 	$font_display = get_option( 'ss_font_display', '' );
 	$font_body    = get_option( 'ss_font_body', '' );
 	if ( ! empty( $font_display ) && preg_match( '/^[a-zA-Z0-9\s,"\'\-\.]+$/', $font_display ) ) {
@@ -583,13 +583,10 @@ function ss_widgets_init() {
 add_action( 'widgets_init', 'ss_widgets_init' );
 
 /* ==========================================================================
-   10. SECURITY — Clean up wp_head output
+   10. CLEAN UP wp_head OUTPUT
    ========================================================================== */
 
-/* Remove WordPress version from head and feeds */
 remove_action( 'wp_head', 'wp_generator' );
-
-/* Remove shortlink */
 remove_action( 'wp_head', 'wp_shortlink_wp_head' );
 
 /* ==========================================================================
