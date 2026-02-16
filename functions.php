@@ -100,14 +100,28 @@ function ss_enqueue_assets() {
 		ss_asset_version( $dir . '/assets/css/components.css' )
 	);
 
-	/* Hero CSS — only on pages using the hero template */
-	if ( is_page_template( 'templates/template-hero.php' ) ) {
+	/* Hero Block CSS + optional countdown JS — front page */
+	if ( is_front_page() ) {
 		wp_enqueue_style(
-			'ss-hero',
-			$uri . '/assets/css/hero.css',
-			array( 'ss-base' ),
-			ss_asset_version( $dir . '/assets/css/hero.css' )
+			'ss-hero-block',
+			$uri . '/assets/css/hero-block.css',
+			array( 'ss-components' ),
+			ss_asset_version( $dir . '/assets/css/hero-block.css' )
 		);
+
+		$hero_pid = get_queried_object_id();
+		if ( $hero_pid ) {
+			$hero_s = ss_get_hero_settings( $hero_pid );
+			if ( $hero_s['countdown']['enabled'] && ! empty( $hero_s['countdown']['target_datetime'] ) ) {
+				wp_enqueue_script(
+					'ss-hero-countdown',
+					$uri . '/assets/js/hero-countdown.js',
+					array(),
+					ss_asset_version( $dir . '/assets/js/hero-countdown.js' ),
+					array( 'strategy' => 'defer', 'in_footer' => true )
+				);
+			}
+		}
 	}
 
 	/* Speakers CSS — on speakers page template */
@@ -455,6 +469,13 @@ if ( is_admin() ) {
    ========================================================================== */
 
 require_once get_template_directory() . '/inc/ticketing/meta-box.php';
+
+/* ==========================================================================
+   8f. HERO BLOCK MODULE
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/hero/meta-box.php';
+require_once get_template_directory() . '/inc/hero/render.php';
 
 /* ==========================================================================
    9. WIDGET AREAS

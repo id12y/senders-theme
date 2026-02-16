@@ -1,0 +1,392 @@
+/* ==========================================================================
+   HERO BLOCK — Sender Symposium
+   Premium · Architectural · Token-Driven
+   Scoped to .ss-hero
+   ========================================================================== */
+
+/* ----------------------------------------------------------
+   Base
+   ---------------------------------------------------------- */
+
+.ss-hero {
+  position: relative;
+  overflow: hidden;
+  background: var(--surface-section);
+}
+
+.ss-hero__inner {
+  position: relative;
+  z-index: 2;
+}
+
+/* ----------------------------------------------------------
+   Spacing Variants
+   ---------------------------------------------------------- */
+
+.ss-hero--compact  { padding-block: var(--sp-7); }
+.ss-hero--standard { padding-block: var(--sp-8); }
+.ss-hero--spacious { padding-block: var(--sp-9); }
+
+/* ----------------------------------------------------------
+   Alignment
+   ---------------------------------------------------------- */
+
+.ss-hero--center {
+  text-align: center;
+}
+
+.ss-hero--center .ss-hero__ctas {
+  justify-content: center;
+}
+
+.ss-hero--center .ss-hero__facts {
+  justify-content: center;
+}
+
+.ss-hero--center .ss-hero__logo {
+  margin-inline: auto;
+}
+
+.ss-hero--center .ss-hero__countdown {
+  justify-content: center;
+}
+
+.ss-hero--left {
+  text-align: left;
+}
+
+/* ----------------------------------------------------------
+   Content Width
+   ---------------------------------------------------------- */
+
+.ss-hero--standard .ss-hero__headline    { max-width: 48ch; }
+.ss-hero--standard .ss-hero__subheadline { max-width: 55ch; }
+.ss-hero--standard .ss-hero__body        { max-width: 60ch; }
+
+.ss-hero--wide .ss-hero__headline    { max-width: 65ch; }
+.ss-hero--wide .ss-hero__subheadline { max-width: 72ch; }
+.ss-hero--wide .ss-hero__body        { max-width: 72ch; }
+
+/* Center-align: auto-center constrained content */
+.ss-hero--center .ss-hero__headline,
+.ss-hero--center .ss-hero__subheadline,
+.ss-hero--center .ss-hero__body {
+  margin-inline: auto;
+}
+
+/* ----------------------------------------------------------
+   Background Image Mode
+   ---------------------------------------------------------- */
+
+.ss-hero--image {
+  color: #fff;
+}
+
+.ss-hero__bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.ss-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.ss-hero--overlay-low    .ss-hero__overlay { background: rgba(0, 0, 0, 0.35); }
+.ss-hero--overlay-medium .ss-hero__overlay { background: rgba(0, 0, 0, 0.50); }
+.ss-hero--overlay-high   .ss-hero__overlay { background: rgba(0, 0, 0, 0.65); }
+
+/* Force light text in image mode */
+.ss-hero--image .ss-hero__eyebrow,
+.ss-hero--image .ss-hero__headline,
+.ss-hero--image .ss-hero__fact {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.ss-hero--image .ss-hero__subheadline,
+.ss-hero--image .ss-hero__body,
+.ss-hero--image .ss-hero__microcopy {
+  color: rgba(255, 255, 255, 0.80);
+}
+
+/* ----------------------------------------------------------
+   Logo
+   ---------------------------------------------------------- */
+
+.ss-hero__logo {
+  margin-bottom: var(--sp-5);
+}
+
+.ss-hero__logo img {
+  max-height: 48px;
+  width: auto;
+}
+
+/* CSS-only light/dark logo toggle */
+.ss-hero__logo .ss-logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] .ss-hero__logo .ss-logo-light {
+  display: none;
+}
+
+[data-theme="dark"] .ss-hero__logo .ss-logo-dark {
+  display: inline;
+}
+
+/* Image mode: always use the dark (light-on-dark) variant */
+.ss-hero--image .ss-hero__logo .ss-logo-light {
+  display: none;
+}
+
+.ss-hero--image .ss-hero__logo .ss-logo-dark {
+  display: inline;
+}
+
+/* ----------------------------------------------------------
+   Eyebrow
+   ---------------------------------------------------------- */
+
+.ss-hero__eyebrow {
+  font-size: var(--text-caption);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-3);
+  font-weight: 500;
+}
+
+/* ----------------------------------------------------------
+   Headline (single H1)
+   ---------------------------------------------------------- */
+
+.ss-hero__headline {
+  font-family: var(--font-display);
+  font-size: var(--text-h1);
+  line-height: var(--lh-h1);
+  letter-spacing: var(--ls-h1);
+  font-weight: 650;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-4);
+}
+
+/* ----------------------------------------------------------
+   Subheadline
+   ---------------------------------------------------------- */
+
+.ss-hero__subheadline {
+  font-size: var(--text-body-lg);
+  line-height: var(--lh-body-lg);
+  color: var(--text-secondary);
+  margin-bottom: var(--sp-3);
+}
+
+/* ----------------------------------------------------------
+   Body
+   ---------------------------------------------------------- */
+
+.ss-hero__body {
+  color: var(--text-secondary);
+  line-height: var(--lh-body);
+  margin-bottom: var(--sp-5);
+}
+
+.ss-hero__body p {
+  margin-bottom: var(--sp-3);
+}
+
+.ss-hero__body p:last-child {
+  margin-bottom: 0;
+}
+
+/* ----------------------------------------------------------
+   CTAs
+   ---------------------------------------------------------- */
+
+.ss-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+
+/* Text link CTA variant */
+.ss-hero__cta-text {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 600;
+  font-size: var(--text-body);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  color: var(--link-default);
+  padding: var(--sp-2) 0;
+  min-height: 44px;
+}
+
+.ss-hero__cta-text:hover {
+  color: var(--link-hover);
+}
+
+.ss-hero--image .ss-hero__cta-text {
+  color: rgba(255, 255, 255, 0.90);
+}
+
+.ss-hero--image .ss-hero__cta-text:hover {
+  color: #fff;
+}
+
+.ss-hero__ctas .btn:focus-visible,
+.ss-hero__cta-text:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 3px;
+}
+
+/* ----------------------------------------------------------
+   Microcopy
+   ---------------------------------------------------------- */
+
+.ss-hero__microcopy {
+  font-size: var(--text-caption);
+  font-style: italic;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-4);
+}
+
+/* ----------------------------------------------------------
+   Key Facts
+   ---------------------------------------------------------- */
+
+.ss-hero__facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-4);
+  font-size: var(--text-small);
+  color: var(--text-muted);
+}
+
+.ss-hero__fact {
+  display: flex;
+  align-items: center;
+}
+
+.ss-hero__fact + .ss-hero__fact::before {
+  content: "\B7";
+  margin-right: var(--sp-3);
+  color: var(--border-strong);
+  font-size: 1.4em;
+  line-height: 1;
+}
+
+/* ----------------------------------------------------------
+   Countdown
+   ---------------------------------------------------------- */
+
+.ss-hero__countdown {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-5);
+  font-family: var(--font-display);
+}
+
+.ss-hero__countdown-unit {
+  text-align: center;
+}
+
+.ss-hero__countdown-number {
+  display: block;
+  font-size: var(--text-h3);
+  line-height: var(--lh-h3);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.ss-hero__countdown-label {
+  display: block;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-family: var(--font-body);
+}
+
+.ss-hero--image .ss-hero__countdown-number {
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.ss-hero--image .ss-hero__countdown-label {
+  color: rgba(255, 255, 255, 0.70);
+}
+
+.ss-hero__countdown-ended {
+  font-size: var(--text-small);
+  color: var(--text-muted);
+}
+
+/* ----------------------------------------------------------
+   Dark Mode (simple mode — no background image)
+   ---------------------------------------------------------- */
+
+[data-theme="dark"] .ss-hero:not(.ss-hero--image) {
+  background: var(--surface-section);
+}
+
+/* ----------------------------------------------------------
+   Reduced Motion
+   ---------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .ss-hero,
+  .ss-hero * {
+    transition-duration: 0ms !important;
+  }
+}
+
+/* ----------------------------------------------------------
+   Mobile
+   ---------------------------------------------------------- */
+
+@media (max-width: 767px) {
+  .ss-hero--compact  { padding-block: var(--sp-6); }
+  .ss-hero--standard { padding-block: var(--sp-7); }
+  .ss-hero--spacious { padding-block: var(--sp-8); }
+
+  .ss-hero__headline {
+    font-size: clamp(2rem, 6vw, 3rem);
+  }
+
+  .ss-hero__ctas {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .ss-hero__ctas .btn,
+  .ss-hero__cta-text {
+    text-align: center;
+    justify-content: center;
+  }
+
+  .ss-hero__facts {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--sp-2);
+  }
+
+  .ss-hero__fact + .ss-hero__fact::before {
+    display: none;
+  }
+
+  .ss-hero__logo img {
+    max-height: 36px;
+  }
+
+  .ss-hero__countdown {
+    gap: var(--sp-4);
+  }
+}

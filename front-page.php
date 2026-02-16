@@ -16,6 +16,9 @@
 get_header();
 
 $hp = ss_get_homepage();
+
+/* ── Hero Block (page-level meta) ── */
+ss_render_hero( get_the_ID() );
 ?>
 
 <?php /* ── Event Info Strip ── */ ?>
