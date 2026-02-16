@@ -509,6 +509,19 @@
   color: var(--action-primary-bg);
 }
 
+/* TT widget transparent bg: force light surface so widget text stays legible */
+[data-theme="dark"] .ss-ticketing-embed--tt-transparent {
+  background: #FFFFFF;
+  border-color: #E3DED6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ss-ticketing-embed--tt-transparent {
+    background: #FFFFFF;
+    border-color: #E3DED6;
+  }
+}
+
 /* ----------------------------------------------------------
    Reduced Motion
    ---------------------------------------------------------- */

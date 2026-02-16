@@ -171,7 +171,7 @@ if ( function_exists( 'ss_get_setting' ) && 'premium' === ss_get_setting( 'card_
 			<div class="ss-ticketing-columns">
 
 				<?php /* ── LEFT: TicketTailor Embed ── */ ?>
-				<div class="ss-ticketing-embed ss-ticketing-embed--surface">
+				<div class="ss-ticketing-embed ss-ticketing-embed--surface<?php echo ! empty( $tt['widget_bg_transparent'] ) ? ' ss-ticketing-embed--tt-transparent' : ''; ?>">
 					<?php
 					$tt_mode       = $tt['embed_method'];
 					$tt_has_event  = ! empty( $tt['event_id'] );
