@@ -341,13 +341,18 @@ function ss_event_schema() {
 	if ( ! is_front_page() ) {
 		return;
 	}
+	$start_date = get_option( 'ss_event_start_date', '' );
+	if ( empty( $start_date ) ) {
+		/* No date configured — skip schema to avoid invalid structured data */
+		return;
+	}
 	$schema = array(
 		'@context'              => 'https://schema.org',
 		'@type'                 => 'Event',
 		'name'                  => esc_html( get_bloginfo( 'name' ) ),
 		'description'           => esc_html( get_bloginfo( 'description' ) ),
 		'url'                   => esc_url( home_url( '/' ) ),
-		'startDate'             => '2026-01-01',
+		'startDate'             => $start_date,
 		'eventStatus'           => 'https://schema.org/EventScheduled',
 		'eventAttendanceMode'   => 'https://schema.org/OfflineEventAttendanceMode',
 		'location'              => array(

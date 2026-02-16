@@ -92,6 +92,13 @@ function ss_register_settings() {
 		'default'           => '',
 	) );
 
+	/* ---- EVENT ---- */
+	register_setting( 'ss_settings_group', 'ss_event_start_date', array(
+		'type'              => 'string',
+		'sanitize_callback' => 'ss_sanitize_date',
+		'default'           => '',
+	) );
+
 	/* ---- DARK MODE ---- */
 	register_setting( 'ss_settings_group', 'ss_dark_mode_default', array(
 		'type'              => 'string',
@@ -109,6 +116,7 @@ function ss_register_settings() {
 	add_settings_section( 'ss_section_colors', esc_html__( 'Color Overrides', 'sender-symposium' ), 'ss_section_colors_cb', 'sender-symposium-settings' );
 	add_settings_section( 'ss_section_layout', esc_html__( 'Layout', 'sender-symposium' ), '__return_false', 'sender-symposium-settings' );
 	add_settings_section( 'ss_section_announcement', esc_html__( 'Announcement Bar', 'sender-symposium' ), '__return_false', 'sender-symposium-settings' );
+	add_settings_section( 'ss_section_event', esc_html__( 'Event', 'sender-symposium' ), '__return_false', 'sender-symposium-settings' );
 	add_settings_section( 'ss_section_darkmode', esc_html__( 'Dark Mode', 'sender-symposium' ), '__return_false', 'sender-symposium-settings' );
 
 	/* ---- FIELDS: Fonts ---- */
@@ -170,6 +178,12 @@ function ss_register_settings() {
 		'placeholder' => 'https://',
 	) );
 
+	/* ---- FIELDS: Event ---- */
+	add_settings_field( 'ss_event_start_date', esc_html__( 'Event Start Date', 'sender-symposium' ), 'ss_field_date', 'sender-symposium-settings', 'ss_section_event', array(
+		'id'          => 'ss_event_start_date',
+		'description' => esc_html__( 'Used in the Schema.org Event structured data (JSON-LD). Format: YYYY-MM-DD.', 'sender-symposium' ),
+	) );
+
 	/* ---- FIELDS: Dark Mode ---- */
 	add_settings_field( 'ss_dark_mode_default', esc_html__( 'Default Mode', 'sender-symposium' ), 'ss_field_select', 'sender-symposium-settings', 'ss_section_darkmode', array(
 		'id'      => 'ss_dark_mode_default',
@@ -225,6 +239,18 @@ function ss_sanitize_toggle( $value ) {
 	return $value === 'on' ? 'on' : 'off';
 }
 
+function ss_sanitize_date( $value ) {
+	$value = sanitize_text_field( $value );
+	if ( '' === $value ) {
+		return '';
+	}
+	/* Accept YYYY-MM-DD only */
+	if ( preg_match( '/^\d{4}-\d{2}-\d{2}$/', $value ) && strtotime( $value ) !== false ) {
+		return $value;
+	}
+	return '';
+}
+
 function ss_sanitize_dark_mode_default( $value ) {
 	$allowed = array( 'system', 'light', 'dark' );
 	return in_array( $value, $allowed, true ) ? $value : 'system';
@@ -267,6 +293,18 @@ function ss_field_select( $args ) {
 		);
 	}
 	echo '</select>';
+}
+
+function ss_field_date( $args ) {
+	$value = get_option( $args['id'], '' );
+	printf(
+		'<input type="date" id="%1$s" name="%1$s" value="%2$s" />',
+		esc_attr( $args['id'] ),
+		esc_attr( $value )
+	);
+	if ( ! empty( $args['description'] ) ) {
+		printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
+	}
 }
 
 function ss_field_toggle( $args ) {
