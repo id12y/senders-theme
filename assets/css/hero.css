@@ -1,0 +1,162 @@
+/* ==========================================================================
+   HERO — La Pedrera-inspired, typography-led, premium
+   ========================================================================== */
+
+.ss-hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: var(--sp-7);
+  min-height: min(75vh, 720px);
+  max-height: 80vh;
+  padding-block: var(--sp-8);
+  overflow: hidden;
+  background-color: var(--surface-page);
+}
+
+/* --------------------------------------------------------------------------
+   CONTENT SIDE
+   -------------------------------------------------------------------------- */
+.ss-hero__content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  z-index: 2;
+}
+
+.ss-hero__eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--lh-caption);
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.ss-hero__title {
+  font-family: var(--font-display);
+  font-size: var(--text-h1);
+  line-height: var(--lh-h1);
+  letter-spacing: var(--ls-h1);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ss-hero__subtitle {
+  font-family: var(--font-body);
+  font-size: var(--text-body-lg);
+  line-height: var(--lh-body-lg);
+  color: var(--text-secondary);
+  max-width: 52ch;
+}
+
+/* Meta row: date / city / venue */
+.ss-hero__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--text-small);
+  color: var(--text-muted);
+}
+
+.ss-hero__meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+}
+
+.ss-hero__meta-divider {
+  width: 1px;
+  height: 1em;
+  background-color: var(--border-strong);
+}
+
+/* CTA row */
+.ss-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  padding-top: var(--sp-2);
+}
+
+/* --------------------------------------------------------------------------
+   ARCHITECTURAL FIELD (right side — La Pedrera balcony curves)
+   -------------------------------------------------------------------------- */
+.ss-hero__field {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 320px;
+  z-index: 1;
+}
+
+.ss-hero__field-svg {
+  width: 100%;
+  max-width: 480px;
+  height: auto;
+  opacity: 0.18;
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .ss-hero__field-svg {
+  opacity: 0.12;
+}
+
+/* Subtle stone texture gradient overlay */
+.ss-hero__field::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 60% 40%,
+    var(--surface-card) 0%,
+    transparent 70%
+  );
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE
+   -------------------------------------------------------------------------- */
+@media (max-width: 991px) {
+  .ss-hero {
+    grid-template-columns: 1fr;
+    min-height: auto;
+    max-height: none;
+    padding-block: var(--sp-7);
+  }
+
+  .ss-hero__field {
+    display: none;
+  }
+}
+
+@media (max-width: 767px) {
+  .ss-hero {
+    padding-block: var(--sp-6);
+  }
+
+  .ss-hero__actions {
+    flex-direction: column;
+  }
+
+  .ss-hero__actions .btn {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   REDUCED MOTION
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .ss-hero__field-svg {
+    animation: none;
+  }
+}

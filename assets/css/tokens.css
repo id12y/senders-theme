@@ -1,0 +1,170 @@
+/* ==========================================================================
+   DESIGN TOKENS — Sender Symposium
+   All components reference these tokens. Never use raw hex in components.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   SPACING (8pt scale)
+   -------------------------------------------------------------------------- */
+:root {
+  --sp-1: 4px;
+  --sp-2: 8px;
+  --sp-3: 16px;
+  --sp-4: 24px;
+  --sp-5: 32px;
+  --sp-6: 48px;
+  --sp-7: 64px;
+  --sp-8: 96px;
+  --sp-9: 128px;
+
+  /* Section padding */
+  --section-padding-block: var(--sp-8);
+
+  /* Container */
+  --container-max: 1200px;
+  --container-padding: var(--sp-4);
+
+  /* Radius */
+  --radius-btn: 6px;
+  --radius-card: 10px;
+  --radius-lg: 14px;
+
+  /* Shadows — light mode defaults */
+  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.08);
+
+  /* Motion */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 350ms;
+
+  /* Typography — families (admin-overridable via inline CSS vars) */
+  --font-display: "Barcelona Variable", "Barcelona", Georgia, "Times New Roman", serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  /* Typography — scale (clamp for fluid sizing) */
+  --text-h1: clamp(2.5rem, 4.2vw, 4rem);
+  --lh-h1: 1.05;
+  --ls-h1: -0.02em;
+
+  --text-h2: clamp(1.875rem, 3vw, 2.75rem);
+  --lh-h2: 1.15;
+  --ls-h2: -0.015em;
+
+  --text-h3: clamp(1.375rem, 2.2vw, 2rem);
+  --lh-h3: 1.2;
+  --ls-h3: 0;
+
+  --text-h4: 1.5rem;
+  --lh-h4: 1.3;
+
+  --text-body: 1.125rem;
+  --lh-body: 1.65;
+
+  --text-body-lg: 1.25rem;
+  --lh-body-lg: 1.6;
+
+  --text-small: 0.9375rem;
+  --lh-small: 1.6;
+
+  --text-caption: 0.8125rem;
+  --lh-caption: 1.4;
+
+  /* Prose max width */
+  --prose-max: 68ch;
+}
+
+/* --------------------------------------------------------------------------
+   LIGHT PALETTE (default)
+   -------------------------------------------------------------------------- */
+:root,
+[data-theme="light"] {
+  --surface-page: #F4F1EB;
+  --surface-section: #FFFFFF;
+  --surface-card: #F8F6F2;
+  --surface-elevated: #FFFFFF;
+
+  --text-primary: #1F1F1D;
+  --text-secondary: #3C3A36;
+  --text-muted: #6B6761;
+  --text-inverse: #FFFFFF;
+
+  --border-subtle: #E3DED6;
+  --border-strong: #CFC7BB;
+
+  --action-primary-bg: #1E2A38;
+  --action-primary-text: #FFFFFF;
+  --action-primary-hover: #2B3B4E;
+  --action-secondary-bg: transparent;
+  --action-secondary-text: #1F1F1D;
+
+  --link-default: #1E2A38;
+  --link-hover: #2B3B4E;
+
+  --focus-ring: #B66A3C;
+
+  --status-success: #2F5D3A;
+  --status-warning: #8C5A1E;
+  --status-error: #8C2F2F;
+
+  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
+  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.08);
+}
+
+/* --------------------------------------------------------------------------
+   DARK PALETTE
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  --surface-page: #151716;
+  --surface-section: #1C1F1D;
+  --surface-card: #232624;
+  --surface-elevated: #2A2D2B;
+
+  --text-primary: #F2EFE9;
+  --text-secondary: #D5D0C8;
+  --text-muted: #A8A39A;
+  --text-inverse: #1F1F1D;
+
+  --border-subtle: #2F3331;
+  --border-strong: #3E4240;
+
+  --action-primary-bg: #B66A3C;
+  --action-primary-text: #151716;
+  --action-primary-hover: #C47A4D;
+  --action-secondary-bg: transparent;
+  --action-secondary-text: #F2EFE9;
+
+  --link-default: #D5D0C8;
+  --link-hover: #FFFFFF;
+
+  --focus-ring: #C47A4D;
+
+  --status-success: #4A8A5B;
+  --status-warning: #C68A3D;
+  --status-error: #C45A5A;
+
+  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   REDUCED MOTION
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-base: 0ms;
+    --duration-slow: 0ms;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   MOBILE OVERRIDES
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  :root {
+    --section-padding-block: var(--sp-7);
+    --container-padding: var(--sp-3);
+  }
+}

@@ -1,0 +1,18 @@
+/*
+Theme Name:  Sender Symposium
+Theme URI:   https://sendersymposium.com
+Author:      Sender Symposium
+Author URI:  https://sendersymposium.com
+Description: A premium, performance-first WordPress theme for Sender Symposium — an architectural conference experience inspired by La Pedrera (Casa Mila), Barcelona. Built for Elementor, WCAG 2.2 AA accessible, dark/light mode, variable font support, and admin-configurable design tokens.
+Version:     1.0.0
+Tested up to: 6.7
+Requires at least: 6.4
+Requires PHP: 8.0
+License:     GPL-2.0-or-later
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain: sender-symposium
+Tags:        full-width-template, custom-colors, accessibility-ready, translation-ready
+
+Sender Symposium Theme — all layout CSS lives in assets/css/.
+This file is intentionally kept minimal per WordPress requirements.
+*/
