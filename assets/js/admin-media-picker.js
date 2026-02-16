@@ -2,14 +2,7 @@
  * Admin Media Picker
  *
  * Turns any `.ss-media-picker` container into a WordPress media library picker.
- *
- * Expected HTML:
- *   <div class="ss-media-picker">
- *     <input type="hidden" name="..." value="0" class="ss-media-picker__id">
- *     <div class="ss-media-picker__preview"></div>
- *     <button type="button" class="button ss-media-picker__choose">Choose Image</button>
- *     <button type="button" class="button-link ss-media-picker__remove" style="display:none;">Remove</button>
- *   </div>
+ * Also supports gallery mode (multi-select) via `.ss-gallery-picker__choose`.
  *
  * @package SenderSymposium
  */
@@ -20,13 +13,15 @@
 		return;
 	}
 
+	/* ── Single Image Picker ── */
+
 	$(document).on('click', '.ss-media-picker__choose', function (e) {
 		e.preventDefault();
 
-		var $wrap   = $(this).closest('.ss-media-picker');
-		var $input  = $wrap.find('.ss-media-picker__id');
+		var $wrap    = $(this).closest('.ss-media-picker');
+		var $input   = $wrap.find('.ss-media-picker__id');
 		var $preview = $wrap.find('.ss-media-picker__preview');
-		var $remove = $wrap.find('.ss-media-picker__remove');
+		var $remove  = $wrap.find('.ss-media-picker__remove');
 
 		var frame = wp.media({
 			title: $wrap.data('title') || 'Select Image',
@@ -52,8 +47,8 @@
 	$(document).on('click', '.ss-media-picker__remove', function (e) {
 		e.preventDefault();
 
-		var $wrap   = $(this).closest('.ss-media-picker');
-		var $input  = $wrap.find('.ss-media-picker__id');
+		var $wrap    = $(this).closest('.ss-media-picker');
+		var $input   = $wrap.find('.ss-media-picker__id');
 		var $preview = $wrap.find('.ss-media-picker__preview');
 
 		$input.val('0');
@@ -61,17 +56,63 @@
 		$(this).hide();
 	});
 
-	/* On page load, show previews for any fields that already have an ID */
+	/* ── Gallery Picker (multi-select) ── */
+
+	$(document).on('click', '.ss-gallery-picker__choose', function (e) {
+		e.preventDefault();
+
+		var $wrap    = $(this).closest('.ss-media-picker');
+		var targetField = $wrap.find('.ss-media-picker__id').data('target-field');
+		var $textInput  = $('input[name="' + targetField + '"]');
+		var $preview = $wrap.find('.ss-media-picker__preview');
+
+		var frame = wp.media({
+			title: $wrap.data('title') || 'Select Images',
+			button: { text: $wrap.data('button') || 'Add to gallery' },
+			multiple: true,
+			library: { type: 'image' }
+		});
+
+		frame.on('select', function () {
+			var selection = frame.state().get('selection');
+			var ids = [];
+			var html = '';
+
+			selection.each(function (attachment) {
+				var att = attachment.toJSON();
+				ids.push(att.id);
+				var thumb = att.sizes && att.sizes.thumbnail
+					? att.sizes.thumbnail.url
+					: att.url;
+				html += '<img src="' + thumb + '" style="width:60px;height:60px;object-fit:cover;border-radius:4px;">';
+			});
+
+			if ($textInput.length) {
+				$textInput.val(ids.join(', '));
+			}
+			$preview.html(html);
+		});
+
+		frame.open();
+	});
+
+	/* ── On page load: show previews for fields with existing IDs ── */
+
 	$(function () {
 		$('.ss-media-picker').each(function () {
-			var $wrap   = $(this);
-			var $input  = $wrap.find('.ss-media-picker__id');
+			var $wrap    = $(this);
+			var isGallery = $wrap.data('gallery');
+			var $input   = $wrap.find('.ss-media-picker__id');
 			var $preview = $wrap.find('.ss-media-picker__preview');
-			var $remove = $wrap.find('.ss-media-picker__remove');
-			var val     = parseInt($input.val(), 10);
+			var $remove  = $wrap.find('.ss-media-picker__remove');
 
+			if (isGallery) {
+				/* Gallery previews are rendered server-side */
+				return;
+			}
+
+			var val = parseInt($input.val(), 10);
 			if (val > 0) {
-				/* Fetch attachment thumbnail via REST API */
 				wp.media.attachment(val).fetch().then(function () {
 					var att = wp.media.attachment(val).toJSON();
 					var thumb = att.sizes && att.sizes.thumbnail

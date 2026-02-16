@@ -144,6 +144,16 @@ function ss_enqueue_assets() {
 		);
 	}
 
+	/* About CSS — on about page template */
+	if ( is_page_template( 'page-templates/template-about.php' ) ) {
+		wp_enqueue_style(
+			'ss-about',
+			$uri . '/assets/css/about.css',
+			array( 'ss-components' ),
+			ss_asset_version( $dir . '/assets/css/about.css' )
+		);
+	}
+
 	/* FAQ CSS + JS — on FAQ page template */
 	if ( is_page_template( 'page-faq.php' ) || is_page( 'faq' ) ) {
 		wp_enqueue_style(
@@ -476,6 +486,12 @@ require_once get_template_directory() . '/inc/ticketing/meta-box.php';
 
 require_once get_template_directory() . '/inc/hero/meta-box.php';
 require_once get_template_directory() . '/inc/hero/render.php';
+
+/* ==========================================================================
+   8g. ABOUT PAGE MODULE
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/about/meta-box.php';
 
 /* ==========================================================================
    9. WIDGET AREAS
