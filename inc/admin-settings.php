@@ -256,7 +256,7 @@ function ss_field_color( $args ) {
 }
 
 function ss_field_select( $args ) {
-	$value = get_option( $args['id'], '' );
+	$value = get_option( $args['id'] );
 	printf( '<select id="%1$s" name="%1$s">', esc_attr( $args['id'] ) );
 	foreach ( $args['options'] as $key => $label ) {
 		printf(
@@ -270,9 +270,10 @@ function ss_field_select( $args ) {
 }
 
 function ss_field_toggle( $args ) {
-	$value = get_option( $args['id'], 'on' );
+	$value = get_option( $args['id'] );
 	printf(
-		'<label><input type="checkbox" id="%1$s" name="%1$s" value="on" %2$s /> %3$s</label>',
+		'<input type="hidden" name="%1$s" value="off" />'
+		. '<label><input type="checkbox" id="%1$s" name="%1$s" value="on" %2$s /> %3$s</label>',
 		esc_attr( $args['id'] ),
 		checked( $value, 'on', false ),
 		esc_html__( 'Enabled', 'sender-symposium' )
@@ -326,7 +327,7 @@ function ss_admin_enqueue( $hook ) {
 		'ss-admin-settings',
 		get_template_directory_uri() . '/assets/js/admin-settings.js',
 		array( 'wp-color-picker' ),
-		'1.0.0',
+		ss_asset_version( get_template_directory() . '/assets/js/admin-settings.js' ),
 		true
 	);
 }

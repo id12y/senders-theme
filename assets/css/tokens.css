@@ -29,10 +29,6 @@
   --radius-card: 10px;
   --radius-lg: 14px;
 
-  /* Shadows — light mode defaults */
-  --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.06);
-  --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.08);
-
   /* Motion */
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --duration-fast: 150ms;
@@ -146,6 +142,39 @@
 
   --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.2);
   --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.3);
+}
+
+/* --------------------------------------------------------------------------
+   PREFERS-COLOR-SCHEME FALLBACK
+   Ensures correct theme before JS runs. Uses :not([data-theme="light"])
+   so that once JS sets the attribute, these rules step aside.
+   -------------------------------------------------------------------------- */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --surface-page: #151716;
+    --surface-section: #1C1F1D;
+    --surface-card: #232624;
+    --surface-elevated: #2A2D2B;
+    --text-primary: #F2EFE9;
+    --text-secondary: #D5D0C8;
+    --text-muted: #A8A39A;
+    --text-inverse: #1F1F1D;
+    --border-subtle: #2F3331;
+    --border-strong: #3E4240;
+    --action-primary-bg: #B66A3C;
+    --action-primary-text: #151716;
+    --action-primary-hover: #C47A4D;
+    --action-secondary-bg: transparent;
+    --action-secondary-text: #F2EFE9;
+    --link-default: #D5D0C8;
+    --link-hover: #FFFFFF;
+    --focus-ring: #C47A4D;
+    --status-success: #4A8A5B;
+    --status-warning: #C68A3D;
+    --status-error: #C45A5A;
+    --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.2);
+    --shadow-elevated: 0 12px 32px rgba(0, 0, 0, 0.3);
+  }
 }
 
 /* --------------------------------------------------------------------------

@@ -9,7 +9,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'SS_VERSION', '1.0.0' );
+if ( ! defined( 'SS_VERSION' ) ) {
+	define( 'SS_VERSION', '1.0.0' );
+}
+
+/**
+ * Helper: get asset file version with fallback if file is missing.
+ */
+function ss_asset_version( $path ) {
+	return file_exists( $path ) ? filemtime( $path ) : SS_VERSION;
+}
 
 /* ==========================================================================
    1. THEME SETUP
@@ -71,24 +80,24 @@ function ss_enqueue_assets() {
 	$uri = get_template_directory_uri();
 	$dir = get_template_directory();
 
-	/* --- CSS: layered enqueue (tokens → base → components) --- */
+	/* --- CSS: layered enqueue (tokens > base > components) --- */
 	wp_enqueue_style(
 		'ss-tokens',
 		$uri . '/assets/css/tokens.css',
 		array(),
-		filemtime( $dir . '/assets/css/tokens.css' )
+		ss_asset_version( $dir . '/assets/css/tokens.css' )
 	);
 	wp_enqueue_style(
 		'ss-base',
 		$uri . '/assets/css/base.css',
 		array( 'ss-tokens' ),
-		filemtime( $dir . '/assets/css/base.css' )
+		ss_asset_version( $dir . '/assets/css/base.css' )
 	);
 	wp_enqueue_style(
 		'ss-components',
 		$uri . '/assets/css/components.css',
 		array( 'ss-base' ),
-		filemtime( $dir . '/assets/css/components.css' )
+		ss_asset_version( $dir . '/assets/css/components.css' )
 	);
 
 	/* Hero CSS — only on front page or pages using hero template */
@@ -97,16 +106,16 @@ function ss_enqueue_assets() {
 			'ss-hero',
 			$uri . '/assets/css/hero.css',
 			array( 'ss-base' ),
-			filemtime( $dir . '/assets/css/hero.css' )
+			ss_asset_version( $dir . '/assets/css/hero.css' )
 		);
 	}
 
-	/* --- JS: deferred, no jQuery --- */
+	/* --- JS: deferred, vanilla JS (no jQuery dependency) --- */
 	wp_enqueue_script(
 		'ss-theme-toggle',
 		$uri . '/assets/js/theme-toggle.js',
 		array(),
-		filemtime( $dir . '/assets/js/theme-toggle.js' ),
+		ss_asset_version( $dir . '/assets/js/theme-toggle.js' ),
 		array( 'strategy' => 'defer', 'in_footer' => true )
 	);
 
@@ -114,15 +123,15 @@ function ss_enqueue_assets() {
 		'ss-navigation',
 		$uri . '/assets/js/navigation.js',
 		array(),
-		filemtime( $dir . '/assets/js/navigation.js' ),
+		ss_asset_version( $dir . '/assets/js/navigation.js' ),
 		array( 'strategy' => 'defer', 'in_footer' => true )
 	);
 
-	/* Deregister jQuery on frontend — not needed */
-	if ( ! is_admin() && ! is_customize_preview() ) {
-		wp_deregister_script( 'jquery' );
-		wp_register_script( 'jquery', false, array(), false, true );
-	}
+	/*
+	 * NOTE: We do NOT deregister jQuery. Plugins like Elementor, contact form
+	 * plugins, and others depend on it. The theme itself does not use jQuery
+	 * on the frontend, but we must not break plugin compatibility.
+	 */
 }
 add_action( 'wp_enqueue_scripts', 'ss_enqueue_assets' );
 
@@ -133,21 +142,19 @@ add_action( 'wp_enqueue_scripts', 'ss_enqueue_assets' );
 /**
  * Inline tiny script in <head> before any render to apply stored theme.
  * This prevents the flash of wrong color scheme.
+ *
+ * When admin forces a mode, we set data-theme-forced on <html> so the
+ * deferred theme-toggle.js knows not to override it.
  */
 function ss_inline_theme_bootstrap() {
 	$dark_mode_default = get_option( 'ss_dark_mode_default', 'system' );
-	$forced            = '';
-
-	if ( 'light' === $dark_mode_default ) {
-		$forced = "'light'";
-	} elseif ( 'dark' === $dark_mode_default ) {
-		$forced = "'dark'";
-	}
+	$is_forced         = in_array( $dark_mode_default, array( 'light', 'dark' ), true );
+	$forced_value      = $is_forced ? $dark_mode_default : '';
 	?>
 	<script>
 	(function(){
-		var f=<?php echo $forced ? $forced : 'null'; ?>;
-		if(f){document.documentElement.setAttribute('data-theme',f);return;}
+		var f=<?php echo $is_forced ? wp_json_encode( $forced_value ) : 'null'; ?>;
+		if(f){document.documentElement.setAttribute('data-theme',f);document.documentElement.setAttribute('data-theme-forced','');return;}
 		var s;try{s=localStorage.getItem('ss-theme')}catch(e){}
 		if(s==='dark'||s==='light'){document.documentElement.setAttribute('data-theme',s);return;}
 		var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
@@ -179,8 +186,8 @@ function ss_inline_critical_css() {
 	/* Prevent FOUC: hide body until theme attribute is set */
 	html:not([data-theme]) body { visibility: hidden; }
 	html[data-theme] body { visibility: visible; }
-	/* Minimal above-the-fold: background + text color */
-	body { background-color: var(--surface-page); color: var(--text-primary); }
+	/* Minimal above-the-fold: background + text color with fallbacks */
+	body { background-color: var(--surface-page, #F4F1EB); color: var(--text-primary, #1F1F1D); }
 	</style>
 	<?php
 }
@@ -192,34 +199,39 @@ add_action( 'wp_head', 'ss_inline_critical_css', 2 );
 
 /**
  * Output admin-configured CSS variable overrides in wp_head.
+ *
+ * Color overrides target [data-theme="light"] and [data-theme="dark"]
+ * to beat the specificity of the palette definitions in tokens.css.
+ * Non-color overrides (fonts, layout) target :root.
  */
 function ss_output_custom_properties() {
-	$css_lines = array();
+	$root_lines  = array();
+	$color_lines = array();
 
-	/* Font overrides */
+	/* Font overrides — validate against CSS injection */
 	$font_display = get_option( 'ss_font_display', '' );
 	$font_body    = get_option( 'ss_font_body', '' );
-	if ( ! empty( $font_display ) ) {
-		$css_lines[] = '--font-display: ' . esc_attr( $font_display ) . ';';
+	if ( ! empty( $font_display ) && preg_match( '/^[a-zA-Z0-9\s,"\'\-\.]+$/', $font_display ) ) {
+		$root_lines[] = '--font-display: ' . $font_display . ';';
 	}
-	if ( ! empty( $font_body ) ) {
-		$css_lines[] = '--font-body: ' . esc_attr( $font_body ) . ';';
+	if ( ! empty( $font_body ) && preg_match( '/^[a-zA-Z0-9\s,"\'\-\.]+$/', $font_body ) ) {
+		$root_lines[] = '--font-body: ' . $font_body . ';';
 	}
 
 	/* Container max width */
 	$container_max = get_option( 'ss_container_max', '1200' );
-	if ( $container_max !== '1200' ) {
-		$css_lines[] = '--container-max: ' . absint( $container_max ) . 'px;';
+	if ( '1200' !== $container_max ) {
+		$root_lines[] = '--container-max: ' . absint( $container_max ) . 'px;';
 	}
 
 	/* Section padding scale */
 	$padding_scale = get_option( 'ss_section_padding', 'standard' );
 	switch ( $padding_scale ) {
 		case 'compact':
-			$css_lines[] = '--section-padding-block: 64px;';
+			$root_lines[] = '--section-padding-block: 64px;';
 			break;
 		case 'airy':
-			$css_lines[] = '--section-padding-block: 128px;';
+			$root_lines[] = '--section-padding-block: 128px;';
 			break;
 	}
 
@@ -241,12 +253,23 @@ function ss_output_custom_properties() {
 	foreach ( $token_map as $option_suffix => $css_prop ) {
 		$val = get_option( 'ss_color_' . $option_suffix, '' );
 		if ( ! empty( $val ) && preg_match( '/^#[0-9a-fA-F]{6}$/', $val ) ) {
-			$css_lines[] = '--' . $css_prop . ': ' . esc_attr( $val ) . ';';
+			$color_lines[] = '--' . $css_prop . ': ' . $val . ';';
 		}
 	}
 
-	if ( ! empty( $css_lines ) ) {
-		echo '<style id="ss-admin-overrides">:root{' . "\n" . implode( "\n", $css_lines ) . "\n" . '}</style>' . "\n";
+	$output = '';
+	if ( ! empty( $root_lines ) ) {
+		$output .= ':root{' . "\n" . implode( "\n", $root_lines ) . "\n" . '}' . "\n";
+	}
+	if ( ! empty( $color_lines ) ) {
+		$joined = implode( "\n", $color_lines );
+		/* Target both theme attribute selectors to beat tokens.css specificity */
+		$output .= '[data-theme="light"]{' . "\n" . $joined . "\n" . '}' . "\n";
+		$output .= '[data-theme="dark"]{' . "\n" . $joined . "\n" . '}' . "\n";
+	}
+
+	if ( ! empty( $output ) ) {
+		echo '<style id="ss-admin-overrides">' . "\n" . $output . '</style>' . "\n";
 	}
 }
 add_action( 'wp_head', 'ss_output_custom_properties', 3 );
@@ -286,14 +309,18 @@ add_filter( 'body_class', 'ss_body_classes' );
 function ss_open_graph_meta() {
 	if ( is_singular() ) {
 		global $post;
-		$title = esc_attr( get_the_title( $post ) );
-		$url   = esc_url( get_permalink( $post ) );
-		$desc  = esc_attr( wp_trim_words( get_the_excerpt( $post ), 30, '...' ) );
-		$image = '';
+		if ( ! $post instanceof WP_Post ) {
+			return;
+		}
+		$og_type = is_single() ? 'article' : 'website';
+		$title   = esc_attr( get_the_title( $post ) );
+		$url     = esc_url( get_permalink( $post ) );
+		$desc    = esc_attr( wp_trim_words( get_the_excerpt( $post ), 30, '...' ) );
+		$image   = '';
 		if ( has_post_thumbnail( $post ) ) {
 			$image = esc_url( get_the_post_thumbnail_url( $post, 'large' ) );
 		}
-		echo '<meta property="og:type" content="website" />' . "\n";
+		echo '<meta property="og:type" content="' . esc_attr( $og_type ) . '" />' . "\n";
 		echo '<meta property="og:title" content="' . $title . '" />' . "\n";
 		echo '<meta property="og:url" content="' . $url . '" />' . "\n";
 		if ( $desc ) {
@@ -315,16 +342,20 @@ function ss_event_schema() {
 		return;
 	}
 	$schema = array(
-		'@context'    => 'https://schema.org',
-		'@type'       => 'Event',
-		'name'        => esc_html( get_bloginfo( 'name' ) ),
-		'description' => esc_html( get_bloginfo( 'description' ) ),
-		'url'         => esc_url( home_url( '/' ) ),
-		'location'    => array(
+		'@context'              => 'https://schema.org',
+		'@type'                 => 'Event',
+		'name'                  => esc_html( get_bloginfo( 'name' ) ),
+		'description'           => esc_html( get_bloginfo( 'description' ) ),
+		'url'                   => esc_url( home_url( '/' ) ),
+		'startDate'             => '2026-01-01',
+		'eventStatus'           => 'https://schema.org/EventScheduled',
+		'eventAttendanceMode'   => 'https://schema.org/OfflineEventAttendanceMode',
+		'location'              => array(
 			'@type'   => 'Place',
 			'name'    => 'La Pedrera (Casa Mila)',
 			'address' => array(
 				'@type'           => 'PostalAddress',
+				'streetAddress'   => 'Passeig de Gracia, 92',
 				'addressLocality' => 'Barcelona',
 				'addressCountry'  => 'ES',
 			),
@@ -383,7 +414,7 @@ remove_action( 'wp_head', 'wp_shortlink_wp_head' );
 require_once get_template_directory() . '/inc/admin-settings.php';
 
 /* ==========================================================================
-   12. HELPER — Check if announcement bar is enabled
+   12. HELPER FUNCTIONS
    ========================================================================== */
 
 function ss_announcement_enabled() {

@@ -99,7 +99,8 @@ a:hover {
   transition: top var(--duration-fast) var(--ease);
 }
 
-.skip-link:focus {
+.skip-link:focus,
+.skip-link:focus-visible {
   top: var(--sp-2);
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
@@ -120,6 +121,7 @@ a:hover {
   margin: -1px;
   overflow: hidden;
   clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
 }
@@ -144,7 +146,13 @@ h2 {
   font-size: var(--text-h2);
   line-height: var(--lh-h2);
   letter-spacing: var(--ls-h2);
-  font-weight: 550;
+  font-weight: 600;
+}
+
+@supports (font-variation-settings: normal) {
+  h2 {
+    font-weight: 550;
+  }
 }
 
 h3 {

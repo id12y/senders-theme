@@ -9,9 +9,7 @@
   align-items: center;
   gap: var(--sp-7);
   min-height: min(75vh, 720px);
-  max-height: 80vh;
   padding-block: var(--sp-8);
-  overflow: hidden;
   background-color: var(--surface-page);
 }
 
@@ -156,7 +154,8 @@
    REDUCED MOTION
    -------------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
-  .ss-hero__field-svg {
-    animation: none;
+  .ss-hero,
+  .ss-hero * {
+    transition-duration: 0ms !important;
   }
 }

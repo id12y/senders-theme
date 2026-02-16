@@ -93,7 +93,7 @@ get_template_part( 'parts/hero' );
 </section>
 
 <!-- Why This Format Is Different -->
-<section class="section" aria-labelledby="format-heading">
+<section id="format" class="section" aria-labelledby="format-heading">
 	<div class="container flow" style="--flow-space: var(--sp-6);">
 		<div style="text-align: center;">
 			<span class="eyebrow"><?php esc_html_e( 'Format', 'sender-symposium' ); ?></span>
@@ -157,19 +157,25 @@ get_template_part( 'parts/hero' );
 
 <!-- Page Content (Elementor or editor content) -->
 <?php if ( have_posts() ) : ?>
-	<?php while ( have_posts() ) : the_post(); ?>
-		<?php if ( trim( get_the_content() ) ) : ?>
-			<div class="container section">
-				<div class="entry-content flow">
-					<?php the_content(); ?>
-				</div>
+	<?php
+	while ( have_posts() ) :
+		the_post();
+		$ss_raw_content = get_post_field( 'post_content', get_the_ID() );
+		if ( ! empty( trim( $ss_raw_content ) ) ) :
+	?>
+		<div class="container section">
+			<div class="entry-content flow">
+				<?php the_content(); ?>
 			</div>
-		<?php endif; ?>
-	<?php endwhile; ?>
+		</div>
+	<?php
+		endif;
+	endwhile;
+	?>
 <?php endif; ?>
 
 <!-- Final CTA -->
-<section class="section">
+<section id="tickets" class="section">
 	<div class="container">
 		<div class="cta-block">
 			<h2 class="cta-block__title"><?php esc_html_e( 'Ready to join the conversation?', 'sender-symposium' ); ?></h2>

@@ -4,18 +4,32 @@
  * Tiny, deferred script. The inline bootstrap in <head> handles
  * initial theme application to prevent FOUC. This script wires up
  * the interactive toggle button.
+ *
+ * The PHP bootstrap may set a data-theme-forced attribute on <html>.
+ * When forced, the toggle is disabled and localStorage is ignored.
  */
 (function () {
   'use strict';
 
   var STORAGE_KEY = 'ss-theme';
   var ATTR = 'data-theme';
+  var FORCED_ATTR = 'data-theme-forced';
   var root = document.documentElement;
+
+  /**
+   * Check if admin has forced a specific mode.
+   */
+  function isForced() {
+    return root.hasAttribute(FORCED_ATTR);
+  }
 
   /**
    * Return the resolved theme: stored pref > system pref > 'light'.
    */
   function getResolvedTheme() {
+    if (isForced()) {
+      return root.getAttribute(ATTR) || 'light';
+    }
     var stored = null;
     try {
       stored = localStorage.getItem(STORAGE_KEY);
@@ -39,9 +53,10 @@
   }
 
   /**
-   * Toggle between light ↔ dark and persist.
+   * Toggle between light and dark and persist.
    */
   function toggleTheme() {
+    if (isForced()) return; /* Admin has locked the mode */
     var current = root.getAttribute(ATTR) || getResolvedTheme();
     var next = current === 'dark' ? 'light' : 'dark';
     applyTheme(next);
@@ -59,13 +74,25 @@
       toggles[i].addEventListener('click', toggleTheme);
     }
 
-    /* Apply current resolved theme (inline bootstrap may have already done this) */
-    applyTheme(getResolvedTheme());
+    /*
+     * Sync ARIA state to match the theme already set by the bootstrap.
+     * Do NOT re-resolve the theme — trust the bootstrap's decision
+     * to avoid overwriting a forced mode or flickering.
+     */
+    var currentTheme = root.getAttribute(ATTR);
+    if (currentTheme) {
+      for (var j = 0; j < toggles.length; j++) {
+        toggles[j].setAttribute('aria-pressed', currentTheme === 'dark' ? 'true' : 'false');
+      }
+    } else {
+      /* Bootstrap didn't run (shouldn't happen, but be safe) */
+      applyTheme(getResolvedTheme());
+    }
 
-    /* Listen for system-level changes */
-    if (window.matchMedia) {
+    /* Listen for system-level changes (only when not forced) */
+    if (window.matchMedia && !isForced()) {
       var mq = window.matchMedia('(prefers-color-scheme: dark)');
-      mq.addEventListener('change', function () {
+      var handler = function () {
         var stored = null;
         try {
           stored = localStorage.getItem(STORAGE_KEY);
@@ -73,7 +100,13 @@
         if (!stored) {
           applyTheme(getResolvedTheme());
         }
-      });
+      };
+      /* Safari < 14 support: addListener is deprecated but has wider compat */
+      if (mq.addEventListener) {
+        mq.addEventListener('change', handler);
+      } else if (mq.addListener) {
+        mq.addListener(handler);
+      }
     }
   }
 

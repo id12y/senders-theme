@@ -18,11 +18,11 @@ get_header();
 
 				<header>
 					<?php if ( is_singular() ) : ?>
-						<h1><?php the_title(); ?></h1>
+						<h1><?php echo esc_html( get_the_title() ); ?></h1>
 					<?php else : ?>
 						<h2>
 							<a href="<?php the_permalink(); ?>">
-								<?php the_title(); ?>
+								<?php echo esc_html( get_the_title() ); ?>
 							</a>
 						</h2>
 					<?php endif; ?>

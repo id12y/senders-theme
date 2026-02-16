@@ -23,7 +23,7 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 
 			<div class="footer-col">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-logo" rel="home">
-					<?php bloginfo( 'name' ); ?>
+					<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
 				</a>
 				<p class="text-small" style="margin-top: var(--sp-3); color: var(--text-muted); max-width: 32ch;">
 					<?php echo esc_html( get_bloginfo( 'description' ) ); ?>
@@ -52,7 +52,7 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 		</div>
 
 		<div class="footer-bottom">
-			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php bloginfo( 'name' ); ?>. <?php esc_html_e( 'All rights reserved.', 'sender-symposium' ); ?></span>
+			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php echo esc_html( get_bloginfo( 'name' ) ); ?>. <?php esc_html_e( 'All rights reserved.', 'sender-symposium' ); ?></span>
 		</div>
 	</div>
 </footer>

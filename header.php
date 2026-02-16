@@ -45,7 +45,7 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 			</div>
 		<?php else : ?>
 			<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="site-logo" rel="home">
-				<?php bloginfo( 'name' ); ?>
+				<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
 			</a>
 		<?php endif; ?>
 

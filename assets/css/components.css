@@ -188,7 +188,8 @@
               border-color var(--duration-base) var(--ease);
 }
 
-.card:hover {
+.card:hover,
+.card:focus-within {
   box-shadow: var(--shadow-soft);
   border-color: var(--border-strong);
 }
@@ -233,14 +234,8 @@
 /* Card grid */
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(320px, 100%), 1fr));
   gap: var(--sp-5);
-}
-
-@media (max-width: 767px) {
-  .card-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -268,19 +263,19 @@
 
 .badge--success {
   background-color: var(--status-success);
-  color: #fff;
+  color: var(--text-inverse);
   border-color: transparent;
 }
 
 .badge--warning {
   background-color: var(--status-warning);
-  color: #fff;
+  color: var(--text-inverse);
   border-color: transparent;
 }
 
 .badge--error {
   background-color: var(--status-error);
-  color: #fff;
+  color: var(--text-inverse);
   border-color: transparent;
 }
 
@@ -384,7 +379,7 @@
    -------------------------------------------------------------------------- */
 .pricing-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: var(--sp-5);
   max-width: 960px;
   margin-inline: auto;
@@ -400,7 +395,8 @@
               border-color var(--duration-base) var(--ease);
 }
 
-.pricing-card:hover {
+.pricing-card:hover,
+.pricing-card:focus-within {
   box-shadow: var(--shadow-soft);
 }
 
@@ -502,7 +498,7 @@
 
 .testimonial-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(340px, 100%), 1fr));
   gap: var(--sp-5);
 }
 
@@ -688,9 +684,7 @@
   margin-bottom: var(--sp-3);
 }
 
-[data-theme="dark"] .value-card__number {
-  color: var(--action-primary-bg);
-}
+
 
 .value-card__title {
   font-family: var(--font-display);
@@ -709,7 +703,7 @@
    -------------------------------------------------------------------------- */
 .format-block {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(260px, 100%), 1fr));
   gap: var(--sp-5);
 }
 

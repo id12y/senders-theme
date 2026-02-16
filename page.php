@@ -15,7 +15,7 @@ get_header();
 		<article id="post-<?php the_ID(); ?>" <?php post_class( 'flow' ); ?>>
 
 			<header>
-				<h1><?php the_title(); ?></h1>
+				<h1><?php echo esc_html( get_the_title() ); ?></h1>
 			</header>
 
 			<div class="entry-content flow">
