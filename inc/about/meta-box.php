@@ -507,7 +507,7 @@ function ss_about_save_meta_box( $post_id ) {
 		return;
 	}
 
-	$raw = $_POST['ss_about'] ?? array();
+	$raw = wp_unslash( $_POST['ss_about'] ?? array() );
 
 	/* Convert gallery comma-separated string to array before sanitize */
 	if ( ! empty( $raw['gallery']['image_ids_raw'] ) ) {

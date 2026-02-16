@@ -513,13 +513,6 @@
    Reduced Motion
    ---------------------------------------------------------- */
 
-@media (prefers-reduced-motion: reduce) {
-  .ss-ticketing,
-  .ss-ticketing * {
-    transition-duration: 0ms !important;
-  }
-}
-
 /* ----------------------------------------------------------
    Mobile
    ---------------------------------------------------------- */

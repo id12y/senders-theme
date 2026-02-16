@@ -28,6 +28,7 @@ html {
 
 body {
   min-height: 100vh;
+  min-height: 100dvh;
   background-color: var(--surface-page);
   color: var(--text-primary);
   font-family: var(--font-body);
@@ -104,6 +105,11 @@ a:hover {
   top: var(--sp-2);
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* Scroll offset for sticky header — prevents anchors hiding behind 72px header */
+[id] {
+  scroll-margin-top: 5rem;
 }
 
 /* Focus states — NEVER remove outlines globally */
@@ -279,6 +285,73 @@ p {
 }
 
 /* --------------------------------------------------------------------------
+   FORM INPUTS
+   -------------------------------------------------------------------------- */
+input[type="text"],
+input[type="email"],
+input[type="search"],
+input[type="url"],
+input[type="tel"],
+input[type="number"],
+input[type="password"],
+textarea,
+select {
+  display: block;
+  width: 100%;
+  padding: var(--sp-2) var(--sp-3);
+  min-height: 48px;
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  background-color: var(--surface-card);
+  color: var(--text-primary);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  transition: border-color var(--duration-fast) var(--ease),
+              box-shadow var(--duration-fast) var(--ease);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="search"]:focus,
+input[type="url"]:focus,
+input[type="tel"]:focus,
+input[type="number"]:focus,
+input[type="password"]:focus,
+textarea:focus,
+select:focus {
+  border-color: var(--focus-ring);
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text-muted);
+  opacity: 1;
+}
+
+textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236B6761' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--sp-3) center;
+  padding-right: var(--sp-6);
+}
+
+label {
+  display: block;
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-1);
+}
+
+/* --------------------------------------------------------------------------
    RESPONSIVE IMAGES
    -------------------------------------------------------------------------- */
 .aspect-ratio-box {
@@ -312,4 +385,67 @@ p {
   background: rgba(255, 255, 255, 0.08);
   padding: var(--sp-2);
   border-radius: var(--radius-btn);
+}
+
+/* --------------------------------------------------------------------------
+   PRINT STYLES
+   -------------------------------------------------------------------------- */
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+
+  .site-header,
+  .menu-toggle,
+  .site-nav,
+  .theme-toggle,
+  .announcement-bar,
+  .skip-link,
+  .btn,
+  .cta-block,
+  .ss-ticketing-journey,
+  .ss-ticketing-scarcity,
+  .ss-ticketing-reassurance {
+    display: none !important;
+  }
+
+  main {
+    margin-top: 0 !important;
+  }
+
+  .site-footer {
+    border-top: 1px solid #ccc;
+    padding: 1em 0;
+    font-size: 10pt;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #555 !important;
+  }
+
+  a[href^="#"]::after,
+  a[href^="javascript:"]::after {
+    content: "";
+  }
+
+  img {
+    max-width: 100% !important;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0;
+  }
 }

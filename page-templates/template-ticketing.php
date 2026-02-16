@@ -301,7 +301,7 @@ if ( ! $rc['show'] ) {
 							case 'why_different': ?>
 								<div class="ss-ticketing-why">
 									<?php if ( ! empty( $wd['title'] ) ) : ?>
-										<h3><?php echo esc_html( $wd['title'] ); ?></h3>
+										<h2><?php echo esc_html( $wd['title'] ); ?></h2>
 									<?php endif; ?>
 									<?php
 									$bullets = ss_lines_to_array( $wd['bullets'] );
@@ -319,7 +319,7 @@ if ( ! $rc['show'] ) {
 							case 'info_card': ?>
 								<div class="ss-ticketing-info-card<?php echo $ic['highlight'] ? ' ss-ticketing-info-card--highlight' : ''; ?>">
 									<?php if ( ! empty( $ic['heading'] ) ) : ?>
-										<h3><?php echo esc_html( $ic['heading'] ); ?></h3>
+										<h2><?php echo esc_html( $ic['heading'] ); ?></h2>
 									<?php endif; ?>
 									<?php if ( ! empty( $ic['body'] ) ) : ?>
 										<div class="ss-ticketing-info-card__body"><?php echo wp_kses_post( $ic['body'] ); ?></div>

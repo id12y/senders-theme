@@ -44,7 +44,7 @@ function ss_render_sponsor_card( $sponsor, $display ) {
 		</div>
 		<?php endif; ?>
 		<div class="sponsor-card__body">
-			<h3 class="sponsor-card__name"><?php echo esc_html( $sponsor['sponsor_name'] ); ?></h3>
+			<h4 class="sponsor-card__name"><?php echo esc_html( $sponsor['sponsor_name'] ); ?></h4>
 			<?php if ( $show_desc ) : ?>
 				<p class="sponsor-card__desc"><?php echo wp_kses_post( $sponsor['description'] ); ?></p>
 			<?php endif; ?>
@@ -52,6 +52,9 @@ function ss_render_sponsor_card( $sponsor, $display ) {
 				<a class="sponsor-card__link" href="<?php echo esc_url( $sponsor['website_link'] ); ?>"<?php echo $link_target; ?>>
 					<?php esc_html_e( 'Visit website', 'sender-symposium' ); ?>
 					<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+					<?php if ( $new_tab ) : ?>
+						<span class="sr-only"><?php esc_html_e( '(opens in new tab)', 'sender-symposium' ); ?></span>
+					<?php endif; ?>
 				</a>
 			<?php endif; ?>
 		</div>

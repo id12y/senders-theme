@@ -16,7 +16,7 @@ if ( empty( $text ) ) {
 	return;
 }
 ?>
-<div class="announcement-bar" role="region" aria-label="<?php esc_attr_e( 'Announcement', 'sender-symposium' ); ?>">
+<div class="announcement-bar">
 	<?php if ( ! empty( $url ) ) : ?>
 		<a href="<?php echo esc_url( $url ); ?>">
 			<?php echo wp_kses_post( $text ); ?>

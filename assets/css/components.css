@@ -474,9 +474,7 @@
   margin-inline: auto;
 }
 
-.faq-item {
-  border-bottom: 1px solid var(--border-subtle);
-}
+/* .faq-item styles are in faq.css — avoid duplication */
 
 .faq-item__trigger {
   display: flex;

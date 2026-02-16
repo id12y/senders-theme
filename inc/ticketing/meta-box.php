@@ -578,7 +578,7 @@ function ss_ticketing_save_meta_box( $post_id ) {
 		return;
 	}
 
-	$raw   = $_POST['ss_ticketing'] ?? array();
+	$raw   = wp_unslash( $_POST['ss_ticketing'] ?? array() );
 	$clean = ss_sanitize_ticketing_settings( $raw );
 	update_post_meta( $post_id, 'ss_ticketing_settings', $clean );
 }

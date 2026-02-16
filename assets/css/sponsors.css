@@ -285,12 +285,3 @@
   outline-offset: 3px;
 }
 
-/* ─── Reduced motion ─── */
-@media (prefers-reduced-motion: reduce) {
-  .sponsor-card,
-  .sponsor-card__link,
-  .ss-sponsors__cta-btn,
-  .ss-sponsors__platinum-cta {
-    transition: none;
-  }
-}
