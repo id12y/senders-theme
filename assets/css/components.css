@@ -747,6 +747,13 @@
   color: var(--text-muted);
 }
 
+.footer-text-line {
+  width: 100%;
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: var(--lh-caption);
+}
+
 /* --------------------------------------------------------------------------
    AUDIENCE TARGETING / WHO SHOULD ATTEND
    -------------------------------------------------------------------------- */

@@ -67,6 +67,20 @@ function ss_site_settings_schema() {
 			'label'       => __( 'Primary Contact URL', 'sender-symposium' ),
 			'description' => __( 'Link to contact page or form.', 'sender-symposium' ),
 		),
+		'footer_text_line_1' => array(
+			'type'        => 'inline_html',
+			'default'     => '',
+			'tab'         => 'site_branding',
+			'label'       => __( 'Footer Text — Line 1', 'sender-symposium' ),
+			'description' => __( 'Optional line above the copyright notice. HTML allowed (links, bold, etc.).', 'sender-symposium' ),
+		),
+		'footer_text_line_2' => array(
+			'type'        => 'inline_html',
+			'default'     => '',
+			'tab'         => 'site_branding',
+			'label'       => __( 'Footer Text — Line 2', 'sender-symposium' ),
+			'description' => __( 'Optional second line above the copyright notice. HTML allowed.', 'sender-symposium' ),
+		),
 
 		/* ── Event Defaults ── */
 		'event_name' => array(

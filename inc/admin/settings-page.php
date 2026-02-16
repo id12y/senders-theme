@@ -72,6 +72,7 @@ function ss_site_sanitize_settings( $input ) {
 				$clean[ $key ] = esc_url_raw( $val );
 				break;
 			case 'wysiwyg':
+			case 'inline_html':
 				$clean[ $key ] = wp_kses_post( $val );
 				break;
 			case 'int':
@@ -200,6 +201,32 @@ function ss_site_render_text( $key, $s, $schema ) {
 				name="ss_site_settings[<?php echo esc_attr( $key ); ?>]"
 				value="<?php echo esc_attr( $value ); ?>"
 				class="regular-text"
+				placeholder="<?php echo esc_attr( $placeholder ); ?>"
+			/>
+			<?php if ( ! empty( $field['description'] ) ) : ?>
+				<p class="description"><?php echo esc_html( $field['description'] ); ?></p>
+			<?php endif; ?>
+		</td>
+	</tr>
+	<?php
+}
+
+/**
+ * Render an inline HTML field row (text input, HTML allowed).
+ */
+function ss_site_render_inline_html( $key, $s, $schema ) {
+	$field = $schema[ $key ];
+	$value = isset( $s[ $key ] ) ? $s[ $key ] : '';
+	$placeholder = isset( $field['default'] ) && '' !== $field['default'] ? $field['default'] : '';
+	?>
+	<tr>
+		<th><label for="ss_site_<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $field['label'] ); ?></label></th>
+		<td>
+			<input type="text"
+				id="ss_site_<?php echo esc_attr( $key ); ?>"
+				name="ss_site_settings[<?php echo esc_attr( $key ); ?>]"
+				value="<?php echo esc_attr( $value ); ?>"
+				class="large-text"
 				placeholder="<?php echo esc_attr( $placeholder ); ?>"
 			/>
 			<?php if ( ! empty( $field['description'] ) ) : ?>
@@ -446,6 +473,9 @@ function ss_site_render_field( $key, $s, $schema ) {
 	switch ( $type ) {
 		case 'text':
 			ss_site_render_text( $key, $s, $schema );
+			break;
+		case 'inline_html':
+			ss_site_render_inline_html( $key, $s, $schema );
 			break;
 		case 'email':
 			ss_site_render_email( $key, $s, $schema );
