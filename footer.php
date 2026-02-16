@@ -52,6 +52,16 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 		</div>
 
 		<div class="footer-bottom">
+			<?php
+			$footer_line_1 = trim( (string) ss_get_setting( 'footer_text_line_1', '' ) );
+			$footer_line_2 = trim( (string) ss_get_setting( 'footer_text_line_2', '' ) );
+			?>
+			<?php if ( '' !== $footer_line_1 ) : ?>
+				<p class="footer-text-line"><?php echo wp_kses_post( $footer_line_1 ); ?></p>
+			<?php endif; ?>
+			<?php if ( '' !== $footer_line_2 ) : ?>
+				<p class="footer-text-line"><?php echo wp_kses_post( $footer_line_2 ); ?></p>
+			<?php endif; ?>
 			<span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> <?php echo esc_html( get_bloginfo( 'name' ) ); ?>. <?php esc_html_e( 'All rights reserved.', 'sender-symposium' ); ?></span>
 		</div>
 	</div>
