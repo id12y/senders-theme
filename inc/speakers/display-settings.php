@@ -28,6 +28,7 @@ function ss_speakers_display_defaults() {
 		'card_style'          => 'elevated',
 		'show_company'        => true,
 		'show_linkedin'       => true,
+		'show_website'        => true,
 		'show_topic'          => true,
 		'show_description'    => true,
 	);
@@ -57,6 +58,7 @@ function ss_save_speakers_display( $data ) {
 			? $data['card_style'] : 'elevated',
 		'show_company'        => ! empty( $data['show_company'] ),
 		'show_linkedin'       => ! empty( $data['show_linkedin'] ),
+		'show_website'        => ! empty( $data['show_website'] ),
 		'show_topic'          => ! empty( $data['show_topic'] ),
 		'show_description'    => ! empty( $data['show_description'] ),
 	);

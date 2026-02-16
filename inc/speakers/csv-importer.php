@@ -39,6 +39,7 @@ function ss_import_speakers_csv( $file_path ) {
 		'job_title'    => array( 'job title', 'job_title', 'title', 'role', 'position' ),
 		'company'      => array( 'company', 'organization', 'org', 'employer' ),
 		'linkedin_url' => array( 'linkedin', 'linkedin url', 'linkedin_url', 'linkedin link' ),
+		'website_url'  => array( 'website', 'website url', 'website_url', 'url', 'web', 'site', 'homepage' ),
 		'image_url'    => array( 'image', 'image url', 'image_url', 'photo', 'photo url', 'avatar' ),
 	);
 
@@ -83,6 +84,7 @@ function ss_import_speakers_csv( $file_path ) {
 			'job_title'    => ss_csv_cell( $row, $map, 'job_title' ),
 			'company'      => ss_csv_cell( $row, $map, 'company' ),
 			'linkedin_url' => ss_csv_cell( $row, $map, 'linkedin_url' ),
+			'website_url'  => ss_csv_cell( $row, $map, 'website_url' ),
 			'image_url'    => ss_csv_cell( $row, $map, 'image_url' ),
 			'topic'        => '',
 			'description'  => '',
@@ -93,6 +95,9 @@ function ss_import_speakers_csv( $file_path ) {
 
 		if ( '' !== $data['linkedin_url'] && ! filter_var( $data['linkedin_url'], FILTER_VALIDATE_URL ) ) {
 			$result['warnings'][] = sprintf( __( 'Row %1$d (%2$s): LinkedIn URL may be invalid.', 'sender-symposium' ), $row_num, $name );
+		}
+		if ( '' !== $data['website_url'] && ! filter_var( $data['website_url'], FILTER_VALIDATE_URL ) ) {
+			$result['warnings'][] = sprintf( __( 'Row %1$d (%2$s): Website URL may be invalid.', 'sender-symposium' ), $row_num, $name );
 		}
 		if ( '' !== $data['image_url'] && ! filter_var( $data['image_url'], FILTER_VALIDATE_URL ) ) {
 			$result['warnings'][] = sprintf( __( 'Row %1$d (%2$s): Image URL may be invalid.', 'sender-symposium' ), $row_num, $name );

@@ -73,6 +73,7 @@ function ss_sanitize_speaker( $raw ) {
 		'job_title'    => sanitize_text_field( $raw['job_title'] ?? '' ),
 		'company'      => sanitize_text_field( $raw['company'] ?? '' ),
 		'linkedin_url' => esc_url_raw( $raw['linkedin_url'] ?? '' ),
+		'website_url'  => esc_url_raw( $raw['website_url'] ?? '' ),
 		'image_url'    => esc_url_raw( $raw['image_url'] ?? '' ),
 		'topic'        => sanitize_text_field( $raw['topic'] ?? '' ),
 		'description'  => wp_kses_post( $raw['description'] ?? '' ),

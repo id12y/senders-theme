@@ -207,8 +207,15 @@
   margin-top: var(--sp-2);
 }
 
-/* LinkedIn link */
-.speaker-card__linkedin {
+/* Speaker links (LinkedIn, Website) */
+.speaker-card__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+}
+
+.speaker-card__link {
   display: inline-flex;
   align-items: center;
   gap: var(--sp-1);
@@ -216,19 +223,18 @@
   font-weight: 500;
   color: var(--text-muted);
   text-decoration: none;
-  margin-top: var(--sp-3);
   transition: color var(--duration-fast) var(--ease);
 }
 
-.speaker-card__linkedin:hover {
+.speaker-card__link:hover {
   color: var(--text-primary);
 }
 
-.speaker-card__linkedin:focus-visible {
+.speaker-card__link:focus-visible {
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
 }
 
-.speaker-card__linkedin svg {
+.speaker-card__link svg {
   flex-shrink: 0;
 }

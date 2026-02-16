@@ -152,7 +152,7 @@ function ss_speakers_render_form( $speaker = null ) {
 	$is_edit = null !== $speaker;
 	$s = $is_edit ? $speaker : array(
 		'id' => '', 'name' => '', 'job_title' => '', 'company' => '',
-		'linkedin_url' => '', 'image_url' => '', 'topic' => '',
+		'linkedin_url' => '', 'website_url' => '', 'image_url' => '', 'topic' => '',
 		'description' => '', 'featured' => false, 'status' => 'unconfirmed',
 	);
 	?>
@@ -173,6 +173,8 @@ function ss_speakers_render_form( $speaker = null ) {
 					<td><input type="text" id="ss-company" name="speaker[company]" value="<?php echo esc_attr( $s['company'] ); ?>" class="regular-text" /></td></tr>
 				<tr><th><label for="ss-linkedin"><?php esc_html_e( 'LinkedIn URL', 'sender-symposium' ); ?></label></th>
 					<td><input type="url" id="ss-linkedin" name="speaker[linkedin_url]" value="<?php echo esc_attr( $s['linkedin_url'] ); ?>" class="regular-text" /></td></tr>
+				<tr><th><label for="ss-website"><?php esc_html_e( 'Website URL', 'sender-symposium' ); ?></label></th>
+					<td><input type="url" id="ss-website" name="speaker[website_url]" value="<?php echo esc_attr( $s['website_url'] ?? '' ); ?>" class="regular-text" /></td></tr>
 				<tr><th><label for="ss-image"><?php esc_html_e( 'Image URL', 'sender-symposium' ); ?></label></th>
 					<td><input type="url" id="ss-image" name="speaker[image_url]" value="<?php echo esc_attr( $s['image_url'] ); ?>" class="regular-text" /></td></tr>
 				<tr><th><label for="ss-topic"><?php esc_html_e( 'Topic', 'sender-symposium' ); ?></label></th>
@@ -202,7 +204,7 @@ function ss_speakers_render_import() {
 	<p><?php esc_html_e( 'Upload a CSV file with speaker data. All imported speakers default to "Unconfirmed" status.', 'sender-symposium' ); ?></p>
 	<div class="ss-csv-example">
 		<h4><?php esc_html_e( 'Expected CSV format:', 'sender-symposium' ); ?></h4>
-		<code>Name,Job Title,Company,LinkedIn,Image URL</code>
+		<code>Name,Job Title,Company,LinkedIn,Website,Image URL</code>
 		<p class="description"><?php esc_html_e( 'Headers are matched case-insensitively. Unknown columns are ignored. Rows without a Name are skipped.', 'sender-symposium' ); ?></p>
 	</div>
 	<form method="post" enctype="multipart/form-data">
@@ -284,6 +286,7 @@ function ss_speakers_render_display() {
 				<td>
 					<label><input type="checkbox" name="display[show_company]" value="1" <?php checked( $d['show_company'] ); ?> /> <?php esc_html_e( 'Company', 'sender-symposium' ); ?></label><br>
 					<label><input type="checkbox" name="display[show_linkedin]" value="1" <?php checked( $d['show_linkedin'] ); ?> /> <?php esc_html_e( 'LinkedIn', 'sender-symposium' ); ?></label><br>
+					<label><input type="checkbox" name="display[show_website]" value="1" <?php checked( $d['show_website'] ); ?> /> <?php esc_html_e( 'Website', 'sender-symposium' ); ?></label><br>
 					<label><input type="checkbox" name="display[show_topic]" value="1" <?php checked( $d['show_topic'] ); ?> /> <?php esc_html_e( 'Topic', 'sender-symposium' ); ?></label><br>
 					<label><input type="checkbox" name="display[show_description]" value="1" <?php checked( $d['show_description'] ); ?> /> <?php esc_html_e( 'Description', 'sender-symposium' ); ?></label>
 				</td></tr>
