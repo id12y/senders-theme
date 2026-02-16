@@ -97,6 +97,14 @@ function ss_enqueue_assets() {
 		ss_asset_version( $dir . '/assets/css/components.css' )
 	);
 
+	/* Menu presets — loaded after components so preset classes override base nav */
+	wp_enqueue_style(
+		'ss-menu-presets',
+		$uri . '/assets/css/menu-presets.css',
+		array( 'ss-components' ),
+		ss_asset_version( $dir . '/assets/css/menu-presets.css' )
+	);
+
 	/* Elementor fallback — only when Elementor is not active */
 	if ( ! defined( 'ELEMENTOR_VERSION' ) ) {
 		wp_enqueue_style(

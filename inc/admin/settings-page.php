@@ -137,6 +137,7 @@ function ss_site_add_tabs( $tabs ) {
 	$tabs['site_event']        = __( 'Event Defaults', 'sender-symposium' );
 	$tabs['site_ticketing']    = __( 'Ticketing Defaults', 'sender-symposium' );
 	$tabs['site_design']       = __( 'Design Defaults', 'sender-symposium' );
+	$tabs['site_navigation']   = __( 'Navigation', 'sender-symposium' );
 	$tabs['site_integrations'] = __( 'Integrations', 'sender-symposium' );
 	return $tabs;
 }
@@ -151,6 +152,7 @@ function ss_site_render_tab( $tab ) {
 		'site_event'        => 'ss_site_render_tab_event',
 		'site_ticketing'    => 'ss_site_render_tab_ticketing',
 		'site_design'       => 'ss_site_render_tab_design',
+		'site_navigation'   => 'ss_site_render_tab_navigation',
 		'site_integrations' => 'ss_site_render_tab_integrations',
 	);
 	if ( isset( $renderers[ $tab ] ) && function_exists( $renderers[ $tab ] ) ) {
@@ -586,6 +588,16 @@ function ss_site_render_tab_design() {
 	ss_site_form_open( 'site_design' );
 	echo '<h2>' . esc_html__( 'Design Defaults', 'sender-symposium' ) . '</h2>';
 	ss_site_render_tab_fields( 'site_design' );
+	ss_site_form_close();
+}
+
+function ss_site_render_tab_navigation() {
+	ss_site_form_open( 'site_navigation' );
+	echo '<h2>' . esc_html__( 'Navigation', 'sender-symposium' ) . '</h2>';
+	echo '<p class="description" style="margin-bottom:16px;">'
+		. esc_html__( 'Choose a visual preset for the primary navigation menu and fine-tune it with the style knobs below. Desktop supports two levels of submenu nesting.', 'sender-symposium' )
+		. '</p>';
+	ss_site_render_tab_fields( 'site_navigation' );
 	ss_site_form_close();
 }
 

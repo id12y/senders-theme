@@ -3,7 +3,8 @@
  *
  * Handles mobile menu toggle with ARIA states, keyboard support,
  * focus trapping, click-outside-to-close, viewport resize cleanup,
- * and dropdown sub-menu toggles for nested menu items.
+ * and dropdown sub-menu toggles for nested menu items (up to 2 levels
+ * of submenus on desktop, 1 level accordion on mobile).
  */
 (function () {
   'use strict';
@@ -116,6 +117,14 @@
 
     /* ── Dropdown sub-menus ── */
 
+    /**
+     * Determine if an item is a top-level parent (direct child of .site-nav__list).
+     */
+    function isTopLevel(item) {
+      var parent = item.parentNode;
+      return parent && parent.classList.contains('site-nav__list');
+    }
+
     var parentItems = nav.querySelectorAll('.menu-item-has-children');
     for (var i = 0; i < parentItems.length; i++) {
       /* Initialize ARIA attributes on parent links */
@@ -141,9 +150,15 @@
       var link = item.querySelector(':scope > a');
       if (!link) return;
 
-      /* On mobile: toggle dropdown on click of parent link */
+      var topLevel = isTopLevel(item);
+
+      /* On mobile: toggle dropdown on click of parent link (top-level only) */
       link.addEventListener('click', function (e) {
         if (!isMobile()) return;
+
+        /* On mobile, only top-level parents get toggle behavior.
+           Sub-submenu parents are always visible — no toggle needed. */
+        if (!topLevel) return;
 
         /* If this is a "#" link or same-page link, toggle dropdown */
         var href = link.getAttribute('href');
@@ -158,7 +173,7 @@
         if (!item.classList.contains('ss-dropdown-open')) {
           e.preventDefault();
           /* Close sibling dropdowns */
-          var siblings = item.parentNode.querySelectorAll('.ss-dropdown-open');
+          var siblings = item.parentNode.querySelectorAll(':scope > .ss-dropdown-open');
           for (var j = 0; j < siblings.length; j++) {
             if (siblings[j] !== item) {
               siblings[j].classList.remove('ss-dropdown-open');
@@ -171,9 +186,10 @@
         /* Second tap navigates to the link's URL */
       });
 
-      /* Keyboard: Enter/Space toggles dropdown on mobile */
+      /* Keyboard: Enter/Space toggles dropdown on mobile (top-level only) */
       link.addEventListener('keydown', function (e) {
         if (!isMobile()) return;
+        if (!topLevel) return;
         if (e.key === 'Enter' || e.key === ' ') {
           var href = link.getAttribute('href');
           if (!href || href === '#' || href === '') {
@@ -184,20 +200,38 @@
         }
       });
 
-      /* Desktop keyboard: Arrow down opens sub-menu */
+      /* Desktop keyboard: Arrow down opens sub-menu for top-level items */
       link.addEventListener('keydown', function (e) {
         if (isMobile()) return;
-        if (e.key === 'ArrowDown') {
+
+        if (topLevel && e.key === 'ArrowDown') {
           e.preventDefault();
           item.classList.add('ss-dropdown-open');
           syncDropdownAria(item);
-          var firstSubLink = item.querySelector('.sub-menu a');
+          var firstSubLink = item.querySelector(':scope > .sub-menu > li > a');
           if (firstSubLink) firstSubLink.focus();
+        }
+
+        /* Desktop keyboard: ArrowRight opens sub-submenu for nested parents */
+        if (!topLevel && e.key === 'ArrowRight') {
+          e.preventDefault();
+          item.classList.add('ss-dropdown-open');
+          syncDropdownAria(item);
+          var firstSubSubLink = item.querySelector(':scope > .sub-menu > li > a');
+          if (firstSubSubLink) firstSubSubLink.focus();
+        }
+
+        /* Desktop keyboard: ArrowLeft closes sub-submenu and returns focus to parent */
+        if (!topLevel && e.key === 'ArrowLeft') {
+          e.preventDefault();
+          item.classList.remove('ss-dropdown-open');
+          syncDropdownAria(item);
+          link.focus();
         }
       });
 
       /* Sub-menu keyboard: Escape closes dropdown */
-      var subMenu = item.querySelector('.sub-menu');
+      var subMenu = item.querySelector(':scope > .sub-menu');
       if (subMenu) {
         subMenu.addEventListener('keydown', function (e) {
           if (e.key === 'Escape') {
@@ -205,6 +239,72 @@
             item.classList.remove('ss-dropdown-open');
             syncDropdownAria(item);
             link.focus();
+          }
+
+          /* Arrow navigation within sub-menu */
+          if (!isMobile() && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) {
+            var links = subMenu.querySelectorAll(':scope > li > a');
+            if (!links.length) return;
+
+            var currentIdx = -1;
+            for (var k = 0; k < links.length; k++) {
+              if (links[k] === document.activeElement) {
+                currentIdx = k;
+                break;
+              }
+            }
+
+            if (currentIdx === -1) return;
+
+            e.preventDefault();
+            if (e.key === 'ArrowDown' && currentIdx < links.length - 1) {
+              links[currentIdx + 1].focus();
+            } else if (e.key === 'ArrowUp' && currentIdx > 0) {
+              links[currentIdx - 1].focus();
+            } else if (e.key === 'ArrowUp' && currentIdx === 0) {
+              /* At first item, go up to parent link */
+              link.focus();
+            }
+          }
+
+          /* ArrowLeft from sub-submenu items returns to parent sub-menu */
+          if (!isMobile() && e.key === 'ArrowLeft' && !topLevel) {
+            e.stopPropagation();
+            item.classList.remove('ss-dropdown-open');
+            syncDropdownAria(item);
+            link.focus();
+          }
+
+          /* ArrowRight on sub-menu item that has children: open sub-submenu */
+          if (!isMobile() && e.key === 'ArrowRight') {
+            var focused = document.activeElement;
+            if (!focused) return;
+            var parentLi = focused.closest('.menu-item-has-children');
+            if (parentLi && parentLi !== item && subMenu.contains(parentLi)) {
+              e.stopPropagation();
+              parentLi.classList.add('ss-dropdown-open');
+              syncDropdownAria(parentLi);
+              var firstChild = parentLi.querySelector(':scope > .sub-menu > li > a');
+              if (firstChild) firstChild.focus();
+            }
+          }
+        });
+      }
+
+      /* Desktop: close sub-submenu on click of parent link (for navigation) */
+      if (!topLevel) {
+        link.addEventListener('click', function (e) {
+          if (isMobile()) return;
+
+          var href = link.getAttribute('href');
+          if (!href || href === '#' || href === '') {
+            e.preventDefault();
+            item.classList.toggle('ss-dropdown-open');
+            syncDropdownAria(item);
+            if (item.classList.contains('ss-dropdown-open')) {
+              var firstChild = item.querySelector(':scope > .sub-menu > li > a');
+              if (firstChild) firstChild.focus();
+            }
           }
         });
       }

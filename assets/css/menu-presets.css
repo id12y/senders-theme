@@ -1,0 +1,437 @@
+/* ==========================================================================
+   MENU PRESETS — Skinnable navigation via .ee-menu--{preset} class
+   Uses CSS variables for colors/spacing/radius so presets are skins only.
+   Loaded after components.css; all rules scoped to preset classes.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   SHARED VARIABLES — defaults for all presets
+   -------------------------------------------------------------------------- */
+.site-nav[class*="ee-menu--"] {
+  --menu-gap: var(--sp-4);
+  --menu-link-px: var(--sp-2);
+  --menu-link-py: var(--sp-1);
+  --menu-radius: var(--radius-btn);
+  --menu-dropdown-radius: var(--radius-card);
+  --menu-dropdown-shadow: var(--shadow-elevated);
+  --menu-dropdown-border: 1px solid var(--border-subtle);
+  --menu-dropdown-bg: var(--surface-page);
+  --menu-transition: var(--duration-fast) var(--ease);
+  --menu-underline-thickness: 2px;
+  --menu-underline-offset: -2px;
+}
+
+/* --------------------------------------------------------------------------
+   KNOB: DENSITY
+   "comfortable" is the default — no rule needed; presets set their own.
+   Only "compact" overrides.
+   -------------------------------------------------------------------------- */
+.site-nav[data-density="compact"] {
+  --menu-gap: var(--sp-2);
+  --menu-link-px: var(--sp-1);
+  --menu-link-py: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   KNOB: RADIUS
+   "m" is the default — no rule needed; presets set their own.
+   Only "s" and "l" override.
+   -------------------------------------------------------------------------- */
+.site-nav[data-radius="s"] {
+  --menu-radius: 3px;
+  --menu-dropdown-radius: 6px;
+}
+
+.site-nav[data-radius="l"] {
+  --menu-radius: var(--radius-lg);
+  --menu-dropdown-radius: var(--radius-lg);
+}
+
+/* --------------------------------------------------------------------------
+   KNOB: UNDERLINE
+   -------------------------------------------------------------------------- */
+.site-nav[data-underline="on"] .site-nav__list > li > a:hover .site-nav__link-text,
+.site-nav[data-underline="on"] .site-nav__list > li > a[aria-current="page"] .site-nav__link-text {
+  text-decoration: underline;
+  text-decoration-thickness: var(--menu-underline-thickness);
+  text-underline-offset: var(--menu-underline-offset);
+}
+
+.site-nav[data-underline="off"] .site-nav__list > li > a .site-nav__link-text {
+  text-decoration: none;
+}
+
+/* --------------------------------------------------------------------------
+   KNOB: ANIMATION
+   -------------------------------------------------------------------------- */
+.site-nav[data-animation="off"],
+.site-nav[data-animation="off"] * {
+  --menu-transition: 0ms var(--ease);
+}
+
+.site-nav[data-animation="off"] .site-nav__list .sub-menu {
+  transition: none;
+}
+
+/* --------------------------------------------------------------------------
+   KNOB: SUBMENU INDICATOR
+   -------------------------------------------------------------------------- */
+
+/* Caret indicator (default, already styled in components.css) */
+
+/* Plus indicator — override the chevron with a + */
+.site-nav[data-indicator="plus"] .site-nav__list > .menu-item-has-children > a::after {
+  content: "+";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  border: none;
+  transform: none;
+  font-size: 1em;
+  font-weight: 600;
+  line-height: 1;
+  margin-left: 4px;
+  vertical-align: middle;
+  transition: transform var(--menu-transition);
+}
+
+.site-nav[data-indicator="plus"] .site-nav__list > .menu-item-has-children:hover > a::after,
+.site-nav[data-indicator="plus"] .site-nav__list > .menu-item-has-children:focus-within > a::after,
+.site-nav[data-indicator="plus"] .site-nav__list > .menu-item-has-children.ss-dropdown-open > a::after {
+  transform: rotate(45deg);
+}
+
+/* Plus indicator for sub-menu level */
+.site-nav[data-indicator="plus"] .sub-menu .menu-item-has-children > a::after {
+  content: "+";
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  height: auto;
+  border: none;
+  transform: none;
+  font-size: 0.875em;
+  font-weight: 600;
+  line-height: 1;
+  padding-left: 0;
+  transition: transform var(--menu-transition);
+}
+
+.site-nav[data-indicator="plus"] .sub-menu .menu-item-has-children:hover > a::after,
+.site-nav[data-indicator="plus"] .sub-menu .menu-item-has-children:focus-within > a::after,
+.site-nav[data-indicator="plus"] .sub-menu .menu-item-has-children.ss-dropdown-open > a::after {
+  transform: rotate(45deg);
+}
+
+/* --------------------------------------------------------------------------
+   APPLY KNOB VARIABLES TO NAV ELEMENTS
+   -------------------------------------------------------------------------- */
+.site-nav[class*="ee-menu--"] .site-nav__list {
+  gap: var(--menu-gap);
+}
+
+.site-nav[class*="ee-menu--"] .site-nav__link {
+  padding: var(--menu-link-py) var(--menu-link-px);
+  border-radius: var(--menu-radius);
+  transition: color var(--menu-transition),
+              background-color var(--menu-transition);
+}
+
+.site-nav[class*="ee-menu--"] .site-nav__list .sub-menu {
+  border-radius: var(--menu-dropdown-radius);
+  box-shadow: var(--menu-dropdown-shadow);
+  border: var(--menu-dropdown-border);
+  background: var(--menu-dropdown-bg);
+}
+
+.site-nav[class*="ee-menu--"] .sub-menu a {
+  transition: color var(--menu-transition),
+              background-color var(--menu-transition);
+}
+
+/* ==========================================================================
+   PRESET: BASELINE
+   Current design, unchanged — knobs still apply.
+   ========================================================================== */
+/* No overrides needed — baseline uses all defaults from components.css */
+
+
+/* ==========================================================================
+   PRESET: GAUDI
+   Gaudi-inspired styling — subtle organic accents, highly readable.
+   Warm tones, softer radius, gentle background transitions.
+   ========================================================================== */
+.ee-menu--gaudi {
+  --menu-radius: var(--radius-pill);
+  --menu-dropdown-radius: var(--radius-lg);
+  --menu-dropdown-shadow: 0 8px 28px rgba(0, 0, 0, 0.08);
+}
+
+/* Top-level links: warm pill-shaped hover */
+.ee-menu--gaudi .site-nav__list > li > a:hover,
+.ee-menu--gaudi .site-nav__list > li > a:focus {
+  background-color: var(--surface-section);
+  color: var(--text-primary);
+}
+
+/* Active item: warm accent underline via box-shadow */
+.ee-menu--gaudi .site-nav__list > li > a[aria-current="page"] {
+  color: var(--text-primary);
+  background-color: var(--surface-section);
+  box-shadow: inset 0 var(--menu-underline-offset) 0 0 var(--focus-ring);
+}
+
+/* Dropdown: organic feel with slightly larger radius */
+.ee-menu--gaudi .site-nav__list .sub-menu {
+  border-top: 2px solid var(--focus-ring);
+  padding: var(--sp-2);
+}
+
+/* Sub-menu items: rounded hover */
+.ee-menu--gaudi .sub-menu a {
+  border-radius: var(--radius-btn);
+}
+
+.ee-menu--gaudi .sub-menu a:hover,
+.ee-menu--gaudi .sub-menu a:focus {
+  background-color: var(--surface-section);
+  color: var(--text-primary);
+}
+
+/* Dark mode adjustments for gaudi */
+[data-theme="dark"] .ee-menu--gaudi {
+  --menu-dropdown-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+}
+
+[data-theme="dark"] .ee-menu--gaudi .site-nav__list .sub-menu {
+  border-top-color: var(--focus-ring);
+}
+
+
+/* ==========================================================================
+   PRESET: MODERN-LITE
+   Clean, minimal, tightly tied to the theme. Text-forward with subtle cues.
+   ========================================================================== */
+.ee-menu--modern-lite {
+  --menu-radius: 4px;
+  --menu-dropdown-radius: 8px;
+  --menu-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+  --menu-dropdown-border: 1px solid var(--border-subtle);
+}
+
+/* Top-level links: subtle text color shift, no background */
+.ee-menu--modern-lite .site-nav__list > li > a {
+  font-weight: 400;
+}
+
+.ee-menu--modern-lite .site-nav__list > li > a:hover,
+.ee-menu--modern-lite .site-nav__list > li > a:focus {
+  color: var(--text-primary);
+}
+
+/* Active item: heavier weight + subtle underline */
+.ee-menu--modern-lite .site-nav__list > li > a[aria-current="page"] {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ee-menu--modern-lite .site-nav__list > li > a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: var(--menu-link-px);
+  right: var(--menu-link-px);
+  height: 2px;
+  background-color: var(--text-primary);
+  border-radius: 1px;
+}
+
+/* Position relative on top-level items for underline pseudo-element */
+.ee-menu--modern-lite .site-nav__list > li {
+  position: relative;
+}
+
+/* Dropdown: clean, minimal border */
+.ee-menu--modern-lite .sub-menu a {
+  font-weight: 400;
+  padding: var(--sp-2) var(--sp-3);
+}
+
+.ee-menu--modern-lite .sub-menu a:hover,
+.ee-menu--modern-lite .sub-menu a:focus {
+  color: var(--text-primary);
+  background-color: var(--surface-section);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .ee-menu--modern-lite {
+  --menu-dropdown-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+
+/* ==========================================================================
+   PRESET: MODERN-PLUS
+   Modern, clean, heavier styling — more defined surfaces/elevation.
+   ========================================================================== */
+.ee-menu--modern-plus {
+  --menu-radius: 6px;
+  --menu-dropdown-radius: 10px;
+  --menu-dropdown-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --menu-dropdown-border: 1px solid var(--border-strong);
+  --menu-dropdown-bg: var(--surface-elevated, var(--surface-page));
+}
+
+/* Top-level links: visible background on hover */
+.ee-menu--modern-plus .site-nav__list > li > a:hover,
+.ee-menu--modern-plus .site-nav__list > li > a:focus {
+  background-color: var(--surface-card);
+  color: var(--text-primary);
+}
+
+/* Active item: filled background with primary text */
+.ee-menu--modern-plus .site-nav__list > li > a[aria-current="page"] {
+  background-color: var(--action-primary-bg);
+  color: var(--action-primary-text);
+}
+
+/* Dropdown: elevated, defined surface */
+.ee-menu--modern-plus .site-nav__list .sub-menu {
+  padding: var(--sp-2);
+}
+
+.ee-menu--modern-plus .sub-menu a {
+  border-radius: var(--menu-radius);
+  padding: var(--sp-2) var(--sp-3);
+}
+
+.ee-menu--modern-plus .sub-menu a:hover,
+.ee-menu--modern-plus .sub-menu a:focus {
+  background-color: var(--surface-section);
+  color: var(--text-primary);
+}
+
+/* Active sub-menu item */
+.ee-menu--modern-plus .sub-menu a[aria-current="page"] {
+  background-color: var(--surface-section);
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .ee-menu--modern-plus {
+  --menu-dropdown-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+}
+
+
+/* ==========================================================================
+   PRESET: SIGNATURE
+   Complementary to Barcelona theme — display font accents, warm underline.
+   ========================================================================== */
+.ee-menu--signature {
+  --menu-radius: 0;
+  --menu-dropdown-radius: 2px;
+  --menu-dropdown-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
+  --menu-dropdown-border: 1px solid var(--border-subtle);
+}
+
+/* Top-level links: display font, slightly larger */
+.ee-menu--signature .site-nav__list > li > a {
+  font-family: var(--font-display);
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.ee-menu--signature .site-nav__list > li > a:hover,
+.ee-menu--signature .site-nav__list > li > a:focus {
+  color: var(--text-primary);
+}
+
+/* Active item: warm accent underline */
+.ee-menu--signature .site-nav__list > li {
+  position: relative;
+}
+
+.ee-menu--signature .site-nav__list > li > a[aria-current="page"] {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.ee-menu--signature .site-nav__list > li > a[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: var(--menu-link-px);
+  right: var(--menu-link-px);
+  height: 2px;
+  background-color: var(--focus-ring);
+  border-radius: 1px;
+}
+
+/* Dropdown: accent top border, sharp corners */
+.ee-menu--signature .site-nav__list .sub-menu {
+  border-top: 2px solid var(--focus-ring);
+}
+
+.ee-menu--signature .sub-menu a {
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+.ee-menu--signature .sub-menu a:hover,
+.ee-menu--signature .sub-menu a:focus {
+  color: var(--text-primary);
+  background-color: var(--surface-section);
+}
+
+/* Dark mode adjustments */
+[data-theme="dark"] .ee-menu--signature {
+  --menu-dropdown-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+
+/* ==========================================================================
+   MOBILE OVERRIDES — All presets reset to consistent mobile behavior
+   ========================================================================== */
+@media (max-width: 991px) {
+
+  /* Reset all preset-specific dropdown styling for mobile */
+  .site-nav[class*="ee-menu--"] .site-nav__list .sub-menu {
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    border-top: none;
+  }
+
+  /* Reset dropdown bg for presets that set it */
+  .site-nav[class*="ee-menu--"] .sub-menu a {
+    border-radius: 0;
+  }
+
+  /* Mobile: active item indicator simplified */
+  .ee-menu--modern-lite .site-nav__list > li > a[aria-current="page"]::before,
+  .ee-menu--signature .site-nav__list > li > a[aria-current="page"]::before {
+    display: none;
+  }
+
+  /* Mobile: modern-plus active resets to simple color */
+  .ee-menu--modern-plus .site-nav__list > li > a[aria-current="page"] {
+    background-color: transparent;
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  /* Mobile: gaudi dropdown border resets */
+  .ee-menu--gaudi .site-nav__list .sub-menu {
+    border-top: none;
+  }
+
+  /* Mobile: signature font resets to body for readability */
+  .ee-menu--signature .site-nav__list > li > a {
+    font-family: var(--font-body);
+  }
+}
