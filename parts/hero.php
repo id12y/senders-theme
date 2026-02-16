@@ -60,8 +60,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( ss_show_hero_field() ) : ?>
 	<div class="ss-hero__field" aria-hidden="true">
 		<svg class="ss-hero__field-svg" viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-width="1">
-			<!-- Abstract La Pedrera balcony curves — iron railings inspired -->
-			<!-- Outer wave structure -->
 			<path d="M50,80 Q100,20 200,60 Q300,100 350,40" stroke-width="1.5" opacity="0.6"/>
 			<path d="M30,140 Q120,80 200,120 Q280,160 370,100" stroke-width="1.5" opacity="0.5"/>
 			<path d="M40,200 Q130,140 210,180 Q290,220 360,160" stroke-width="1.5" opacity="0.4"/>
@@ -70,18 +68,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<path d="M40,380 Q130,320 210,360 Q290,400 360,340" stroke-width="1.5" opacity="0.25"/>
 			<path d="M50,440 Q140,380 220,420 Q300,460 350,400" stroke-width="1.5" opacity="0.2"/>
 
-			<!-- Vertical structural lines -->
 			<line x1="100" y1="30" x2="100" y2="470" stroke-width="0.5" opacity="0.15"/>
 			<line x1="200" y1="30" x2="200" y2="470" stroke-width="0.5" opacity="0.15"/>
 			<line x1="300" y1="30" x2="300" y2="470" stroke-width="0.5" opacity="0.15"/>
 
-			<!-- Subtle organic curves — iron balcony detail -->
 			<ellipse cx="150" cy="150" rx="40" ry="25" stroke-width="0.8" opacity="0.2"/>
 			<ellipse cx="250" cy="250" rx="45" ry="28" stroke-width="0.8" opacity="0.18"/>
 			<ellipse cx="150" cy="350" rx="38" ry="22" stroke-width="0.8" opacity="0.15"/>
 			<ellipse cx="250" cy="420" rx="42" ry="26" stroke-width="0.8" opacity="0.12"/>
 
-			<!-- Stone arch hints -->
 			<path d="M80,480 Q200,430 320,480" stroke-width="1" opacity="0.2"/>
 			<path d="M100,490 Q200,450 300,490" stroke-width="0.8" opacity="0.15"/>
 		</svg>

@@ -5,9 +5,6 @@
  * Stores hero settings as a single structured post-meta array:
  *   ss_hero_settings
  *
- * Architecture matches ticketing module: one meta key, nonce + capability
- * checks, escape on output.
- *
  * @package SenderSymposium
  */
 
