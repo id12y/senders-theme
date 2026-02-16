@@ -145,7 +145,7 @@ function ss_get_confirmed_sponsors( $sort = 'manual' ) {
  */
 function ss_sponsor_logo_url( $sponsor ) {
 	if ( ! empty( $sponsor['logo_attachment_id'] ) ) {
-		$url = wp_get_attachment_image_url( $sponsor['logo_attachment_id'], 'medium' );
+		$url = wp_get_attachment_image_url( $sponsor['logo_attachment_id'], 'full' );
 		if ( $url ) {
 			return $url;
 		}
@@ -158,7 +158,7 @@ function ss_sponsor_logo_url( $sponsor ) {
  */
 function ss_sponsor_dark_logo_url( $sponsor ) {
 	if ( ! empty( $sponsor['logo_dark_attachment_id'] ) ) {
-		$url = wp_get_attachment_image_url( $sponsor['logo_dark_attachment_id'], 'medium' );
+		$url = wp_get_attachment_image_url( $sponsor['logo_dark_attachment_id'], 'full' );
 		if ( $url ) {
 			return $url;
 		}

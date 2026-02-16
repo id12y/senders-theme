@@ -57,14 +57,14 @@ function ss_render_hero( $post_id ) {
 				$logo_dark  = '';
 
 				if ( $s['logo']['image_id'] ) {
-					$logo_light = wp_get_attachment_image_url( $s['logo']['image_id'], 'medium' );
+					$logo_light = wp_get_attachment_image_url( $s['logo']['image_id'], 'full' );
 				}
 				if ( ! $logo_light && has_custom_logo() ) {
 					$custom_logo_id = get_theme_mod( 'custom_logo' );
-					$logo_light     = wp_get_attachment_image_url( $custom_logo_id, 'medium' );
+					$logo_light     = wp_get_attachment_image_url( $custom_logo_id, 'full' );
 				}
 				if ( $s['logo']['dark_image_id'] ) {
-					$logo_dark = wp_get_attachment_image_url( $s['logo']['dark_image_id'], 'medium' );
+					$logo_dark = wp_get_attachment_image_url( $s['logo']['dark_image_id'], 'full' );
 				}
 
 				$site_name = get_bloginfo( 'name' );
