@@ -309,6 +309,7 @@ function ss_inline_critical_css() {
 	   decoded, so esc_url()'s &#038; would break CSS url() for any URL with &. */
 	$font_file_url = esc_url_raw( $font_file_url );
 	?>
+	<link rel="preload" as="font" type="font/woff2" href="<?php echo $font_file_url; ?>" crossorigin>
 	<style id="ss-critical">
 	@font-face {
 		font-family: "Barcelona Variable";

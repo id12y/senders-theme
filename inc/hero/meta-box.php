@@ -491,15 +491,30 @@ function ss_preload_hero_image() {
 	if ( ! $s['enabled'] || 'image' !== $s['mode'] || empty( $s['background']['image_id'] ) ) {
 		return;
 	}
-	$img_url  = wp_get_attachment_image_url( $s['background']['image_id'], 'full' );
+	$img_id  = $s['background']['image_id'];
+	$img_url = wp_get_attachment_image_url( $img_id, 'full' );
+	$srcset  = wp_get_attachment_image_srcset( $img_id, 'full' );
 	$dark_id  = $s['background']['dark_image_id'] ?? 0;
 	$dark_url = $dark_id ? wp_get_attachment_image_url( $dark_id, 'full' ) : '';
 
 	if ( $img_url && $dark_url ) {
-		echo '<link rel="preload" as="image" href="' . esc_url( $img_url ) . '" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">' . "\n";
-		echo '<link rel="preload" as="image" href="' . esc_url( $dark_url ) . '" media="(prefers-color-scheme: dark)">' . "\n";
+		$dark_srcset = wp_get_attachment_image_srcset( $dark_id, 'full' );
+		echo '<link rel="preload" as="image" href="' . esc_url( $img_url ) . '"';
+		if ( $srcset ) {
+			echo ' imagesrcset="' . esc_attr( $srcset ) . '" imagesizes="100vw"';
+		}
+		echo ' media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">' . "\n";
+		echo '<link rel="preload" as="image" href="' . esc_url( $dark_url ) . '"';
+		if ( $dark_srcset ) {
+			echo ' imagesrcset="' . esc_attr( $dark_srcset ) . '" imagesizes="100vw"';
+		}
+		echo ' media="(prefers-color-scheme: dark)">' . "\n";
 	} elseif ( $img_url ) {
-		echo '<link rel="preload" as="image" href="' . esc_url( $img_url ) . '">' . "\n";
+		echo '<link rel="preload" as="image" href="' . esc_url( $img_url ) . '"';
+		if ( $srcset ) {
+			echo ' imagesrcset="' . esc_attr( $srcset ) . '" imagesizes="100vw"';
+		}
+		echo '>' . "\n";
 	}
 }
 add_action( 'wp_head', 'ss_preload_hero_image', 4 );
