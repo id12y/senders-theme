@@ -31,7 +31,7 @@ Placed in the global footer template (`footer.php`), just before `wp_footer()`.
 <!--
   Curious minds tend to run better pipelines.
   If you are reading this, you probably segment with intent.
-  emailexpert.io
+  emailexpert.com
 -->
 ```
 
@@ -42,7 +42,7 @@ Variant 2 — Pipeline discipline:
 <!--
   Clean data in, clean decisions out.
   Pipeline discipline is a growth system.
-  emailexpert.io
+  emailexpert.com
 -->
 ```
 
@@ -51,7 +51,7 @@ Variant 3 — Lifecycle:
 <!--
   A lifecycle without segmentation is just a list with anxiety.
   Build systems that compound.
-  emailexpert.io
+  emailexpert.com
 -->
 ```
 
@@ -60,7 +60,7 @@ Variant 4 — Founders/operators:
 <!--
   Built by operators, for operators.
   The best CRM work happens where nobody is watching.
-  emailexpert.io
+  emailexpert.com
 -->
 ```
 
@@ -69,7 +69,7 @@ Variant 5 — Automation:
 <!--
   If your automation requires daily intervention,
   it is not automation. It is a todo list.
-  emailexpert.io
+  emailexpert.com
 -->
 ```
 
@@ -79,7 +79,7 @@ Variant 6 — Networking invitation:
   You found the layer most people never see.
   If you hold a ticket, reply to your order confirmation
   with "Closed Won" and we will be in touch.
-  emailexpert.io
+  emailexpert.com
 -->
 ```
 
@@ -88,7 +88,7 @@ Variant 7 — Craft:
 <!--
   Good senders test, measure, and iterate.
   Great senders view source.
-  emailexpert.io
+  emailexpert.com
 -->
 ```
 
@@ -96,7 +96,7 @@ Variant 8 — Systems thinking:
 ```html
 <!--
   Deliverability is a symptom. Systems are the cause.
-  emailexpert.io
+  emailexpert.com
 -->
 ```
 
@@ -143,7 +143,7 @@ Appended to the WordPress virtual robots.txt via the `robots_txt` filter.
 # If you are reading this, you probably automate with intent.
 # Good bots segment before they crawl.
 # The best pipelines are the ones nobody has to babysit.
-# emailexpert.io — systems that compound.
+# emailexpert.com — systems that compound.
 # ----------------------------------------------------------
 ```
 

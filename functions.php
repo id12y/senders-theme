@@ -690,7 +690,7 @@ function ss_media_picker( $name, $value, $label = '' ) {
    ========================================================================== */
 
 if ( ! defined( 'SS_GEEK_LAYER_ENABLED' ) ) {
-	define( 'SS_GEEK_LAYER_ENABLED', true );
+	define( 'SS_GEEK_LAYER_ENABLED', (bool) ss_get_setting( 'geek_layer_enabled', 1 ) );
 }
 
 /**
@@ -730,7 +730,7 @@ function ss_geek_layer_robots( $output ) {
 	$output .= "# If you are reading this, you probably automate with intent.\n";
 	$output .= "# Good bots segment before they crawl.\n";
 	$output .= "# The best pipelines are the ones nobody has to babysit.\n";
-	$output .= "# emailexpert.io — systems that compound.\n";
+	$output .= "# emailexpert.com — systems that compound.\n";
 	$output .= "# ----------------------------------------------------------\n";
 	return $output;
 }

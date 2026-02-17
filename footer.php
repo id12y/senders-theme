@@ -72,7 +72,7 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 <!--
   Curious minds tend to run better pipelines.
   If you are reading this, you probably segment with intent.
-  emailexpert.io
+  emailexpert.com
 -->
 <?php endif; ?>
 
