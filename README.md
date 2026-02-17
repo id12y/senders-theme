@@ -1,6 +1,6 @@
 # Sender Symposium — WordPress Theme
 
-A premium, performance-first WordPress theme for Sender Symposium. Designed for Elementor, accessible (WCAG 2.2 AA), dark/light mode, variable font support, and fully admin-configurable.
+A premium, performance-first WordPress theme for Sender Symposium. Designed for Elementor, accessible (WCAG 2.2 AA), dark/light mode, static font support, and fully admin-configurable.
 
 **Design tone:** Architectural, sculptural, calm authority, premium, European.
 **Venue inspiration:** La Pedrera (Casa Mila), Barcelona.
@@ -11,7 +11,7 @@ A premium, performance-first WordPress theme for Sender Symposium. Designed for 
 
 1. **Upload** the `senders-theme` folder to `wp-content/themes/`
 2. **Activate** the theme in Appearance → Themes
-3. **Add the font:** Place your licensed `Barcelona-Variable.woff2` in `assets/fonts/` (see `assets/fonts/README.md`)
+3. **Add the font:** Place your licensed Barcelona Regular font files (`.woff2`, `.woff`, `.ttf`, `.eot`, `.svg`) in `assets/fonts/` (see `assets/fonts/README.md`)
 4. **Configure:** Go to Appearance → Sender Symposium Settings to customise fonts, colours, layout, and dark mode
 5. **Set up menus:** Appearance → Menus — assign to "Primary Navigation" and "Footer Navigation"
 6. **Set homepage:** Settings → Reading → "A static page" → select your home page
@@ -56,7 +56,7 @@ senders-theme/
     │   ├── accordion.js       # FAQ accordion enhancement
     │   └── admin-settings.js  # WP color picker for admin
     ├── fonts/
-    │   └── Barcelona-Variable.woff2  # (add your licensed font)
+    │   └── Barcelona-Regular.*       # (add your licensed static font files)
     └── img/                   # Optional optimised images
 ```
 
@@ -96,7 +96,7 @@ The theme supports Elementor Theme Builder for custom headers and footers. If yo
    - **Custom Display Font File URL:** URL to your local .woff2 file
 
 ### Via Theme Files
-1. Replace `assets/fonts/Barcelona-Variable.woff2` with your font file
+1. Replace the `assets/fonts/Barcelona-Regular.*` files with your font files
 2. Update the `@font-face` declaration in `functions.php` → `ss_inline_critical_css()` if the font-family name changes
 
 **Important:** Only use locally hosted fonts. No external CDN links.
