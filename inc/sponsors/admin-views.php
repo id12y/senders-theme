@@ -377,9 +377,11 @@ function ss_sponsors_render_display() {
 				<td><input type="text" id="d-pet" name="display[platinum_empty_text]" value="<?php echo esc_attr( $d['platinum_empty_text'] ); ?>" class="regular-text" />
 				<p class="description"><?php esc_html_e( 'Shown when no platinum sponsor exists.', 'sender-symposium' ); ?></p></td></tr>
 			<tr><th><label for="d-pec"><?php esc_html_e( 'Platinum Empty CTA', 'sender-symposium' ); ?></label></th>
-				<td><input type="text" id="d-pec" name="display[platinum_empty_cta]" value="<?php echo esc_attr( $d['platinum_empty_cta'] ); ?>" class="regular-text" /></td></tr>
+				<td><input type="text" id="d-pec" name="display[platinum_empty_cta]" value="<?php echo esc_attr( $d['platinum_empty_cta'] ); ?>" class="regular-text" />
+				<p class="description"><?php esc_html_e( 'Becomes a link when a URL is set below.', 'sender-symposium' ); ?></p></td></tr>
 			<tr><th><label for="d-peu"><?php esc_html_e( 'Platinum Empty CTA URL', 'sender-symposium' ); ?></label></th>
-				<td><input type="url" id="d-peu" name="display[platinum_empty_url]" value="<?php echo esc_attr( $d['platinum_empty_url'] ); ?>" class="regular-text" /></td></tr>
+				<td><input type="url" id="d-peu" name="display[platinum_empty_url]" value="<?php echo esc_attr( $d['platinum_empty_url'] ); ?>" class="regular-text" />
+				<p class="description"><?php esc_html_e( 'Link destination for the CTA text above. Leave empty for plain text.', 'sender-symposium' ); ?></p></td></tr>
 			<tr><th><label for="d-gt"><?php esc_html_e( 'Gold Section Title', 'sender-symposium' ); ?></label></th>
 				<td><input type="text" id="d-gt" name="display[gold_title]" value="<?php echo esc_attr( $d['gold_title'] ); ?>" class="regular-text" /></td></tr>
 			<tr><th><label for="d-st"><?php esc_html_e( 'Silver Section Title', 'sender-symposium' ); ?></label></th>
@@ -389,15 +391,19 @@ function ss_sponsors_render_display() {
 		</table>
 
 		<h3><?php esc_html_e( 'Call-to-Action', 'sender-symposium' ); ?></h3>
+		<p class="description"><?php esc_html_e( 'Shown at the bottom of the sponsors page. Set a Button URL to make the heading a link and display the CTA button. Leave the heading empty to hide the entire section.', 'sender-symposium' ); ?></p>
 		<table class="form-table">
 			<tr><th><label for="d-ctah"><?php esc_html_e( 'CTA Heading', 'sender-symposium' ); ?></label></th>
-				<td><input type="text" id="d-ctah" name="display[cta_heading]" value="<?php echo esc_attr( $d['cta_heading'] ); ?>" class="regular-text" /></td></tr>
+				<td><input type="text" id="d-ctah" name="display[cta_heading]" value="<?php echo esc_attr( $d['cta_heading'] ); ?>" class="regular-text" />
+				<p class="description"><?php esc_html_e( 'Becomes a clickable link when a Button URL is set.', 'sender-symposium' ); ?></p></td></tr>
 			<tr><th><label for="d-ctat"><?php esc_html_e( 'CTA Text', 'sender-symposium' ); ?></label></th>
-				<td><textarea id="d-ctat" name="display[cta_text]" class="large-text" rows="2"><?php echo esc_textarea( $d['cta_text'] ); ?></textarea></td></tr>
+				<td><textarea id="d-ctat" name="display[cta_text]" class="large-text" rows="2"><?php echo esc_textarea( $d['cta_text'] ); ?></textarea>
+				<p class="description"><?php esc_html_e( 'Optional supporting copy below the heading.', 'sender-symposium' ); ?></p></td></tr>
 			<tr><th><label for="d-ctabl"><?php esc_html_e( 'Button Label', 'sender-symposium' ); ?></label></th>
 				<td><input type="text" id="d-ctabl" name="display[cta_button_label]" value="<?php echo esc_attr( $d['cta_button_label'] ); ?>" class="regular-text" /></td></tr>
 			<tr><th><label for="d-ctabu"><?php esc_html_e( 'Button URL', 'sender-symposium' ); ?></label></th>
-				<td><input type="url" id="d-ctabu" name="display[cta_button_url]" value="<?php echo esc_attr( $d['cta_button_url'] ); ?>" class="regular-text" /></td></tr>
+				<td><input type="url" id="d-ctabu" name="display[cta_button_url]" value="<?php echo esc_attr( $d['cta_button_url'] ); ?>" class="regular-text" />
+				<p class="description"><?php esc_html_e( 'Required for the heading link and button to appear.', 'sender-symposium' ); ?></p></td></tr>
 		</table>
 
 		<h3><?php esc_html_e( 'Layout', 'sender-symposium' ); ?></h3>

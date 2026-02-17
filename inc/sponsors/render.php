@@ -197,14 +197,22 @@ function ss_sponsors_shortcode( $atts ) {
 		<?php endforeach; ?>
 
 		<?php /* CTA section */ ?>
-		<?php if ( ! empty( $display['cta_heading'] ) ) : ?>
-		<section class="ss-sponsors__cta">
-			<h3 class="ss-sponsors__cta-heading"><?php echo esc_html( $display['cta_heading'] ); ?></h3>
+		<?php if ( ! empty( $display['cta_heading'] ) ) :
+			$cta_url = $display['cta_button_url'] ?? '';
+		?>
+		<section class="ss-sponsors__cta" aria-label="<?php esc_attr_e( 'Partner enquiry', 'sender-symposium' ); ?>">
+			<h3 class="ss-sponsors__cta-heading">
+				<?php if ( ! empty( $cta_url ) ) : ?>
+					<a href="<?php echo esc_url( $cta_url ); ?>"><?php echo esc_html( $display['cta_heading'] ); ?></a>
+				<?php else : ?>
+					<?php echo esc_html( $display['cta_heading'] ); ?>
+				<?php endif; ?>
+			</h3>
 			<?php if ( ! empty( $display['cta_text'] ) ) : ?>
 				<div class="ss-sponsors__cta-text"><?php echo wp_kses_post( $display['cta_text'] ); ?></div>
 			<?php endif; ?>
-			<?php if ( ! empty( $display['cta_button_url'] ) && ! empty( $display['cta_button_label'] ) ) : ?>
-				<a class="ss-sponsors__cta-btn" href="<?php echo esc_url( $display['cta_button_url'] ); ?>"><?php echo esc_html( $display['cta_button_label'] ); ?></a>
+			<?php if ( ! empty( $cta_url ) && ! empty( $display['cta_button_label'] ) ) : ?>
+				<a class="ss-sponsors__cta-btn" href="<?php echo esc_url( $cta_url ); ?>"><?php echo esc_html( $display['cta_button_label'] ); ?></a>
 			<?php endif; ?>
 		</section>
 		<?php endif; ?>
