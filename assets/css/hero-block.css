@@ -89,6 +89,7 @@
   height: 100%;
   object-fit: cover;
   z-index: 0;
+  transition: opacity 0.3s ease;
 }
 
 .ss-hero__overlay {

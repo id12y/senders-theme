@@ -286,12 +286,11 @@ function ss_inline_theme_bootstrap() {
 	?>
 	<script>
 	(function(){
+		var r=document.documentElement,m=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches,os=m?'dark':'light',t;
 		var f=<?php echo $is_forced ? wp_json_encode( $forced_value ) : 'null'; ?>;
-		if(f){document.documentElement.setAttribute('data-theme',f);document.documentElement.setAttribute('data-theme-forced','');return;}
-		var s;try{s=localStorage.getItem('ss-theme')}catch(e){}
-		if(s==='dark'||s==='light'){document.documentElement.setAttribute('data-theme',s);return;}
-		var d=window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light';
-		document.documentElement.setAttribute('data-theme',d);
+		if(f){t=f;r.setAttribute('data-theme',f);r.setAttribute('data-theme-forced','');}
+		else{var s;try{s=localStorage.getItem('ss-theme')}catch(e){}if(s==='dark'||s==='light'){t=s;}else{t=os;}r.setAttribute('data-theme',t);}
+		if(t!==os)r.classList.add('ss-hero-mismatch');
 	})();
 	</script>
 	<?php
@@ -321,6 +320,8 @@ function ss_inline_critical_css() {
 	/* Prevent FOUC: hide body until theme attribute is set */
 	html:not([data-theme]) body { visibility: hidden; }
 	html[data-theme] body { visibility: visible; }
+	/* Hide hero bg when bootstrap detects theme/OS mismatch (JS reveals it) */
+	.ss-hero-mismatch .ss-hero__bg[data-dark-src] { opacity: 0; }
 	/* Minimal above-the-fold: background + text color with fallbacks */
 	body { background-color: var(--surface-page, #F4F1EB); color: var(--text-primary, #1F1F1D); }
 	</style>
