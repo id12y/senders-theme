@@ -268,6 +268,33 @@ function ss_defer_non_critical_styles( $html, $handle ) {
 }
 add_filter( 'style_loader_tag', 'ss_defer_non_critical_styles', 10, 2 );
 
+/**
+ * Inline critical CSS on the front page to eliminate render-blocking requests.
+ *
+ * Replaces external <link> tags with inline <style> blocks for the 4 core
+ * stylesheets. Other pages continue using cached external files.
+ */
+function ss_inline_front_page_css( $html, $handle ) {
+	if ( is_admin() || ! is_front_page() ) {
+		return $html;
+	}
+	$map = array(
+		'ss-tokens'     => '/assets/css/tokens.css',
+		'ss-base'       => '/assets/css/base.css',
+		'ss-components' => '/assets/css/components.css',
+		'ss-hero-block' => '/assets/css/hero-block.css',
+	);
+	if ( ! isset( $map[ $handle ] ) ) {
+		return $html;
+	}
+	$file = get_template_directory() . $map[ $handle ];
+	if ( ! file_exists( $file ) ) {
+		return $html;
+	}
+	return '<style id="' . esc_attr( $handle ) . '-inline">' . file_get_contents( $file ) . "</style>\n";
+}
+add_filter( 'style_loader_tag', 'ss_inline_front_page_css', 9, 2 );
+
 /* ==========================================================================
    3. INLINE CRITICAL CSS & THEME BOOTSTRAP (NO FOUC)
    ========================================================================== */
