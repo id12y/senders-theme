@@ -44,14 +44,28 @@
   /**
    * Sync hero background image to match theme when a dark variant exists.
    * Works with the <picture> + data-attribute markup from render.php.
+   *
+   * @param {string}  theme     - 'light' or 'dark'
+   * @param {boolean} crossfade - true for toggle clicks (fade-out/in),
+   *                              false for init (immediate swap)
    */
-  function syncHeroBg(theme) {
+  function syncHeroBg(theme, crossfade) {
     var img = document.querySelector('.ss-hero__bg[data-dark-src]');
     if (!img) return;
-    img.src = theme === 'dark' ? img.dataset.darkSrc : img.dataset.lightSrc;
     var source = img.closest && img.closest('picture');
     source = source && source.querySelector('source[media]');
     if (source) source.media = 'not all';
+
+    var newSrc = theme === 'dark' ? img.dataset.darkSrc : img.dataset.lightSrc;
+    if (crossfade) {
+      img.style.opacity = '0';
+      setTimeout(function () {
+        img.src = newSrc;
+        img.style.opacity = '';
+      }, 300);
+    } else {
+      img.src = newSrc;
+    }
   }
 
   /**
@@ -59,7 +73,7 @@
    */
   function applyTheme(theme) {
     root.setAttribute(ATTR, theme);
-    syncHeroBg(theme);
+    syncHeroBg(theme, true);
     var toggles = document.querySelectorAll('.theme-toggle');
     for (var i = 0; i < toggles.length; i++) {
       toggles[i].setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
@@ -96,7 +110,8 @@
      */
     var currentTheme = root.getAttribute(ATTR);
     if (currentTheme) {
-      syncHeroBg(currentTheme);
+      syncHeroBg(currentTheme, false);
+      root.classList.remove('ss-hero-mismatch');
       for (var j = 0; j < toggles.length; j++) {
         toggles[j].setAttribute('aria-pressed', currentTheme === 'dark' ? 'true' : 'false');
       }
