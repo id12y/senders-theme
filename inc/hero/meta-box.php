@@ -86,6 +86,7 @@ function ss_hero_defaults() {
 		),
 		'background' => array(
 			'image_id'         => 0,
+			'dark_image_id'    => 0,
 			'overlay_strength' => 'medium',
 		),
 		'layout' => array(
@@ -183,6 +184,7 @@ function ss_sanitize_hero_settings( $raw ) {
 	$bg = $raw['background'] ?? array();
 	$clean['background'] = array(
 		'image_id'         => absint( $bg['image_id'] ?? 0 ),
+		'dark_image_id'    => absint( $bg['dark_image_id'] ?? 0 ),
 		'overlay_strength' => in_array( $bg['overlay_strength'] ?? '', array( 'low', 'medium', 'high' ), true )
 			? $bg['overlay_strength'] : 'medium',
 	);
@@ -372,6 +374,11 @@ function ss_hero_render_meta_box( $post ) {
 			<?php ss_media_picker( 'ss_hero[background][image_id]', $s['background']['image_id'], __( 'Choose Background Image', 'sender-symposium' ) ); ?>
 		</p>
 		<p>
+			<label><?php esc_html_e( 'Dark Mode Background', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'optional — leave empty to use the same image for both modes', 'sender-symposium' ); ?>)</small></label><br>
+			<?php ss_media_picker( 'ss_hero[background][dark_image_id]', $s['background']['dark_image_id'], __( 'Choose Dark Background', 'sender-symposium' ) ); ?>
+		</p>
+		<p>
 			<label><?php esc_html_e( 'Overlay Strength', 'sender-symposium' ); ?><br>
 			<select name="ss_hero[background][overlay_strength]">
 				<option value="low" <?php selected( $s['background']['overlay_strength'], 'low' ); ?>><?php esc_html_e( 'Low (35%)', 'sender-symposium' ); ?></option>
@@ -484,8 +491,14 @@ function ss_preload_hero_image() {
 	if ( ! $s['enabled'] || 'image' !== $s['mode'] || empty( $s['background']['image_id'] ) ) {
 		return;
 	}
-	$img_url = wp_get_attachment_image_url( $s['background']['image_id'], 'full' );
-	if ( $img_url ) {
+	$img_url  = wp_get_attachment_image_url( $s['background']['image_id'], 'full' );
+	$dark_id  = $s['background']['dark_image_id'] ?? 0;
+	$dark_url = $dark_id ? wp_get_attachment_image_url( $dark_id, 'full' ) : '';
+
+	if ( $img_url && $dark_url ) {
+		echo '<link rel="preload" as="image" href="' . esc_url( $img_url ) . '" media="(prefers-color-scheme: light), (prefers-color-scheme: no-preference)">' . "\n";
+		echo '<link rel="preload" as="image" href="' . esc_url( $dark_url ) . '" media="(prefers-color-scheme: dark)">' . "\n";
+	} elseif ( $img_url ) {
 		echo '<link rel="preload" as="image" href="' . esc_url( $img_url ) . '">' . "\n";
 	}
 }

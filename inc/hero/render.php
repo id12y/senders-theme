@@ -40,13 +40,29 @@ function ss_render_hero( $post_id ) {
 
 		<?php /* Background image + overlay */ ?>
 		<?php if ( $is_image ) :
-			$bg = wp_get_attachment_image_src( $s['background']['image_id'], 'full' );
+			$bg      = wp_get_attachment_image_src( $s['background']['image_id'], 'full' );
+			$dark_id = $s['background']['dark_image_id'] ?? 0;
+			$dark_bg = $dark_id ? wp_get_attachment_image_src( $dark_id, 'full' ) : null;
 			if ( $bg ) : ?>
-			<img class="ss-hero__bg"
-				src="<?php echo esc_url( $bg[0] ); ?>"
-				width="<?php echo esc_attr( $bg[1] ); ?>"
-				height="<?php echo esc_attr( $bg[2] ); ?>"
-				alt="" loading="eager" fetchpriority="high" aria-hidden="true">
+				<?php if ( $dark_bg ) : ?>
+				<picture>
+					<source srcset="<?php echo esc_url( $dark_bg[0] ); ?>"
+						media="(prefers-color-scheme: dark)">
+					<img class="ss-hero__bg"
+						src="<?php echo esc_url( $bg[0] ); ?>"
+						data-light-src="<?php echo esc_url( $bg[0] ); ?>"
+						data-dark-src="<?php echo esc_url( $dark_bg[0] ); ?>"
+						width="<?php echo esc_attr( $bg[1] ); ?>"
+						height="<?php echo esc_attr( $bg[2] ); ?>"
+						alt="" loading="eager" fetchpriority="high" aria-hidden="true">
+				</picture>
+				<?php else : ?>
+				<img class="ss-hero__bg"
+					src="<?php echo esc_url( $bg[0] ); ?>"
+					width="<?php echo esc_attr( $bg[1] ); ?>"
+					height="<?php echo esc_attr( $bg[2] ); ?>"
+					alt="" loading="eager" fetchpriority="high" aria-hidden="true">
+				<?php endif; ?>
 			<div class="ss-hero__overlay"></div>
 			<?php endif; ?>
 		<?php endif; ?>
