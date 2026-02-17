@@ -42,10 +42,24 @@
   }
 
   /**
+   * Sync hero background image to match theme when a dark variant exists.
+   * Works with the <picture> + data-attribute markup from render.php.
+   */
+  function syncHeroBg(theme) {
+    var img = document.querySelector('.ss-hero__bg[data-dark-src]');
+    if (!img) return;
+    img.src = theme === 'dark' ? img.dataset.darkSrc : img.dataset.lightSrc;
+    var source = img.closest && img.closest('picture');
+    source = source && source.querySelector('source[media]');
+    if (source) source.media = 'not all';
+  }
+
+  /**
    * Apply theme to <html> and update toggle buttons.
    */
   function applyTheme(theme) {
     root.setAttribute(ATTR, theme);
+    syncHeroBg(theme);
     var toggles = document.querySelectorAll('.theme-toggle');
     for (var i = 0; i < toggles.length; i++) {
       toggles[i].setAttribute('aria-pressed', theme === 'dark' ? 'true' : 'false');
@@ -75,12 +89,14 @@
     }
 
     /*
-     * Sync ARIA state to match the theme already set by the bootstrap.
-     * Do NOT re-resolve the theme — trust the bootstrap's decision
-     * to avoid overwriting a forced mode or flickering.
+     * Sync ARIA state and hero background to match the theme already
+     * set by the bootstrap. Do NOT re-resolve the theme — trust the
+     * bootstrap's decision to avoid overwriting a forced mode or
+     * flickering.
      */
     var currentTheme = root.getAttribute(ATTR);
     if (currentTheme) {
+      syncHeroBg(currentTheme);
       for (var j = 0; j < toggles.length; j++) {
         toggles[j].setAttribute('aria-pressed', currentTheme === 'dark' ? 'true' : 'false');
       }
