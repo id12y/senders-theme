@@ -121,16 +121,16 @@ function ss_register_settings() {
 	add_settings_section( 'ss_section_debug', esc_html__( 'Debug', 'sender-symposium' ), '__return_false', 'ss_page_general' );
 
 	add_settings_field( 'ss_font_display', esc_html__( 'Display Font Family', 'sender-symposium' ), 'ss_field_text', 'ss_page_general', 'ss_section_fonts', array(
-		'id' => 'ss_font_display', 'placeholder' => '"Barcelona", Georgia, serif',
+		'id' => 'ss_font_display', 'placeholder' => '"Barcelona Variable", Georgia, serif',
 		'description' => esc_html__( 'CSS font-family stack for headings. Leave blank for default.', 'sender-symposium' ),
 	) );
 	add_settings_field( 'ss_font_body', esc_html__( 'Body Font Family', 'sender-symposium' ), 'ss_field_text', 'ss_page_general', 'ss_section_fonts', array(
 		'id' => 'ss_font_body', 'placeholder' => 'system-ui, -apple-system, sans-serif',
 		'description' => esc_html__( 'CSS font-family stack for body text. Leave blank for default.', 'sender-symposium' ),
 	) );
-	add_settings_field( 'ss_font_file_url', esc_html__( 'Custom Display Font File URL', 'sender-symposium' ), 'ss_field_text', 'ss_page_general', 'ss_section_fonts', array(
-		'id' => 'ss_font_file_url', 'placeholder' => '',
-		'description' => esc_html__( 'URL to a .woff2 font file. Leave blank to use bundled Barcelona Regular.', 'sender-symposium' ),
+	add_settings_field( 'ss_font_file_url', esc_html__( 'Display Font File', 'sender-symposium' ), 'ss_field_font_upload', 'ss_page_general', 'ss_section_fonts', array(
+		'id' => 'ss_font_file_url',
+		'description' => esc_html__( 'Upload a .woff2 font file, or paste a URL. Leave blank to use bundled Barcelona Variable from theme fonts folder.', 'sender-symposium' ),
 	) );
 
 	add_settings_field( 'ss_container_max', esc_html__( 'Container Max Width', 'sender-symposium' ), 'ss_field_select', 'ss_page_general', 'ss_section_layout', array(
@@ -346,6 +346,25 @@ function ss_field_media( $args ) {
 	$value = absint( get_option( $args['id'], 0 ) );
 	$label = ! empty( $args['button_label'] ) ? $args['button_label'] : __( 'Choose Image', 'sender-symposium' );
 	ss_media_picker( $args['id'], $value, $label );
+	if ( ! empty( $args['description'] ) ) {
+		printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
+	}
+}
+
+function ss_field_font_upload( $args ) {
+	$value = get_option( $args['id'], '' );
+	$filename = $value ? basename( $value ) : '';
+	?>
+	<div class="ss-font-upload">
+		<input type="text" id="<?php echo esc_attr( $args['id'] ); ?>" name="<?php echo esc_attr( $args['id'] ); ?>" value="<?php echo esc_attr( $value ); ?>" class="regular-text ss-font-upload__url" placeholder="https://" />
+		<button type="button" class="button ss-font-upload__choose"><?php esc_html_e( 'Upload Font', 'sender-symposium' ); ?></button>
+		<?php if ( $filename ) : ?>
+		<span class="ss-font-upload__filename" style="display:inline-block;margin-left:8px;color:#666;"><?php echo esc_html( $filename ); ?></span>
+		<?php else : ?>
+		<span class="ss-font-upload__filename" style="display:none;margin-left:8px;color:#666;"></span>
+		<?php endif; ?>
+	</div>
+	<?php
 	if ( ! empty( $args['description'] ) ) {
 		printf( '<p class="description">%s</p>', esc_html( $args['description'] ) );
 	}

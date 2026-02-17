@@ -37,7 +37,7 @@
   --duration-slow: 350ms;
 
   /* Typography — families (admin-overridable via inline CSS vars) */
-  --font-display: "Barcelona", Georgia, "Times New Roman", serif;
+  --font-display: "Barcelona Variable", "Barcelona", Georgia, "Times New Roman", serif;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* Typography — scale (clamp for fluid sizing) */
