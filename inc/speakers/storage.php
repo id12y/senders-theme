@@ -68,19 +68,20 @@ function ss_next_speaker_order() {
 
 function ss_sanitize_speaker( $raw ) {
 	return array(
-		'id'           => sanitize_key( $raw['id'] ?? ss_generate_speaker_id() ),
-		'name'         => sanitize_text_field( $raw['name'] ?? '' ),
-		'job_title'    => sanitize_text_field( $raw['job_title'] ?? '' ),
-		'company'      => sanitize_text_field( $raw['company'] ?? '' ),
-		'linkedin_url' => esc_url_raw( $raw['linkedin_url'] ?? '' ),
-		'website_url'  => esc_url_raw( $raw['website_url'] ?? '' ),
-		'image_url'    => esc_url_raw( $raw['image_url'] ?? '' ),
-		'topic'        => sanitize_text_field( $raw['topic'] ?? '' ),
-		'description'  => wp_kses_post( $raw['description'] ?? '' ),
-		'featured'     => ! empty( $raw['featured'] ),
-		'status'       => in_array( $raw['status'] ?? '', array( 'published', 'unconfirmed' ), true )
+		'id'                  => sanitize_key( $raw['id'] ?? ss_generate_speaker_id() ),
+		'name'                => sanitize_text_field( $raw['name'] ?? '' ),
+		'job_title'           => sanitize_text_field( $raw['job_title'] ?? '' ),
+		'company'             => sanitize_text_field( $raw['company'] ?? '' ),
+		'linkedin_url'        => esc_url_raw( $raw['linkedin_url'] ?? '' ),
+		'website_url'         => esc_url_raw( $raw['website_url'] ?? '' ),
+		'image_attachment_id' => absint( $raw['image_attachment_id'] ?? 0 ),
+		'image_url'           => esc_url_raw( $raw['image_url'] ?? '' ),
+		'topic'               => sanitize_text_field( $raw['topic'] ?? '' ),
+		'description'         => wp_kses_post( $raw['description'] ?? '' ),
+		'featured'            => ! empty( $raw['featured'] ),
+		'status'              => in_array( $raw['status'] ?? '', array( 'published', 'unconfirmed' ), true )
 			? $raw['status'] : 'unconfirmed',
-		'order'        => absint( $raw['order'] ?? 0 ),
+		'order'               => absint( $raw['order'] ?? 0 ),
 	);
 }
 

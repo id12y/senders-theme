@@ -20,13 +20,20 @@ function ss_render_speaker_card( $speaker, $display ) {
 	if ( ! empty( $speaker['featured'] ) ) {
 		$card_class .= ' speaker-card--featured';
 	}
+	$image_url = '';
+	if ( ! empty( $speaker['image_attachment_id'] ) ) {
+		$image_url = wp_get_attachment_image_url( absint( $speaker['image_attachment_id'] ), 'medium' );
+	}
+	if ( ! $image_url && ! empty( $speaker['image_url'] ) ) {
+		$image_url = $speaker['image_url'];
+	}
 	?>
 	<article class="<?php echo esc_attr( $card_class ); ?>">
 		<div class="speaker-card__image-wrap">
-			<?php if ( ! empty( $speaker['image_url'] ) ) : ?>
+			<?php if ( $image_url ) : ?>
 				<img
 					class="speaker-card__image"
-					src="<?php echo esc_url( $speaker['image_url'] ); ?>"
+					src="<?php echo esc_url( $image_url ); ?>"
 					alt="<?php echo esc_attr( $speaker['name'] ); ?>"
 					loading="lazy"
 					decoding="async"

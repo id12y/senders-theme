@@ -156,7 +156,8 @@ function ss_speakers_render_form( $speaker = null ) {
 	$is_edit = null !== $speaker;
 	$s = $is_edit ? $speaker : array(
 		'id' => '', 'name' => '', 'job_title' => '', 'company' => '',
-		'linkedin_url' => '', 'website_url' => '', 'image_url' => '', 'topic' => '',
+		'linkedin_url' => '', 'website_url' => '', 'image_attachment_id' => 0,
+		'image_url' => '', 'topic' => '',
 		'description' => '', 'featured' => false, 'status' => 'unconfirmed',
 	);
 	?>
@@ -179,8 +180,10 @@ function ss_speakers_render_form( $speaker = null ) {
 					<td><input type="url" id="ss-linkedin" name="speaker[linkedin_url]" value="<?php echo esc_attr( $s['linkedin_url'] ); ?>" class="regular-text" /></td></tr>
 				<tr><th><label for="ss-website"><?php esc_html_e( 'Website URL', 'sender-symposium' ); ?></label></th>
 					<td><input type="url" id="ss-website" name="speaker[website_url]" value="<?php echo esc_attr( $s['website_url'] ?? '' ); ?>" class="regular-text" /></td></tr>
-				<tr><th><label for="ss-image"><?php esc_html_e( 'Image URL', 'sender-symposium' ); ?></label></th>
-					<td><input type="url" id="ss-image" name="speaker[image_url]" value="<?php echo esc_attr( $s['image_url'] ); ?>" class="regular-text" /></td></tr>
+				<tr><th><?php esc_html_e( 'Image', 'sender-symposium' ); ?></th>
+					<td>
+						<?php ss_speakers_media_field( $s['image_attachment_id'] ?? 0, $s['image_url'] ?? '' ); ?>
+					</td></tr>
 				<tr><th><label for="ss-topic"><?php esc_html_e( 'Topic', 'sender-symposium' ); ?></label></th>
 					<td><input type="text" id="ss-topic" name="speaker[topic]" value="<?php echo esc_attr( $s['topic'] ); ?>" class="regular-text" /></td></tr>
 				<tr><th><label for="ss-desc"><?php esc_html_e( 'Description', 'sender-symposium' ); ?></label></th>
@@ -197,6 +200,38 @@ function ss_speakers_render_form( $speaker = null ) {
 		</form>
 	</div>
 	<hr />
+	<?php
+}
+
+/* ─── Speaker image media picker field ─── */
+
+/**
+ * Render a combined media library picker + URL fallback field for speaker image.
+ */
+function ss_speakers_media_field( $attachment_id, $url_value ) {
+	$attachment_id = absint( $attachment_id );
+	$preview_url   = '';
+	if ( $attachment_id ) {
+		$preview_url = wp_get_attachment_image_url( $attachment_id, 'thumbnail' );
+	}
+	if ( ! $preview_url && $url_value ) {
+		$preview_url = $url_value;
+	}
+	?>
+	<div class="ss-speaker-media-field">
+		<input type="hidden" name="speaker[image_attachment_id]" value="<?php echo esc_attr( $attachment_id ); ?>" class="ss-speaker-media-id" />
+		<div class="ss-speaker-media-preview">
+			<?php if ( $preview_url ) : ?>
+				<img src="<?php echo esc_url( $preview_url ); ?>" alt="" style="max-height:80px;max-width:150px;object-fit:cover;border-radius:4px;" />
+			<?php endif; ?>
+		</div>
+		<button type="button" class="button ss-speaker-media-choose"><?php esc_html_e( 'Choose from Media Library', 'sender-symposium' ); ?></button>
+		<button type="button" class="button-link ss-speaker-media-remove" style="<?php echo $attachment_id ? '' : 'display:none;'; ?>color:#a00;margin-left:8px;"><?php esc_html_e( 'Remove', 'sender-symposium' ); ?></button>
+		<div style="margin-top:8px;">
+			<label class="description"><?php esc_html_e( 'Or paste image URL:', 'sender-symposium' ); ?></label>
+			<input type="url" name="speaker[image_url]" value="<?php echo esc_attr( $url_value ); ?>" class="regular-text ss-speaker-url-fallback" />
+		</div>
+	</div>
 	<?php
 }
 
