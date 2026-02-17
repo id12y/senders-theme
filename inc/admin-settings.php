@@ -121,7 +121,7 @@ function ss_register_settings() {
 	add_settings_section( 'ss_section_debug', esc_html__( 'Debug', 'sender-symposium' ), '__return_false', 'ss_page_general' );
 
 	add_settings_field( 'ss_font_display', esc_html__( 'Display Font Family', 'sender-symposium' ), 'ss_field_text', 'ss_page_general', 'ss_section_fonts', array(
-		'id' => 'ss_font_display', 'placeholder' => '"Barcelona Variable", Georgia, serif',
+		'id' => 'ss_font_display', 'placeholder' => '"Barcelona", Georgia, serif',
 		'description' => esc_html__( 'CSS font-family stack for headings. Leave blank for default.', 'sender-symposium' ),
 	) );
 	add_settings_field( 'ss_font_body', esc_html__( 'Body Font Family', 'sender-symposium' ), 'ss_field_text', 'ss_page_general', 'ss_section_fonts', array(
@@ -130,7 +130,7 @@ function ss_register_settings() {
 	) );
 	add_settings_field( 'ss_font_file_url', esc_html__( 'Custom Display Font File URL', 'sender-symposium' ), 'ss_field_text', 'ss_page_general', 'ss_section_fonts', array(
 		'id' => 'ss_font_file_url', 'placeholder' => '',
-		'description' => esc_html__( 'URL to a .woff2 font file. Leave blank to use bundled Barcelona Variable.', 'sender-symposium' ),
+		'description' => esc_html__( 'URL to a .woff2 font file. Leave blank to use bundled Barcelona Regular.', 'sender-symposium' ),
 	) );
 
 	add_settings_field( 'ss_container_max', esc_html__( 'Container Max Width', 'sender-symposium' ), 'ss_field_select', 'ss_page_general', 'ss_section_layout', array(

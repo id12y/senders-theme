@@ -283,21 +283,34 @@ add_action( 'wp_head', 'ss_inline_theme_bootstrap', 1 );
 
 /**
  * Inline critical CSS: font-face + above-the-fold essentials.
+ *
+ * Loads the static Barcelona Regular font (single weight 400).
+ * When no custom URL is set, a full multi-format src stack is used
+ * for broad browser support (.eot, .woff2, .woff, .ttf, .svg).
  */
 function ss_inline_critical_css() {
 	$font_file_url = get_option( 'ss_font_file_url', '' );
-	if ( empty( $font_file_url ) ) {
-		$font_file_url = get_template_directory_uri() . '/assets/fonts/Barcelona-Variable.woff2';
-	}
 	/* Use esc_url_raw(): <style> is "raw text" in HTML5, entities are NOT
 	   decoded, so esc_url()'s &#038; would break CSS url() for any URL with &. */
-	$font_file_url = esc_url_raw( $font_file_url );
 	?>
 	<style id="ss-critical">
 	@font-face {
-		font-family: "Barcelona Variable";
+		font-family: "Barcelona";
+		<?php if ( ! empty( $font_file_url ) ) :
+			$font_file_url = esc_url_raw( $font_file_url );
+		?>
 		src: url("<?php echo $font_file_url; ?>") format("woff2");
-		font-weight: 100 900;
+		<?php else :
+			$base = esc_url_raw( get_template_directory_uri() . '/assets/fonts/Barcelona-Regular' );
+		?>
+		src: url("<?php echo $base; ?>.eot");
+		src: url("<?php echo $base; ?>.eot?#iefix") format("embedded-opentype"),
+		     url("<?php echo $base; ?>.woff2") format("woff2"),
+		     url("<?php echo $base; ?>.woff") format("woff"),
+		     url("<?php echo $base; ?>.ttf") format("truetype"),
+		     url("<?php echo $base; ?>.svg#Barcelona") format("svg");
+		<?php endif; ?>
+		font-weight: 400;
 		font-display: swap;
 		font-style: normal;
 	}
