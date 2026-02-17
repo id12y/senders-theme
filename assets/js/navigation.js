@@ -115,6 +115,22 @@
       }, 150);
     });
 
+    /* ── Dismiss hover-triggered dropdowns on Escape (WCAG 1.4.13) ── */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || isMobile()) return;
+      var hoveredParents = nav.querySelectorAll('.menu-item-has-children:hover');
+      for (var i = 0; i < hoveredParents.length; i++) {
+        hoveredParents[i].setAttribute('data-hover-dismissed', '');
+        hoveredParents[i].classList.remove('ss-dropdown-open');
+        syncDropdownAria(hoveredParents[i]);
+      }
+    });
+
+    nav.addEventListener('mouseenter', function (e) {
+      var item = e.target.closest('.menu-item-has-children[data-hover-dismissed]');
+      if (item) item.removeAttribute('data-hover-dismissed');
+    }, true);
+
     /* ── Dropdown sub-menus ── */
 
     /**

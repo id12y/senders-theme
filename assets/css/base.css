@@ -18,6 +18,7 @@ html {
   -moz-text-size-adjust: 100%;
   text-size-adjust: 100%;
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem; /* Clear sticky header (72px + breathing room) for focus & anchor scrolling */
 }
 
 @media (prefers-reduced-motion: reduce) {

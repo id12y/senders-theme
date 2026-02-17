@@ -37,7 +37,7 @@
   --duration-slow: 350ms;
 
   /* Typography — families (admin-overridable via inline CSS vars) */
-  --font-display: "Barcelona", Georgia, "Times New Roman", serif;
+  --font-display: "Barcelona Variable", "Barcelona", Georgia, "Times New Roman", serif;
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 
   /* Typography — scale (clamp for fluid sizing) */
@@ -88,7 +88,7 @@
   --text-inverse: #FFFFFF;
 
   --border-subtle: #E3DED6;
-  --border-strong: #CFC7BB;
+  --border-strong: #9B8A72;
 
   --action-primary-bg: #1E2A38;
   --action-primary-text: #FFFFFF;
@@ -124,7 +124,7 @@
   --text-inverse: #1F1F1D;
 
   --border-subtle: #2F3331;
-  --border-strong: #3E4240;
+  --border-strong: #6B726F;
 
   --action-primary-bg: #B66A3C;
   --action-primary-text: #151716;
@@ -161,7 +161,7 @@
     --text-muted: #A8A39A;
     --text-inverse: #1F1F1D;
     --border-subtle: #2F3331;
-    --border-strong: #3E4240;
+    --border-strong: #6B726F;
     --action-primary-bg: #B66A3C;
     --action-primary-text: #151716;
     --action-primary-hover: #C47A4D;

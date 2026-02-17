@@ -139,6 +139,11 @@
   display: block;
 }
 
+/* Suppress hover dropdown after Escape dismissal (WCAG 1.4.13) */
+.site-nav__list .menu-item-has-children[data-hover-dismissed]:hover > .sub-menu {
+  display: none;
+}
+
 /* Rotate arrow when open */
 .site-nav__list .menu-item-has-children:hover > a::after,
 .site-nav__list .menu-item-has-children:focus-within > a::after,
@@ -334,6 +339,7 @@
   .sub-menu a {
     padding-left: var(--sp-6);
     font-size: var(--text-small);
+    white-space: normal; /* Override desktop nowrap for reflow at narrow widths (WCAG 1.4.10) */
   }
 
   /* Mobile sub-submenu: always visible when parent sub-menu is open, deeper indent */

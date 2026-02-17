@@ -283,34 +283,21 @@ add_action( 'wp_head', 'ss_inline_theme_bootstrap', 1 );
 
 /**
  * Inline critical CSS: font-face + above-the-fold essentials.
- *
- * Loads the static Barcelona Regular font (single weight 400).
- * When no custom URL is set, a full multi-format src stack is used
- * for broad browser support (.eot, .woff2, .woff, .ttf, .svg).
  */
 function ss_inline_critical_css() {
 	$font_file_url = get_option( 'ss_font_file_url', '' );
+	if ( empty( $font_file_url ) ) {
+		$font_file_url = get_template_directory_uri() . '/assets/fonts/Barcelona-Variable.woff2';
+	}
 	/* Use esc_url_raw(): <style> is "raw text" in HTML5, entities are NOT
 	   decoded, so esc_url()'s &#038; would break CSS url() for any URL with &. */
+	$font_file_url = esc_url_raw( $font_file_url );
 	?>
 	<style id="ss-critical">
 	@font-face {
-		font-family: "Barcelona";
-		<?php if ( ! empty( $font_file_url ) ) :
-			$font_file_url = esc_url_raw( $font_file_url );
-		?>
+		font-family: "Barcelona Variable";
 		src: url("<?php echo $font_file_url; ?>") format("woff2");
-		<?php else :
-			$base = esc_url_raw( get_template_directory_uri() . '/assets/fonts/Barcelona-Regular' );
-		?>
-		src: url("<?php echo $base; ?>.eot");
-		src: url("<?php echo $base; ?>.eot?#iefix") format("embedded-opentype"),
-		     url("<?php echo $base; ?>.woff2") format("woff2"),
-		     url("<?php echo $base; ?>.woff") format("woff"),
-		     url("<?php echo $base; ?>.ttf") format("truetype"),
-		     url("<?php echo $base; ?>.svg#Barcelona") format("svg");
-		<?php endif; ?>
-		font-weight: 400;
+		font-weight: 100 900;
 		font-display: swap;
 		font-style: normal;
 	}
@@ -683,6 +670,38 @@ function ss_lines_to_array( $text ) {
  * @param int    $value Current attachment ID (0 = none).
  * @param string $label Button label text.
  */
+/**
+ * Allow font file uploads in the WordPress Media Library.
+ */
+function ss_allow_font_uploads( $mimes ) {
+	$mimes['woff2'] = 'font/woff2';
+	$mimes['woff']  = 'font/woff';
+	$mimes['ttf']   = 'font/ttf';
+	$mimes['otf']   = 'font/otf';
+	return $mimes;
+}
+add_filter( 'upload_mimes', 'ss_allow_font_uploads' );
+
+/**
+ * Fix MIME type detection for font files (wp_check_filetype_and_ext may
+ * fail on hosts with restrictive finfo — this provides a fallback).
+ */
+function ss_fix_font_mime_types( $data, $file, $filename, $mimes ) {
+	$ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
+	$font_mimes = array(
+		'woff2' => 'font/woff2',
+		'woff'  => 'font/woff',
+		'ttf'   => 'font/ttf',
+		'otf'   => 'font/otf',
+	);
+	if ( isset( $font_mimes[ $ext ] ) && empty( $data['type'] ) ) {
+		$data['ext']  = $ext;
+		$data['type'] = $font_mimes[ $ext ];
+	}
+	return $data;
+}
+add_filter( 'wp_check_filetype_and_ext', 'ss_fix_font_mime_types', 10, 4 );
+
 function ss_media_picker( $name, $value, $label = '' ) {
 	if ( empty( $label ) ) {
 		$label = __( 'Choose Image', 'sender-symposium' );

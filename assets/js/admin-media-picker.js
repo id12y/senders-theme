@@ -96,6 +96,30 @@
 		frame.open();
 	});
 
+	/* ── Font File Upload Picker ── */
+
+	$(document).on('click', '.ss-font-upload__choose', function (e) {
+		e.preventDefault();
+
+		var $wrap  = $(this).closest('.ss-font-upload');
+		var $input = $wrap.find('.ss-font-upload__url');
+		var $name  = $wrap.find('.ss-font-upload__filename');
+
+		var frame = wp.media({
+			title: 'Upload or Select Font File',
+			button: { text: 'Use this font' },
+			multiple: false
+		});
+
+		frame.on('select', function () {
+			var attachment = frame.state().get('selection').first().toJSON();
+			$input.val(attachment.url);
+			$name.text(attachment.filename || '').show();
+		});
+
+		frame.open();
+	});
+
 	/* ── On page load: show previews for fields with existing IDs ── */
 
 	$(function () {
