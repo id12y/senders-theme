@@ -40,10 +40,12 @@ function ss_render_hero( $post_id ) {
 
 		<?php /* Background image + overlay */ ?>
 		<?php if ( $is_image ) :
-			$bg_url = wp_get_attachment_image_url( $s['background']['image_id'], 'full' );
-			if ( $bg_url ) : ?>
+			$bg = wp_get_attachment_image_src( $s['background']['image_id'], 'full' );
+			if ( $bg ) : ?>
 			<img class="ss-hero__bg"
-				src="<?php echo esc_url( $bg_url ); ?>"
+				src="<?php echo esc_url( $bg[0] ); ?>"
+				width="<?php echo esc_attr( $bg[1] ); ?>"
+				height="<?php echo esc_attr( $bg[2] ); ?>"
 				alt="" loading="eager" fetchpriority="high" aria-hidden="true">
 			<div class="ss-hero__overlay"></div>
 			<?php endif; ?>
