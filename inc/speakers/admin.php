@@ -37,6 +37,8 @@ function ss_speakers_admin_enqueue( $hook ) {
 	$uri = get_template_directory_uri();
 	$dir = get_template_directory();
 
+	wp_enqueue_media();
+
 	wp_enqueue_style(
 		'ss-speakers-admin',
 		$uri . '/assets/css/speakers-admin.css',
