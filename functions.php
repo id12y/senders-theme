@@ -770,24 +770,22 @@ add_action( 'wp_enqueue_scripts', 'ss_enqueue_geek_layer', 20 );
 /**
  * Add recommended crawl rules to the WordPress virtual robots.txt.
  *
- * WordPress core normally outputs User-agent: * and Disallow: /wp-admin/
- * with Allow: /wp-admin/admin-ajax.php. A defensive check ensures a
- * User-agent directive is always present even when core output is missing
- * (static file override, plugin interference, or non-standard config).
+ * Builds a complete, self-contained block (User-agent + Disallow rules +
+ * Sitemap) and prepends it to $output. This guarantees the theme's rules
+ * are always under a valid User-agent directive regardless of whether
+ * WordPress core, Yoast, or another plugin provides one.
  */
 function ss_robots_txt_rules( $output ) {
-	if ( stripos( $output, 'user-agent' ) === false ) {
-		$output = "User-agent: *\n" . $output;
-	}
-	$output .= "Disallow: /wp-login.php\n";
-	$output .= "Disallow: /wp-includes/\n";
-	$output .= "Disallow: /wp-content/plugins/\n";
-	$output .= "Disallow: /wp-json/\n";
-	$output .= "Disallow: /?s=\n";
-	$output .= "Disallow: /search/\n";
-	$output .= "\n";
-	$output .= "Sitemap: " . esc_url( home_url( '/sitemap.xml' ) ) . "\n";
-	return $output;
+	$rules  = "User-agent: *\n";
+	$rules .= "Disallow: /wp-login.php\n";
+	$rules .= "Disallow: /wp-includes/\n";
+	$rules .= "Disallow: /wp-content/plugins/\n";
+	$rules .= "Disallow: /wp-json/\n";
+	$rules .= "Disallow: /?s=\n";
+	$rules .= "Disallow: /search/\n";
+	$rules .= "\n";
+	$rules .= "Sitemap: " . esc_url( home_url( '/sitemap.xml' ) ) . "\n";
+	return $rules . "\n" . $output;
 }
 add_filter( 'robots_txt', 'ss_robots_txt_rules', 10 );
 
