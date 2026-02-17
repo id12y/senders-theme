@@ -251,6 +251,23 @@ function ss_enqueue_assets() {
 }
 add_action( 'wp_enqueue_scripts', 'ss_enqueue_assets' );
 
+/**
+ * Defer non-critical stylesheets using the print/onload pattern.
+ *
+ * Converts render-blocking <link> to media="print" with an onload
+ * that switches to media="all", plus a <noscript> fallback.
+ */
+function ss_defer_non_critical_styles( $html, $handle ) {
+	$defer = array( 'ss-menu-presets', 'ss-elementor-fallback' );
+	if ( ! in_array( $handle, $defer, true ) || is_admin() ) {
+		return $html;
+	}
+	$html     = str_replace( "media='all'", "media='print' onload=\"this.media='all'\"", $html );
+	$noscript = '<noscript>' . str_replace( "media='print' onload=\"this.media='all'\"", "media='all'", $html ) . '</noscript>';
+	return $html . "\n" . $noscript;
+}
+add_filter( 'style_loader_tag', 'ss_defer_non_critical_styles', 10, 2 );
+
 /* ==========================================================================
    3. INLINE CRITICAL CSS & THEME BOOTSTRAP (NO FOUC)
    ========================================================================== */

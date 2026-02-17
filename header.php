@@ -44,18 +44,26 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 		if ( has_custom_logo() ) :
 			if ( $dark_logo_id ) :
 				$custom_logo_id = get_theme_mod( 'custom_logo' );
-				$logo_light_url = wp_get_attachment_image_url( $custom_logo_id, 'full' );
-				$logo_dark_url  = wp_get_attachment_image_url( $dark_logo_id, 'full' );
+				$logo_light     = wp_get_attachment_image_src( $custom_logo_id, 'full' );
+				$logo_dark      = wp_get_attachment_image_src( $dark_logo_id, 'full' );
 				$site_name      = get_bloginfo( 'name' );
 			?>
 			<div class="site-logo-wrap">
 				<a href="<?php echo esc_url( home_url( '/' ) ); ?>" class="custom-logo-link" rel="home">
+					<?php if ( $logo_light ) : ?>
 					<img class="custom-logo ss-logo-light"
-						src="<?php echo esc_url( $logo_light_url ); ?>"
+						src="<?php echo esc_url( $logo_light[0] ); ?>"
+						width="<?php echo esc_attr( $logo_light[1] ); ?>"
+						height="<?php echo esc_attr( $logo_light[2] ); ?>"
 						alt="<?php echo esc_attr( $site_name ); ?>">
+					<?php endif; ?>
+					<?php if ( $logo_dark ) : ?>
 					<img class="custom-logo ss-logo-dark"
-						src="<?php echo esc_url( $logo_dark_url ); ?>"
+						src="<?php echo esc_url( $logo_dark[0] ); ?>"
+						width="<?php echo esc_attr( $logo_dark[1] ); ?>"
+						height="<?php echo esc_attr( $logo_dark[2] ); ?>"
 						alt="<?php echo esc_attr( $site_name ); ?>">
+					<?php endif; ?>
 				</a>
 			</div>
 			<?php else : ?>
