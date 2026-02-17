@@ -41,15 +41,22 @@ function ss_render_hero( $post_id ) {
 		<?php /* Background image + overlay */ ?>
 		<?php if ( $is_image ) :
 			$bg      = wp_get_attachment_image_src( $s['background']['image_id'], 'full' );
+			$srcset  = wp_get_attachment_image_srcset( $s['background']['image_id'], 'full' );
 			$dark_id = $s['background']['dark_image_id'] ?? 0;
 			$dark_bg = $dark_id ? wp_get_attachment_image_src( $dark_id, 'full' ) : null;
 			if ( $bg ) : ?>
-				<?php if ( $dark_bg ) : ?>
+				<?php if ( $dark_bg ) :
+					$dark_srcset = wp_get_attachment_image_srcset( $dark_id, 'full' );
+				?>
 				<picture>
-					<source srcset="<?php echo esc_url( $dark_bg[0] ); ?>"
+					<source srcset="<?php echo esc_attr( $dark_srcset ?: $dark_bg[0] ); ?>"
+						sizes="100vw"
 						media="(prefers-color-scheme: dark)">
 					<img class="ss-hero__bg"
 						src="<?php echo esc_url( $bg[0] ); ?>"
+						<?php if ( $srcset ) : ?>srcset="<?php echo esc_attr( $srcset ); ?>"
+						sizes="100vw"
+						<?php endif; ?>
 						data-light-src="<?php echo esc_url( $bg[0] ); ?>"
 						data-dark-src="<?php echo esc_url( $dark_bg[0] ); ?>"
 						width="<?php echo esc_attr( $bg[1] ); ?>"
@@ -59,6 +66,9 @@ function ss_render_hero( $post_id ) {
 				<?php else : ?>
 				<img class="ss-hero__bg"
 					src="<?php echo esc_url( $bg[0] ); ?>"
+					<?php if ( $srcset ) : ?>srcset="<?php echo esc_attr( $srcset ); ?>"
+					sizes="100vw"
+					<?php endif; ?>
 					width="<?php echo esc_attr( $bg[1] ); ?>"
 					height="<?php echo esc_attr( $bg[2] ); ?>"
 					alt="" loading="eager" fetchpriority="high" aria-hidden="true">
