@@ -613,6 +613,37 @@ if ( is_admin() ) {
 }
 
 /* ==========================================================================
+   8i. HIDE IRRELEVANT PAGE META BOXES
+   ========================================================================== */
+
+function ss_hide_irrelevant_metaboxes( $post_type, $post ) {
+	if ( 'page' !== $post_type || ! $post ) {
+		return;
+	}
+
+	$template = get_post_meta( $post->ID, '_wp_page_template', true );
+
+	$map = array(
+		'ss_ticketing_meta_box' => array( 'page-templates/template-ticketing.php' ),
+		'ss_about_meta_box'     => array( 'page-templates/template-about.php' ),
+		'ss_hero_meta_box'      => array( 'templates/template-hero.php' ),
+	);
+
+	// Hero box also shows on the static front page.
+	$front_page_id = (int) get_option( 'page_on_front' );
+	if ( $front_page_id && $post->ID === $front_page_id ) {
+		unset( $map['ss_hero_meta_box'] );
+	}
+
+	foreach ( $map as $box_id => $allowed_templates ) {
+		if ( ! in_array( $template, $allowed_templates, true ) ) {
+			remove_meta_box( $box_id, 'page', 'normal' );
+		}
+	}
+}
+add_action( 'add_meta_boxes', 'ss_hide_irrelevant_metaboxes', 99, 2 );
+
+/* ==========================================================================
    9. WIDGET AREAS
    ========================================================================== */
 
