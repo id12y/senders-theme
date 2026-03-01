@@ -277,6 +277,27 @@ function ss_landing_render_meta_box( $post ) {
 		<?php esc_html_e( 'These settings apply when the "Ticket Landing Page" template is selected for this page.', 'sender-symposium' ); ?>
 	</p>
 
+	<?php /* ── Copy Set Import / Export ── */ ?>
+	<details style="<?php echo $fs; ?>">
+		<summary style="cursor:pointer;"><strong><?php esc_html_e( 'Import / Export Copy Set', 'sender-symposium' ); ?></strong></summary>
+		<div style="padding:12px 0 0;">
+			<p class="description">
+				<?php esc_html_e( 'Paste a JSON copy set to populate all fields at once, or export the current fields to share with an LLM. Image fields and TicketTailor settings are excluded.', 'sender-symposium' ); ?>
+			</p>
+			<p style="margin-top:8px;">
+				<textarea id="ss-landing-copyset-json" rows="8" class="large-text" style="font-family:monospace;font-size:12px;" placeholder='<?php esc_attr_e( 'Paste JSON copy set here...', 'sender-symposium' ); ?>'></textarea>
+			</p>
+			<p>
+				<button type="button" id="ss-landing-copyset-import" class="button button-primary"><?php esc_html_e( 'Import Copy Set', 'sender-symposium' ); ?></button>
+				<button type="button" id="ss-landing-copyset-export" class="button"><?php esc_html_e( 'Export Current Fields', 'sender-symposium' ); ?></button>
+			</p>
+			<div id="ss-landing-copyset-status"></div>
+			<p class="description" style="margin-top:8px;">
+				<?php esc_html_e( 'Review all fields below after importing, then click Publish/Update to save.', 'sender-symposium' ); ?>
+			</p>
+		</div>
+	</details>
+
 	<?php /* ── Hero ── */ ?>
 	<fieldset style="<?php echo $fs; ?>">
 		<legend><strong><?php esc_html_e( 'Hero (Above the Fold)', 'sender-symposium' ); ?></strong></legend>

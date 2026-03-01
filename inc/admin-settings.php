@@ -689,6 +689,13 @@ function ss_admin_enqueue( $hook ) {
 				ss_asset_version( $dir . '/assets/js/admin-media-picker.js' ),
 				true
 			);
+			wp_enqueue_script(
+				'ss-landing-copyset',
+				$uri . '/assets/js/landing-copyset.js',
+				array(),
+				ss_asset_version( $dir . '/assets/js/landing-copyset.js' ),
+				true
+			);
 		}
 	}
 }
