@@ -199,6 +199,37 @@ function ss_enqueue_assets() {
 		);
 	}
 
+	/* Landing page CSS + optional TT scripts */
+	if ( is_page_template( 'page-templates/template-landing.php' ) ) {
+		wp_enqueue_style(
+			'ss-landing',
+			$uri . '/assets/css/landing.css',
+			array( 'ss-components' ),
+			ss_asset_version( $dir . '/assets/css/landing.css' )
+		);
+
+		/* TicketTailor widget.js + init if embed enabled */
+		$landing_s  = ss_get_landing_settings( get_the_ID() );
+		$landing_tt = $landing_s['tickettailor'];
+		$lt_mode    = $landing_tt['embed_method'] ?? 'auto';
+		if ( $landing_tt['show_embed'] && in_array( $lt_mode, array( 'auto', 'widget_js' ), true ) && ! empty( $landing_tt['event_id'] ) ) {
+			wp_enqueue_script(
+				'tt-widget',
+				'https://cdn.tickettailor.com/js/widgets/min/widget.js',
+				array(),
+				null,
+				array( 'strategy' => 'defer', 'in_footer' => true )
+			);
+			wp_enqueue_script(
+				'ss-tt-init',
+				$uri . '/assets/js/tickettailor-init.js',
+				array( 'tt-widget' ),
+				ss_asset_version( $dir . '/assets/js/tickettailor-init.js' ),
+				array( 'strategy' => 'defer', 'in_footer' => true )
+			);
+		}
+	}
+
 	/* Sponsors CSS — on sponsors template, slug match, or shortcode usage */
 	if ( is_page_template( 'page-sponsors.php' ) || is_page( 'sponsors' ) || is_page( 'partners' ) || ( is_singular() && has_shortcode( get_post()->post_content ?? '', 'ss_sponsors' ) ) ) {
 		wp_enqueue_style(
@@ -600,6 +631,12 @@ require_once get_template_directory() . '/inc/hero/render.php';
 require_once get_template_directory() . '/inc/about/meta-box.php';
 
 /* ==========================================================================
+   8g2. LANDING PAGE MODULE
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/landing/meta-box.php';
+
+/* ==========================================================================
    8h. SPONSORS MODULE
    ========================================================================== */
 
@@ -626,6 +663,7 @@ function ss_hide_irrelevant_metaboxes( $post_type, $post ) {
 	$map = array(
 		'ss_ticketing_meta_box' => array( 'page-templates/template-ticketing.php' ),
 		'ss_about_meta_box'     => array( 'page-templates/template-about.php' ),
+		'ss_landing_meta_box'   => array( 'page-templates/template-landing.php' ),
 		'ss_hero_meta_box'      => array( 'templates/template-hero.php' ),
 	);
 

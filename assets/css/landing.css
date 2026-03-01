@@ -1,0 +1,758 @@
+/* ==========================================================================
+   LANDING PAGE — Sender Symposium
+   Conversion-focused partner/speaker landing pages.
+   Scoped to .ss-landing to avoid Elementor conflicts.
+   ========================================================================== */
+
+/* ----------------------------------------------------------
+   Section Rhythm
+   Alternating backgrounds for visual flow.
+   ---------------------------------------------------------- */
+
+.ss-landing__hero,
+.ss-landing__why,
+.ss-landing__audience,
+.ss-landing__closing {
+  background-color: var(--surface-page);
+}
+
+.ss-landing__event,
+.ss-landing__value-stack,
+.ss-landing__notes {
+  background-color: var(--surface-section);
+}
+
+.ss-landing__offer {
+  background-color: var(--surface-card);
+}
+
+/* All content sections: consistent vertical padding */
+.ss-landing__hero,
+.ss-landing__event,
+.ss-landing__offer,
+.ss-landing__why,
+.ss-landing__value-stack,
+.ss-landing__audience,
+.ss-landing__notes,
+.ss-landing__closing,
+.ss-landing__embed {
+  padding-block: var(--section-padding-block);
+}
+
+/* ----------------------------------------------------------
+   Hero — Split Layout
+   ---------------------------------------------------------- */
+
+.ss-landing__hero {
+  padding-top: var(--sp-7);
+  padding-bottom: var(--sp-8);
+}
+
+.ss-landing__hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--sp-6);
+  align-items: center;
+}
+
+@media (min-width: 900px) {
+  .ss-landing__hero-grid {
+    grid-template-columns: 3fr 2fr;
+    gap: var(--sp-7);
+  }
+}
+
+/* Hero content */
+.ss-landing__hero-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* Overline (used in hero + offer) */
+.ss-landing__overline {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--lh-caption);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.ss-landing__event-name {
+  font-family: var(--font-display);
+  font-size: var(--text-body-lg);
+  line-height: var(--lh-body-lg);
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.ss-landing__headline {
+  font-family: var(--font-display);
+  font-size: var(--text-h1);
+  line-height: var(--lh-h1);
+  letter-spacing: var(--ls-h1);
+  font-weight: 600;
+  color: var(--text-primary);
+  max-width: 20ch;
+  text-wrap: balance;
+}
+
+.ss-landing__subheadline {
+  font-size: var(--text-body-lg);
+  line-height: var(--lh-body-lg);
+  color: var(--text-secondary);
+  max-width: 48ch;
+}
+
+/* Partner column */
+.ss-landing__hero-partner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  text-align: center;
+}
+
+.ss-landing__partner-portrait img {
+  width: 280px;
+  height: 280px;
+  border-radius: var(--radius-lg);
+  object-fit: cover;
+  box-shadow: var(--shadow-soft);
+}
+
+.ss-landing__partner-logo {
+  max-width: 160px;
+}
+
+.ss-landing__partner-logo img {
+  max-height: 40px;
+  width: auto;
+}
+
+.ss-landing__partner-credit {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ss-landing__partner-name {
+  font-weight: 600;
+  font-size: var(--text-body);
+  color: var(--text-primary);
+}
+
+.ss-landing__partner-title {
+  font-size: var(--text-small);
+  color: var(--text-muted);
+}
+
+/* ----------------------------------------------------------
+   Micro Trust Row
+   ---------------------------------------------------------- */
+
+.ss-landing__micro-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  font-size: var(--text-small);
+  color: var(--text-muted);
+}
+
+.ss-landing__micro-trust li {
+  display: flex;
+  align-items: center;
+}
+
+.ss-landing__micro-trust li + li::before {
+  content: "\B7";
+  margin-right: var(--sp-3);
+  color: var(--border-strong);
+  font-size: 1.4em;
+  line-height: 1;
+}
+
+/* ----------------------------------------------------------
+   Scarcity Badge
+   ---------------------------------------------------------- */
+
+.ss-landing__scarcity {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.ss-landing__scarcity span {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--sp-1) var(--sp-3);
+  font-size: var(--text-caption);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--status-warning);
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-btn);
+}
+
+.ss-landing__scarcity--closing {
+  text-align: center;
+  display: block;
+  margin-bottom: var(--sp-4);
+}
+
+.ss-landing__scarcity--closing span {
+  /* Inherit inline styling from parent badge */
+}
+
+/* ----------------------------------------------------------
+   Hero CTA Actions
+   ---------------------------------------------------------- */
+
+.ss-landing__hero-actions {
+  padding-top: var(--sp-2);
+}
+
+/* ----------------------------------------------------------
+   Shared Section Elements
+   ---------------------------------------------------------- */
+
+.ss-landing__section-headline {
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  line-height: var(--lh-h2);
+  letter-spacing: var(--ls-h2);
+  font-weight: 550;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-4);
+  max-width: 28ch;
+  text-wrap: balance;
+}
+
+.ss-landing__prose {
+  color: var(--text-secondary);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  max-width: var(--prose-max);
+}
+
+.ss-landing__prose p {
+  margin-bottom: var(--sp-3);
+}
+
+.ss-landing__prose p:last-child {
+  margin-bottom: 0;
+}
+
+.ss-landing__prose--centered {
+  margin-inline: auto;
+  text-align: center;
+}
+
+.ss-landing__section-footer {
+  margin-top: var(--sp-5);
+  color: var(--text-muted);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  max-width: var(--prose-max);
+}
+
+.ss-landing__section-footer--emphasis {
+  font-style: italic;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.ss-landing__value-note {
+  font-size: var(--text-small);
+  color: var(--text-muted);
+  font-style: italic;
+  margin-bottom: var(--sp-4);
+}
+
+/* ----------------------------------------------------------
+   Statement List (bold declarative bullets)
+   ---------------------------------------------------------- */
+
+.ss-landing__statement-list {
+  list-style: none;
+  margin: var(--sp-5) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.ss-landing__statement-list li {
+  position: relative;
+  padding-left: var(--sp-4);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.ss-landing__statement-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 8px;
+  height: 3px;
+  background-color: var(--action-primary-bg);
+  border-radius: 1px;
+}
+
+.ss-landing__statement-list--centered {
+  align-items: center;
+  text-align: center;
+  margin-inline: auto;
+  max-width: 600px;
+}
+
+.ss-landing__statement-list--centered li {
+  padding-left: 0;
+}
+
+.ss-landing__statement-list--centered li::before {
+  display: none;
+}
+
+/* ----------------------------------------------------------
+   Check List (offer/value stack items with checkmark)
+   ---------------------------------------------------------- */
+
+.ss-landing__check-list {
+  list-style: none;
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.ss-landing__check-list li {
+  position: relative;
+  padding-left: calc(var(--sp-4) + 4px);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+}
+
+.ss-landing__check-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.35em;
+  width: 18px;
+  height: 18px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%232F5D3A'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-size: contain;
+  flex-shrink: 0;
+}
+
+/* ----------------------------------------------------------
+   Progression List (why section: arrow-style items)
+   ---------------------------------------------------------- */
+
+.ss-landing__progression {
+  list-style: none;
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.ss-landing__progression li {
+  position: relative;
+  padding-left: var(--sp-4);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+  border-left: 3px solid var(--border-subtle);
+  padding-top: var(--sp-1);
+  padding-bottom: var(--sp-1);
+}
+
+/* ----------------------------------------------------------
+   Role List (audience section: green dots)
+   ---------------------------------------------------------- */
+
+.ss-landing__role-list {
+  list-style: none;
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.ss-landing__role-list li {
+  position: relative;
+  padding-left: var(--sp-4);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+}
+
+.ss-landing__role-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--status-success);
+}
+
+.ss-landing__audience-intro {
+  color: var(--text-secondary);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  margin-bottom: var(--sp-2);
+  max-width: var(--prose-max);
+}
+
+/* ----------------------------------------------------------
+   Notes List (important notes section)
+   ---------------------------------------------------------- */
+
+.ss-landing__notes-list {
+  list-style: none;
+  margin: var(--sp-4) 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.ss-landing__notes-list li {
+  position: relative;
+  padding-left: var(--sp-4);
+  padding-top: var(--sp-2);
+  padding-bottom: var(--sp-2);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ss-landing__notes-list li:last-child {
+  border-bottom: 0;
+}
+
+.ss-landing__notes-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: calc(var(--sp-2) + 0.5em);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+}
+
+/* ----------------------------------------------------------
+   Value Stack — Card
+   ---------------------------------------------------------- */
+
+.ss-landing__value-card {
+  background-color: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: var(--sp-5);
+  max-width: 640px;
+}
+
+.ss-landing__value-card-name {
+  font-family: var(--font-display);
+  font-size: var(--text-h4);
+  line-height: var(--lh-h4);
+  font-weight: 550;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+}
+
+.ss-landing__value-card-price {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  line-height: var(--lh-h3);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-4);
+}
+
+/* Value bonus (highlighted add-on) */
+.ss-landing__value-bonus {
+  margin-top: var(--sp-4);
+  padding-top: var(--sp-4);
+  border-top: 2px solid var(--action-primary-bg);
+}
+
+.ss-landing__value-bonus-label {
+  font-size: var(--text-small);
+  color: var(--text-muted);
+  font-weight: 500;
+  margin-bottom: var(--sp-2);
+}
+
+.ss-landing__value-bonus-name {
+  font-family: var(--font-display);
+  font-size: var(--text-h4);
+  line-height: var(--lh-h4);
+  font-weight: 550;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-1);
+}
+
+.ss-landing__value-bonus-desc {
+  font-size: var(--text-small);
+  color: var(--text-secondary);
+  line-height: var(--lh-small);
+}
+
+/* ----------------------------------------------------------
+   TT Embed Surface
+   ---------------------------------------------------------- */
+
+.ss-landing__embed {
+  padding-block: var(--sp-6);
+}
+
+.ss-landing__embed-surface {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  padding: var(--sp-4);
+}
+
+.ss-landing__embed-inline {
+  margin-top: var(--sp-5);
+  margin-bottom: var(--sp-4);
+}
+
+.ss-landing__notice {
+  padding: var(--sp-4);
+  background: var(--surface-card);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-card);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.ss-landing__fallback-text {
+  margin-top: var(--sp-3);
+  color: var(--text-muted);
+  font-size: var(--text-small);
+}
+
+/* ----------------------------------------------------------
+   Closing CTA
+   ---------------------------------------------------------- */
+
+.ss-landing__closing {
+  text-align: center;
+  padding-block: var(--sp-8);
+}
+
+.ss-landing__closing .ss-landing__section-headline {
+  margin-inline: auto;
+}
+
+.ss-landing__closing-actions {
+  margin-top: var(--sp-4);
+}
+
+/* Large CTA button variant */
+.ss-landing__btn-lg {
+  padding: var(--sp-3) var(--sp-5);
+  font-size: var(--text-body-lg);
+  min-height: 56px;
+}
+
+/* ----------------------------------------------------------
+   Focus States (scoped)
+   ---------------------------------------------------------- */
+
+.ss-landing a:focus-visible,
+.ss-landing button:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* ----------------------------------------------------------
+   Dark Mode
+   ---------------------------------------------------------- */
+
+[data-theme="dark"] .ss-landing__offer {
+  background-color: var(--surface-elevated);
+}
+
+[data-theme="dark"] .ss-landing__event,
+[data-theme="dark"] .ss-landing__value-stack,
+[data-theme="dark"] .ss-landing__notes {
+  background-color: var(--surface-section);
+}
+
+[data-theme="dark"] .ss-landing__value-card {
+  background-color: var(--surface-elevated);
+  border-color: var(--border-strong);
+}
+
+[data-theme="dark"] .ss-landing__embed-surface {
+  background: var(--surface-elevated);
+  border-color: var(--border-strong);
+}
+
+[data-theme="dark"] .ss-landing__notice {
+  background: var(--surface-elevated);
+}
+
+[data-theme="dark"] .ss-landing__scarcity span {
+  background-color: var(--surface-elevated);
+  border-color: var(--border-strong);
+}
+
+/* Dark-mode checkmark colour */
+[data-theme="dark"] .ss-landing__check-list li::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%234A8A5B'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* TT widget transparent bg: force light surface */
+[data-theme="dark"] .ss-landing__embed--tt-transparent {
+  background: #FFFFFF;
+  border-color: #E3DED6;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ss-landing__embed--tt-transparent {
+    background: #FFFFFF;
+    border-color: #E3DED6;
+  }
+
+  :root:not([data-theme="light"]) .ss-landing__offer {
+    background-color: var(--surface-elevated);
+  }
+
+  :root:not([data-theme="light"]) .ss-landing__value-card {
+    background-color: var(--surface-elevated);
+    border-color: var(--border-strong);
+  }
+
+  :root:not([data-theme="light"]) .ss-landing__embed-surface {
+    background: var(--surface-elevated);
+    border-color: var(--border-strong);
+  }
+
+  :root:not([data-theme="light"]) .ss-landing__scarcity span {
+    background-color: var(--surface-elevated);
+    border-color: var(--border-strong);
+  }
+
+  :root:not([data-theme="light"]) .ss-landing__check-list li::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%234A8A5B'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
+  }
+}
+
+/* ----------------------------------------------------------
+   Mobile
+   ---------------------------------------------------------- */
+
+@media (max-width: 899px) {
+  .ss-landing__hero {
+    padding-top: var(--sp-5);
+    padding-bottom: var(--sp-6);
+  }
+
+  /* On mobile, show partner image first (above content) */
+  .ss-landing__hero-grid {
+    display: flex;
+    flex-direction: column-reverse;
+    gap: var(--sp-5);
+  }
+
+  .ss-landing__hero-partner {
+    align-items: center;
+  }
+
+  .ss-landing__partner-portrait img {
+    width: 200px;
+    height: 200px;
+  }
+
+  .ss-landing__headline {
+    font-size: var(--text-h2);
+    line-height: var(--lh-h2);
+    letter-spacing: var(--ls-h2);
+    max-width: none;
+  }
+
+  .ss-landing__micro-trust {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--sp-2);
+  }
+
+  .ss-landing__micro-trust li + li::before {
+    display: none;
+  }
+
+  .ss-landing__section-headline {
+    max-width: none;
+  }
+
+  .ss-landing__embed-surface {
+    padding: var(--sp-3);
+  }
+
+  .ss-landing__closing {
+    padding-block: var(--sp-6);
+  }
+}
+
+@media (max-width: 767px) {
+  .ss-landing__headline {
+    font-size: var(--text-h3);
+    line-height: var(--lh-h3);
+    letter-spacing: var(--ls-h3);
+  }
+
+  .ss-landing__section-headline {
+    font-size: var(--text-h3);
+    line-height: var(--lh-h3);
+  }
+
+  .ss-landing__partner-portrait img {
+    width: 160px;
+    height: 160px;
+  }
+
+  .ss-landing__btn-lg {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ----------------------------------------------------------
+   Print
+   ---------------------------------------------------------- */
+
+@media print {
+  .ss-landing__scarcity,
+  .ss-landing__embed,
+  .ss-landing__embed-inline,
+  .ss-landing__closing-actions,
+  .ss-landing__hero-actions {
+    display: none !important;
+  }
+}
