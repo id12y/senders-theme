@@ -153,7 +153,9 @@ $tt_inside_closing = $tt['show_embed'] && 'inside_closing' === $tt['embed_positi
 
 				<?php
 				$partner_img = $hero['partner_image_id'] ? wp_get_attachment_image_url( $hero['partner_image_id'], 'medium_large' ) : '';
-				$partner_logo = $hero['partner_logo_id'] ? wp_get_attachment_image_url( $hero['partner_logo_id'], 'medium' ) : '';
+				$partner_logo      = $hero['partner_logo_id'] ? wp_get_attachment_image_url( $hero['partner_logo_id'], 'medium' ) : '';
+				$partner_logo_dark = ! empty( $hero['partner_logo_dark_id'] ) ? wp_get_attachment_image_url( $hero['partner_logo_dark_id'], 'medium' ) : '';
+				$has_both_logos    = $partner_logo && $partner_logo_dark;
 				if ( $partner_img || ! empty( $hero['partner_name'] ) ) :
 				?>
 				<div class="ss-landing__hero-partner">
@@ -166,11 +168,20 @@ $tt_inside_closing = $tt['show_embed'] && 'inside_closing' === $tt['embed_positi
 						</div>
 					<?php endif; ?>
 
-					<?php if ( $partner_logo ) : ?>
+					<?php if ( $partner_logo || $partner_logo_dark ) : ?>
 						<div class="ss-landing__partner-logo">
-							<img src="<?php echo esc_url( $partner_logo ); ?>"
-								alt="<?php echo esc_attr( $hero['partner_title'] ); ?>"
-								loading="eager" decoding="async">
+							<?php if ( $partner_logo ) : ?>
+								<img src="<?php echo esc_url( $partner_logo ); ?>"
+									alt="<?php echo esc_attr( $hero['partner_title'] ); ?>"
+									<?php echo $has_both_logos ? 'class="ss-landing__logo-light"' : ''; ?>
+									loading="eager" decoding="async">
+							<?php endif; ?>
+							<?php if ( $partner_logo_dark ) : ?>
+								<img src="<?php echo esc_url( $partner_logo_dark ); ?>"
+									alt="<?php echo esc_attr( $hero['partner_title'] ); ?>"
+									<?php echo $has_both_logos ? 'class="ss-landing__logo-dark"' : ''; ?>
+									loading="eager" decoding="async">
+							<?php endif; ?>
 						</div>
 					<?php endif; ?>
 

@@ -28,7 +28,8 @@ function ss_landing_defaults() {
 			'partner_name'     => '',
 			'partner_title'    => '',
 			'partner_image_id' => 0,
-			'partner_logo_id'  => 0,
+			'partner_logo_id'      => 0,
+			'partner_logo_dark_id' => 0,
 			'cta_label'        => __( 'Secure Strategic Access', 'sender-symposium' ),
 			'cta_url'          => '#tickets',
 			'show_scarcity'    => false,
@@ -144,7 +145,8 @@ function ss_sanitize_landing_settings( $raw ) {
 		'partner_name'     => sanitize_text_field( $h['partner_name'] ?? '' ),
 		'partner_title'    => sanitize_text_field( $h['partner_title'] ?? '' ),
 		'partner_image_id' => absint( $h['partner_image_id'] ?? 0 ),
-		'partner_logo_id'  => absint( $h['partner_logo_id'] ?? 0 ),
+		'partner_logo_id'      => absint( $h['partner_logo_id'] ?? 0 ),
+		'partner_logo_dark_id' => absint( $h['partner_logo_dark_id'] ?? 0 ),
 		'cta_label'        => sanitize_text_field( $h['cta_label'] ?? '' ),
 		'cta_url'          => esc_url_raw( $h['cta_url'] ?? '' ),
 		'show_scarcity'    => ! empty( $h['show_scarcity'] ),
@@ -336,9 +338,14 @@ function ss_landing_render_meta_box( $post ) {
 			<?php ss_media_picker( 'ss_landing[hero][partner_image_id]', $s['hero']['partner_image_id'], __( 'Choose Partner Photo', 'sender-symposium' ) ); ?>
 		</p>
 		<p>
-			<label><?php esc_html_e( 'Partner / Company Logo', 'sender-symposium' ); ?>
-			<small>(<?php esc_html_e( 'optional — displayed alongside partner name', 'sender-symposium' ); ?>)</small></label><br>
+			<label><?php esc_html_e( 'Partner / Company Logo (Light Background)', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'optional — shown on light backgrounds', 'sender-symposium' ); ?>)</small></label><br>
 			<?php ss_media_picker( 'ss_landing[hero][partner_logo_id]', $s['hero']['partner_logo_id'], __( 'Choose Logo', 'sender-symposium' ) ); ?>
+		</p>
+		<p>
+			<label><?php esc_html_e( 'Partner / Company Logo (Dark Background)', 'sender-symposium' ); ?>
+			<small>(<?php esc_html_e( 'optional — shown when dark mode is active', 'sender-symposium' ); ?>)</small></label><br>
+			<?php ss_media_picker( 'ss_landing[hero][partner_logo_dark_id]', $s['hero']['partner_logo_dark_id'], __( 'Choose Dark Logo', 'sender-symposium' ) ); ?>
 		</p>
 
 		<hr>

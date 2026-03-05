@@ -23,7 +23,7 @@
 
 	/* Fields to exclude from the copy set */
 	var EXCLUDED_FIELDS = {
-		hero: [ 'partner_image_id', 'partner_logo_id' ]
+		hero: [ 'partner_image_id', 'partner_logo_id', 'partner_logo_dark_id' ]
 	};
 
 	/* Sections to exclude entirely */

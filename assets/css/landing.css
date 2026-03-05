@@ -623,6 +623,19 @@
   border-color: var(--border-strong);
 }
 
+/* Partner logo light/dark variants (classes only added when both are uploaded) */
+.ss-landing__logo-dark {
+  display: none;
+}
+
+[data-theme="dark"] .ss-landing__logo-light {
+  display: none;
+}
+
+[data-theme="dark"] .ss-landing__logo-dark {
+  display: block;
+}
+
 /* Dark-mode checkmark colour */
 [data-theme="dark"] .ss-landing__check-list li::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%234A8A5B'%3E%3Cpath fill-rule='evenodd' d='M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z' clip-rule='evenodd'/%3E%3C/svg%3E");
@@ -635,6 +648,14 @@
 }
 
 @media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .ss-landing__logo-light {
+    display: none;
+  }
+
+  :root:not([data-theme="light"]) .ss-landing__logo-dark {
+    display: block;
+  }
+
   :root:not([data-theme="light"]) .ss-landing__embed--tt-transparent {
     background: #FFFFFF;
     border-color: #E3DED6;
