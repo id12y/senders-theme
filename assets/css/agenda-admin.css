@@ -1,0 +1,86 @@
+/* ==========================================================================
+   AGENDA — Admin Styles
+   Scoped to the agenda admin page.
+   ========================================================================== */
+
+/* Type badges in session list */
+.ss-agenda-type {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  background: #f0f0f0;
+  color: #555;
+}
+
+.ss-agenda-type--keynote {
+  background: #fef3e2;
+  color: #b26f08;
+}
+
+.ss-agenda-type--panel {
+  background: #e8f0fe;
+  color: #1a56db;
+}
+
+.ss-agenda-type--workshop {
+  background: #e5f6ea;
+  color: #1e7e34;
+}
+
+.ss-agenda-type--break,
+.ss-agenda-type--lunch,
+.ss-agenda-type--networking {
+  background: #f5f5f5;
+  color: #999;
+  font-weight: 400;
+}
+
+.ss-agenda-type--sponsor {
+  background: #fdf2f8;
+  color: #9f1239;
+}
+
+/* Utility rows are visually quieter */
+.ss-agenda-row--utility {
+  opacity: 0.65;
+}
+
+.ss-agenda-row--utility:hover {
+  opacity: 1;
+}
+
+/* Session table */
+.ss-agenda-table th {
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+/* Participant rows in the form */
+.ss-participant-row {
+  transition: background-color 0.15s ease;
+}
+
+.ss-participant-row:hover {
+  background-color: #f0f0f0 !important;
+}
+
+.ss-remove-participant {
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  min-width: 28px;
+  min-height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Form wrap */
+.ss-agenda-form-wrap .form-table th {
+  width: 140px;
+  padding-top: 12px;
+}
