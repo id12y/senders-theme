@@ -1,0 +1,524 @@
+/* ==========================================================================
+   AGENDA — Frontend Styles
+   Uses theme design tokens exclusively. No magic numbers.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   Container
+   -------------------------------------------------------------------------- */
+.ss-agenda {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 var(--container-padding);
+}
+
+/* --------------------------------------------------------------------------
+   Filters
+   -------------------------------------------------------------------------- */
+.ss-agenda__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-6);
+  padding: var(--sp-3);
+  background: var(--surface-card);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--border-subtle);
+}
+
+.ss-agenda__filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+}
+
+.ss-agenda__filter-label {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--lh-caption);
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.ss-agenda__filter-select {
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  padding: var(--sp-2) var(--sp-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-btn);
+  background: var(--surface-section);
+  color: var(--text-primary);
+  cursor: pointer;
+  min-width: 140px;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%236B6761' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right var(--sp-2) center;
+  padding-right: var(--sp-5);
+}
+
+.ss-agenda__filter-select:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Day Sections
+   -------------------------------------------------------------------------- */
+.ss-agenda__day {
+  margin-bottom: var(--sp-7);
+}
+
+.ss-agenda__day-title {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  line-height: var(--lh-h3);
+  letter-spacing: var(--ls-h3);
+  color: var(--text-primary);
+  margin: 0 0 var(--sp-4);
+  padding-bottom: var(--sp-2);
+  border-bottom: 2px solid var(--border-subtle);
+}
+
+/* --------------------------------------------------------------------------
+   Time Slots
+   -------------------------------------------------------------------------- */
+.ss-agenda__time-slot {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: var(--sp-3);
+  padding: var(--sp-3) 0;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.ss-agenda__time-slot:last-child {
+  border-bottom: none;
+}
+
+.ss-agenda__time-col {
+  display: flex;
+  flex-direction: column;
+  padding-top: var(--sp-2);
+  position: sticky;
+  top: var(--sp-3);
+  align-self: start;
+}
+
+.ss-agenda__time {
+  font-family: var(--font-display);
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.ss-agenda__time-end {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  line-height: var(--lh-caption);
+}
+
+.ss-agenda__slot-sessions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+/* Parallel sessions: side-by-side on desktop */
+.ss-agenda__time-slot--parallel .ss-agenda__slot-sessions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--sp-3);
+}
+
+/* --------------------------------------------------------------------------
+   Session Cards
+   -------------------------------------------------------------------------- */
+.ss-agenda__card {
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  transition: border-color var(--duration-fast) var(--ease);
+}
+
+.ss-agenda__card:hover {
+  border-color: var(--border-strong);
+}
+
+/* Utility sessions (break/lunch/networking) — quieter */
+.ss-agenda__card--utility {
+  background: transparent;
+  border: 1px dashed var(--border-subtle);
+  border-radius: var(--radius-btn);
+}
+
+.ss-agenda__card--utility .ss-agenda__card-header {
+  padding: var(--sp-2) var(--sp-3);
+}
+
+.ss-agenda__card--utility .ss-agenda__card-title {
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.ss-agenda__card--utility .ss-agenda__type {
+  opacity: 0.7;
+}
+
+/* Keynote accent */
+.ss-agenda__card--keynote {
+  border-left: 3px solid var(--focus-ring);
+}
+
+/* --------------------------------------------------------------------------
+   Card Toggle (disclosure button)
+   -------------------------------------------------------------------------- */
+.ss-agenda__card-toggle {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--sp-3) var(--sp-4);
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: inherit;
+  font: inherit;
+  gap: var(--sp-3);
+}
+
+.ss-agenda__card-toggle:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: -2px;
+  border-radius: var(--radius-card);
+}
+
+.ss-agenda__card-toggle:hover .ss-agenda__card-title {
+  color: var(--link-hover);
+}
+
+.ss-agenda__expand-icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--text-muted);
+  margin-top: var(--sp-1);
+  transition: transform var(--duration-fast) var(--ease);
+}
+
+.ss-agenda__card-toggle[aria-expanded="true"] .ss-agenda__expand-icon {
+  transform: rotate(180deg);
+}
+
+/* Cards without toggle button */
+.ss-agenda__card:not(:has(.ss-agenda__card-toggle)) .ss-agenda__card-header {
+  padding: var(--sp-3) var(--sp-4);
+}
+
+/* --------------------------------------------------------------------------
+   Card Content
+   -------------------------------------------------------------------------- */
+.ss-agenda__card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-bottom: var(--sp-2);
+}
+
+.ss-agenda__room,
+.ss-agenda__track,
+.ss-agenda__type {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--lh-caption);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 2px var(--sp-2);
+  border-radius: var(--radius-btn);
+}
+
+.ss-agenda__room {
+  background: var(--surface-elevated);
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+}
+
+.ss-agenda__track {
+  background: var(--surface-elevated);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+
+.ss-agenda__type {
+  color: var(--text-muted);
+  background: none;
+}
+
+.ss-agenda__type--keynote {
+  color: var(--focus-ring);
+}
+
+.ss-agenda__card-title {
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  line-height: 1.3;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.ss-agenda__card-subtitle {
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  color: var(--text-secondary);
+  margin: var(--sp-1) 0 0;
+}
+
+/* --------------------------------------------------------------------------
+   Participants Summary (collapsed view)
+   -------------------------------------------------------------------------- */
+.ss-agenda__participants-summary {
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+  color: var(--text-secondary);
+  margin-top: var(--sp-2);
+}
+
+.ss-agenda__role {
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+}
+
+.ss-agenda__sep {
+  color: var(--border-strong);
+}
+
+/* --------------------------------------------------------------------------
+   Card Details (expanded panel)
+   -------------------------------------------------------------------------- */
+.ss-agenda__card-details {
+  padding: 0 var(--sp-4) var(--sp-4);
+  border-top: 1px solid var(--border-subtle);
+  margin-top: 0;
+}
+
+.ss-agenda__card-details[hidden] {
+  display: none;
+}
+
+.ss-agenda__description {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  color: var(--text-secondary);
+  margin-top: var(--sp-3);
+  max-width: var(--prose-max);
+}
+
+.ss-agenda__description p:last-child {
+  margin-bottom: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Participant Detail (expanded view with photos)
+   -------------------------------------------------------------------------- */
+.ss-agenda__participants-detail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-top: var(--sp-3);
+}
+
+.ss-agenda__participant {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-width: 220px;
+}
+
+.ss-agenda__participant-photo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.ss-agenda__participant-placeholder {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--surface-elevated);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.ss-agenda__participant-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.ss-agenda__participant-name {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+
+.ss-agenda__participant-role {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--lh-caption);
+  color: var(--text-muted);
+  text-transform: capitalize;
+}
+
+.ss-agenda__participant-title {
+  font-family: var(--font-body);
+  font-size: var(--text-caption);
+  line-height: var(--lh-caption);
+  color: var(--text-secondary);
+}
+
+/* --------------------------------------------------------------------------
+   CTA
+   -------------------------------------------------------------------------- */
+.ss-agenda__cta {
+  margin-top: var(--sp-3);
+}
+
+.ss-agenda__cta-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-1);
+  font-family: var(--font-body);
+  font-size: var(--text-small);
+  font-weight: 600;
+  color: var(--link-default);
+  text-decoration: none;
+  padding: var(--sp-2) 0;
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.ss-agenda__cta-link:hover {
+  color: var(--link-hover);
+}
+
+.ss-agenda__cta-link:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Empty State
+   -------------------------------------------------------------------------- */
+.ss-agenda__empty {
+  font-family: var(--font-body);
+  font-size: var(--text-body);
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--sp-8) 0;
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE — Tablet (768–1024)
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .ss-agenda__time-slot {
+    grid-template-columns: 70px 1fr;
+  }
+
+  .ss-agenda__time-slot--parallel .ss-agenda__slot-sessions {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   RESPONSIVE — Mobile (<768)
+   -------------------------------------------------------------------------- */
+@media (max-width: 767px) {
+  .ss-agenda__filters {
+    flex-direction: column;
+    gap: var(--sp-2);
+  }
+
+  .ss-agenda__filter-select {
+    min-width: 100%;
+  }
+
+  .ss-agenda__time-slot {
+    grid-template-columns: 1fr;
+    gap: var(--sp-1);
+  }
+
+  .ss-agenda__time-col {
+    flex-direction: row;
+    align-items: baseline;
+    gap: var(--sp-2);
+    position: static;
+    padding-bottom: var(--sp-1);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: var(--sp-2);
+  }
+
+  .ss-agenda__time {
+    font-size: 1rem;
+  }
+
+  .ss-agenda__time-end {
+    font-size: var(--text-caption);
+  }
+
+  .ss-agenda__time-slot--parallel .ss-agenda__slot-sessions {
+    grid-template-columns: 1fr;
+  }
+
+  .ss-agenda__card-toggle {
+    padding: var(--sp-3);
+  }
+
+  .ss-agenda__card:not(:has(.ss-agenda__card-toggle)) .ss-agenda__card-header {
+    padding: var(--sp-3);
+  }
+
+  .ss-agenda__card-details {
+    padding: 0 var(--sp-3) var(--sp-3);
+  }
+
+  .ss-agenda__card-title {
+    font-size: 1.125rem;
+  }
+
+  .ss-agenda__participants-detail {
+    flex-direction: column;
+  }
+
+  .ss-agenda__participant {
+    min-width: auto;
+  }
+
+  .ss-agenda__day-title {
+    font-size: clamp(1.25rem, 4vw, 1.75rem);
+  }
+}

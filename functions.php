@@ -240,6 +240,23 @@ function ss_enqueue_assets() {
 		);
 	}
 
+	/* Agenda CSS + JS — on agenda page or any page with [ss_agenda] shortcode */
+	if ( is_page( 'agenda' ) || is_page( 'programme' ) || is_page( 'schedule' ) || ( is_singular() && has_shortcode( get_post()->post_content ?? '', 'ss_agenda' ) ) ) {
+		wp_enqueue_style(
+			'ss-agenda',
+			$uri . '/assets/css/agenda.css',
+			array( 'ss-components' ),
+			ss_asset_version( $dir . '/assets/css/agenda.css' )
+		);
+		wp_enqueue_script(
+			'ss-agenda',
+			$uri . '/assets/js/agenda.js',
+			array(),
+			ss_asset_version( $dir . '/assets/js/agenda.js' ),
+			array( 'strategy' => 'defer', 'in_footer' => true )
+		);
+	}
+
 	/* FAQ CSS + JS — on FAQ page template */
 	if ( is_page_template( 'page-faq.php' ) || is_page( 'faq' ) ) {
 		wp_enqueue_style(
@@ -647,6 +664,18 @@ require_once get_template_directory() . '/inc/sponsors/csv-importer.php';
 
 if ( is_admin() ) {
 	require_once get_template_directory() . '/inc/sponsors/admin.php';
+}
+
+/* ==========================================================================
+   8h2. AGENDA MODULE
+   ========================================================================== */
+
+require_once get_template_directory() . '/inc/agenda/storage.php';
+require_once get_template_directory() . '/inc/agenda/render.php';
+require_once get_template_directory() . '/inc/agenda/csv-importer.php';
+
+if ( is_admin() ) {
+	require_once get_template_directory() . '/inc/agenda/admin.php';
 }
 
 /* ==========================================================================
