@@ -444,6 +444,7 @@
 /* Visual feedback when large text is active */
 [data-text-size="large"] .text-size-toggle {
   color: var(--focus-ring);
+  background-color: var(--surface-card);
 }
 
 /* --------------------------------------------------------------------------
