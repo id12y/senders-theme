@@ -152,6 +152,20 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 			</button>
 		<?php endif; ?>
 
+		<?php if ( ss_show_text_size_toggle() ) : ?>
+			<button
+				class="text-size-toggle"
+				type="button"
+				aria-pressed="false"
+				aria-label="<?php esc_attr_e( 'Toggle larger text', 'sender-symposium' ); ?>"
+			>
+				<svg class="text-size-toggle__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+					<path d="M3 19l4.5-13h1L13 19M5 14h6"></path>
+					<path d="M15 19l3-8h.5L21 19M16.5 16h3"></path>
+				</svg>
+			</button>
+		<?php endif; ?>
+
 	</div>
 </header>
 <?php endif; ?>

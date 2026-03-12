@@ -415,6 +415,39 @@
 [data-theme="dark"]  .theme-toggle__moon { display: none; }
 
 /* --------------------------------------------------------------------------
+   TEXT SIZE TOGGLE (accessibility)
+   -------------------------------------------------------------------------- */
+.text-size-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-2);
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: var(--radius-btn);
+  color: var(--text-secondary);
+  transition: color var(--duration-fast) var(--ease),
+              background-color var(--duration-fast) var(--ease);
+}
+
+.text-size-toggle:hover {
+  color: var(--text-primary);
+  background-color: var(--surface-card);
+}
+
+.text-size-toggle svg {
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+}
+
+/* Visual feedback when large text is active */
+[data-text-size="large"] .text-size-toggle {
+  color: var(--focus-ring);
+  background-color: var(--surface-card);
+}
+
+/* --------------------------------------------------------------------------
    ANNOUNCEMENT BAR
    -------------------------------------------------------------------------- */
 .announcement-bar {

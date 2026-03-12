@@ -113,6 +113,9 @@ function ss_register_settings() {
 	register_setting( 'ss_tab_darkmode', 'ss_dark_mode_toggle', array(
 		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_toggle', 'default' => 'on',
 	) );
+	register_setting( 'ss_tab_darkmode', 'ss_text_size_toggle', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_toggle', 'default' => 'on',
+	) );
 
 	/* ── Sections & Fields: General ── */
 	add_settings_section( 'ss_section_fonts', esc_html__( 'Fonts', 'sender-symposium' ), 'ss_section_fonts_cb', 'ss_page_general' );
@@ -203,6 +206,10 @@ function ss_register_settings() {
 	add_settings_field( 'ss_dark_mode_toggle', esc_html__( 'Show Theme Toggle', 'sender-symposium' ), 'ss_field_toggle', 'ss_page_darkmode', 'ss_section_darkmode', array(
 		'id' => 'ss_dark_mode_toggle',
 		'description' => esc_html__( 'Display the dark/light toggle in the header.', 'sender-symposium' ),
+	) );
+	add_settings_field( 'ss_text_size_toggle', esc_html__( 'Show Text Size Toggle', 'sender-symposium' ), 'ss_field_toggle', 'ss_page_darkmode', 'ss_section_darkmode', array(
+		'id' => 'ss_text_size_toggle',
+		'description' => esc_html__( 'Display a text size toggle button in the header for accessibility.', 'sender-symposium' ),
 	) );
 }
 add_action( 'admin_init', 'ss_register_settings' );

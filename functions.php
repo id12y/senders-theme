@@ -284,6 +284,14 @@ function ss_enqueue_assets() {
 	);
 
 	wp_enqueue_script(
+		'ss-text-size-toggle',
+		$uri . '/assets/js/text-size-toggle.js',
+		array(),
+		ss_asset_version( $dir . '/assets/js/text-size-toggle.js' ),
+		array( 'strategy' => 'defer', 'in_footer' => true )
+	);
+
+	wp_enqueue_script(
 		'ss-navigation',
 		$uri . '/assets/js/navigation.js',
 		array(),
@@ -339,6 +347,8 @@ function ss_inline_theme_bootstrap() {
 		if(f){t=f;r.setAttribute('data-theme',f);r.setAttribute('data-theme-forced','');}
 		else{var s;try{s=localStorage.getItem('ss-theme')}catch(e){}if(s==='dark'||s==='light'){t=s;}else{t=os;}r.setAttribute('data-theme',t);}
 		if(t!==os)r.classList.add('ss-hero-mismatch');
+		var ts;try{ts=localStorage.getItem('ss-text-size')}catch(e){}
+		if(ts==='large'){r.setAttribute('data-text-size','large');}
 	})();
 	</script>
 	<?php
@@ -761,6 +771,13 @@ function ss_announcement_enabled() {
  */
 function ss_show_theme_toggle() {
 	return get_option( 'ss_dark_mode_toggle', 'on' ) === 'on';
+}
+
+/**
+ * Check if the text size toggle should be displayed.
+ */
+function ss_show_text_size_toggle() {
+	return get_option( 'ss_text_size_toggle', 'on' ) === 'on';
 }
 
 /**
