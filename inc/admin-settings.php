@@ -67,6 +67,9 @@ function ss_register_settings() {
 	register_setting( 'ss_tab_general', 'ss_section_padding', array(
 		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_section_padding', 'default' => 'standard',
 	) );
+	register_setting( 'ss_tab_general', 'ss_body_text_scale', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_body_text_scale', 'default' => 'default',
+	) );
 	register_setting( 'ss_tab_general', 'ss_logo_max_height', array(
 		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_logo_max_height', 'default' => '40',
 	) );
@@ -146,6 +149,13 @@ function ss_register_settings() {
 			'compact' => esc_html__( 'Compact (64px)', 'sender-symposium' ),
 			'standard' => esc_html__( 'Standard (96px)', 'sender-symposium' ),
 			'airy' => esc_html__( 'Airy (128px)', 'sender-symposium' ),
+		),
+	) );
+	add_settings_field( 'ss_body_text_scale', esc_html__( 'Body Text Size', 'sender-symposium' ), 'ss_field_select', 'ss_page_general', 'ss_section_layout', array(
+		'id' => 'ss_body_text_scale', 'options' => array(
+			'default'     => esc_html__( 'Default', 'sender-symposium' ),
+			'comfortable' => esc_html__( 'Comfortable (+1 step)', 'sender-symposium' ),
+			'spacious'    => esc_html__( 'Spacious (+2 steps)', 'sender-symposium' ),
 		),
 	) );
 	add_settings_field( 'ss_logo_max_height', esc_html__( 'Logo Max Height', 'sender-symposium' ), 'ss_field_select', 'ss_page_general', 'ss_section_layout', array(
@@ -293,6 +303,11 @@ function ss_sanitize_date( $value ) {
 function ss_sanitize_dark_mode_default( $value ) {
 	$allowed = array( 'system', 'light', 'dark' );
 	return in_array( $value, $allowed, true ) ? $value : 'system';
+}
+
+function ss_sanitize_body_text_scale( $value ) {
+	$allowed = array( 'default', 'comfortable', 'spacious' );
+	return in_array( $value, $allowed, true ) ? $value : 'default';
 }
 
 /* ── Field renderers ── */

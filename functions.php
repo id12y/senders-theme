@@ -436,6 +436,23 @@ function ss_output_custom_properties() {
 			break;
 	}
 
+	/* Body text scale */
+	$body_scale = get_option( 'ss_body_text_scale', 'default' );
+	switch ( $body_scale ) {
+		case 'comfortable':
+			$root_lines[] = '--text-body: 1.375rem;';
+			$root_lines[] = '--text-body-lg: 1.5rem;';
+			$root_lines[] = '--text-small: 1.1875rem;';
+			$root_lines[] = '--text-caption: 1.0625rem;';
+			break;
+		case 'spacious':
+			$root_lines[] = '--text-body: 1.5rem;';
+			$root_lines[] = '--text-body-lg: 1.625rem;';
+			$root_lines[] = '--text-small: 1.3125rem;';
+			$root_lines[] = '--text-caption: 1.1875rem;';
+			break;
+	}
+
 	/* Color token overrides */
 	$token_map = array(
 		'surface_page'         => 'surface-page',
