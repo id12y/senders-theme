@@ -191,15 +191,15 @@
 
 /* --------------------------------------------------------------------------
    LARGE TEXT MODE (accessibility)
-   Scales typography tokens ~20% for users who need larger text.
-   All components consume these tokens, so the change cascades site-wide.
-   Layout & spacing tokens (px-based) are intentionally unaffected.
+   Scales body typography tokens for users who need larger text.
+   Uses html[…] for specificity (0,1,1) to beat admin inline :root (0,1,0).
+   Values are the ceiling — always larger than the "spacious" admin preset.
    -------------------------------------------------------------------------- */
-[data-text-size="large"] {
-  --text-body:    1.5rem;
-  --text-body-lg: 1.625rem;
-  --text-small:   1.25rem;
-  --text-caption: 1.125rem;
+html[data-text-size="large"] {
+  --text-body:    1.75rem;
+  --text-body-lg: 1.875rem;
+  --text-small:   1.5rem;
+  --text-caption: 1.375rem;
 }
 
 /* --------------------------------------------------------------------------
