@@ -108,6 +108,15 @@ function ss_register_settings() {
 	register_setting( 'ss_tab_announcement', 'ss_announcement_url', array(
 		'type' => 'string', 'sanitize_callback' => 'esc_url_raw', 'default' => '',
 	) );
+	register_setting( 'ss_tab_announcement', 'ss_announcement_style', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_announcement_style', 'default' => 'default',
+	) );
+	register_setting( 'ss_tab_announcement', 'ss_announcement_position', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_announcement_position', 'default' => 'header',
+	) );
+	register_setting( 'ss_tab_announcement', 'ss_announcement_icon', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_announcement_icon', 'default' => 'none',
+	) );
 
 	/* ── Dark Mode ── */
 	register_setting( 'ss_tab_darkmode', 'ss_dark_mode_default', array(
@@ -202,6 +211,29 @@ function ss_register_settings() {
 	) );
 	add_settings_field( 'ss_announcement_url', esc_html__( 'Announcement Link URL', 'sender-symposium' ), 'ss_field_text', 'ss_page_announcement', 'ss_section_announcement', array(
 		'id' => 'ss_announcement_url', 'placeholder' => 'https://',
+	) );
+	add_settings_field( 'ss_announcement_style', esc_html__( 'Style', 'sender-symposium' ), 'ss_field_select', 'ss_page_announcement', 'ss_section_announcement', array(
+		'id' => 'ss_announcement_style', 'options' => array(
+			'default' => esc_html__( 'Default', 'sender-symposium' ),
+			'urgent'  => esc_html__( 'Urgent (flash sale)', 'sender-symposium' ),
+			'success' => esc_html__( 'Success (deal / offer)', 'sender-symposium' ),
+			'warm'    => esc_html__( 'Warm (limited time)', 'sender-symposium' ),
+		),
+	) );
+	add_settings_field( 'ss_announcement_position', esc_html__( 'Position', 'sender-symposium' ), 'ss_field_select', 'ss_page_announcement', 'ss_section_announcement', array(
+		'id' => 'ss_announcement_position', 'options' => array(
+			'header' => esc_html__( 'Top of page', 'sender-symposium' ),
+			'footer' => esc_html__( 'Bottom of page (sticky)', 'sender-symposium' ),
+		),
+	) );
+	add_settings_field( 'ss_announcement_icon', esc_html__( 'Icon', 'sender-symposium' ), 'ss_field_select', 'ss_page_announcement', 'ss_section_announcement', array(
+		'id' => 'ss_announcement_icon', 'options' => array(
+			'none'      => esc_html__( 'None', 'sender-symposium' ),
+			'megaphone' => esc_html__( 'Megaphone', 'sender-symposium' ),
+			'tag'       => esc_html__( 'Tag', 'sender-symposium' ),
+			'sparkle'   => esc_html__( 'Sparkle', 'sender-symposium' ),
+			'clock'     => esc_html__( 'Clock', 'sender-symposium' ),
+		),
 	) );
 
 	/* ── Sections & Fields: Dark Mode ── */
@@ -308,6 +340,20 @@ function ss_sanitize_dark_mode_default( $value ) {
 function ss_sanitize_body_text_scale( $value ) {
 	$allowed = array( 'default', 'comfortable', 'spacious' );
 	return in_array( $value, $allowed, true ) ? $value : 'default';
+}
+
+function ss_sanitize_announcement_style( $value ) {
+	$allowed = array( 'default', 'urgent', 'success', 'warm' );
+	return in_array( $value, $allowed, true ) ? $value : 'default';
+}
+
+function ss_sanitize_announcement_position( $value ) {
+	return in_array( $value, array( 'header', 'footer' ), true ) ? $value : 'header';
+}
+
+function ss_sanitize_announcement_icon( $value ) {
+	$allowed = array( 'none', 'megaphone', 'tag', 'sparkle', 'clock' );
+	return in_array( $value, $allowed, true ) ? $value : 'none';
 }
 
 /* ── Field renderers ── */

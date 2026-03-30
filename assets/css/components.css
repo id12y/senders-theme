@@ -468,6 +468,73 @@
   opacity: 0.85;
 }
 
+/* -- Inner layout (icon + text) -- */
+.announcement-bar__inner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-2);
+  color: inherit;
+  text-decoration: none;
+}
+
+.announcement-bar__icon {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+}
+
+/* -- Position: footer (sticky bottom bar) -- */
+.announcement-bar[data-position="footer"] {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+}
+
+body.has-announcement-footer {
+  padding-bottom: 40px;
+}
+
+/* -- Style: urgent (flash sale) -- */
+.announcement-bar[data-style="urgent"] {
+  background-color: var(--status-error);
+  color: var(--text-inverse);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  animation: bar-pulse 2s var(--ease) infinite;
+}
+
+.announcement-bar[data-style="urgent"] a {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* -- Style: success (deal / offer) -- */
+.announcement-bar[data-style="success"] {
+  background-color: var(--status-success);
+  color: var(--text-inverse);
+}
+
+/* -- Style: warm (limited time) -- */
+.announcement-bar[data-style="warm"] {
+  background-color: var(--status-warning);
+  color: var(--text-inverse);
+}
+
+/* -- Pulse keyframes -- */
+@keyframes bar-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.88; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .announcement-bar[data-style="urgent"] {
+    animation: none;
+  }
+}
+
 /* --------------------------------------------------------------------------
    CARDS (speaker / session / topic)
    -------------------------------------------------------------------------- */
