@@ -128,6 +128,28 @@ function ss_speakers_handle_actions() {
 }
 add_action( 'admin_init', 'ss_speakers_handle_actions' );
 
+/* ─── Export Download Handler (admin_init, early) ─── */
+
+function ss_speakers_handle_exports() {
+	if ( ! isset( $_GET['ss_speakers_export'] ) ) {
+		return;
+	}
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
+
+	$format = sanitize_key( $_GET['ss_speakers_export'] );
+
+	if ( 'csv' === $format ) {
+		check_admin_referer( 'ss_speakers_export' );
+		header( 'Content-Type: text/csv; charset=utf-8' );
+		header( 'Content-Disposition: attachment; filename="speakers-export-' . gmdate( 'Y-m-d' ) . '.csv"' );
+		echo ss_speakers_export_csv();
+		exit;
+	}
+}
+add_action( 'admin_init', 'ss_speakers_handle_exports', 5 );
+
 /* ─── AJAX: Reorder ─── */
 
 function ss_ajax_reorder_speakers() {

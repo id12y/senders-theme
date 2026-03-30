@@ -79,7 +79,9 @@ function ss_agenda_admin_notices() {
 	);
 
 	if ( 'import_done' === $message ) {
-		$count = isset( $_GET['imported'] ) ? absint( $_GET['imported'] ) : 0;
+		$count    = isset( $_GET['imported'] ) ? absint( $_GET['imported'] ) : 0;
+		$warnings = get_transient( 'ss_agenda_import_warnings' );
+		delete_transient( 'ss_agenda_import_warnings' );
 		?>
 		<div class="notice notice-success is-dismissible">
 			<p>
@@ -89,6 +91,16 @@ function ss_agenda_admin_notices() {
 				?>
 			</p>
 		</div>
+		<?php if ( is_array( $warnings ) && ! empty( $warnings ) ) : ?>
+			<div class="notice notice-warning is-dismissible">
+				<p><strong><?php esc_html_e( 'Import warnings:', 'sender-symposium' ); ?></strong></p>
+				<ul style="list-style:disc;margin-left:20px;">
+					<?php foreach ( $warnings as $w ) : ?>
+						<li><?php echo esc_html( $w ); ?></li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		<?php endif; ?>
 		<?php
 		return;
 	}
