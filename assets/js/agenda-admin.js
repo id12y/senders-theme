@@ -71,4 +71,70 @@
         });
     });
   });
+
+  /* -----------------------------------------------------------------------
+     Bulk delete
+     ----------------------------------------------------------------------- */
+  var bulkBtn = document.getElementById('ss-bulk-delete-btn');
+  if (!bulkBtn) return;
+
+  function updateBulkBtn() {
+    var checked = document.querySelectorAll('.ss-session-check:checked');
+    if (checked.length > 0) {
+      bulkBtn.style.display = '';
+      bulkBtn.textContent = 'Delete Selected (' + checked.length + ')';
+    } else {
+      bulkBtn.style.display = 'none';
+    }
+  }
+
+  /* Select-all toggles within the same table */
+  document.addEventListener('change', function (e) {
+    if (e.target.classList.contains('ss-select-all')) {
+      var table = e.target.closest('table');
+      if (!table) return;
+      var boxes = table.querySelectorAll('.ss-session-check');
+      for (var i = 0; i < boxes.length; i++) {
+        boxes[i].checked = e.target.checked;
+      }
+      updateBulkBtn();
+    } else if (e.target.classList.contains('ss-session-check')) {
+      updateBulkBtn();
+    }
+  });
+
+  /* Bulk delete click */
+  bulkBtn.addEventListener('click', function () {
+    var checked = document.querySelectorAll('.ss-session-check:checked');
+    if (!checked.length) return;
+
+    var ids = [];
+    for (var i = 0; i < checked.length; i++) {
+      ids.push(checked[i].value);
+    }
+
+    if (!confirm('Delete ' + ids.length + ' session(s)?')) return;
+
+    var fd = new FormData();
+    fd.append('action', 'ss_bulk_delete_sessions');
+    fd.append('nonce', cfg.nonce);
+    fd.append('ids', ids.join(','));
+
+    fetch(cfg.ajaxUrl, { method: 'POST', body: fd })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data.success) {
+          for (var j = 0; j < checked.length; j++) {
+            var row = checked[j].closest('tr');
+            if (row) row.remove();
+          }
+          /* Uncheck select-all boxes */
+          var selectAlls = document.querySelectorAll('.ss-select-all');
+          for (var k = 0; k < selectAlls.length; k++) {
+            selectAlls[k].checked = false;
+          }
+          updateBulkBtn();
+        }
+      });
+  });
 })();

@@ -193,6 +193,9 @@ function ss_agenda_render_sessions() {
 		<a href="<?php echo esc_url( $add_url ); ?>" class="button button-primary">
 			<?php esc_html_e( '+ Add Session', 'sender-symposium' ); ?>
 		</a>
+		<button type="button" id="ss-bulk-delete-btn" class="button" style="display:none;margin-left:8px;color:#a00;">
+			<?php esc_html_e( 'Delete Selected', 'sender-symposium' ); ?>
+		</button>
 		<span style="margin-left:12px;color:#666;">
 			<?php
 			/* translators: %d: total session count */
@@ -220,6 +223,7 @@ function ss_agenda_render_sessions() {
 			<table class="wp-list-table widefat striped ss-agenda-table">
 				<thead>
 					<tr>
+						<th style="width:30px;"><input type="checkbox" class="ss-select-all" title="<?php esc_attr_e( 'Select all', 'sender-symposium' ); ?>"></th>
 						<th style="width:100px;"><?php esc_html_e( 'Time', 'sender-symposium' ); ?></th>
 						<th style="width:120px;"><?php esc_html_e( 'Room', 'sender-symposium' ); ?></th>
 						<th><?php esc_html_e( 'Title', 'sender-symposium' ); ?></th>
@@ -241,6 +245,7 @@ function ss_agenda_render_sessions() {
 						$is_utility = in_array( $s['type'], array( 'break', 'lunch', 'networking' ), true );
 						?>
 						<tr class="<?php echo $is_utility ? 'ss-agenda-row--utility' : ''; ?>" data-id="<?php echo esc_attr( $s['id'] ); ?>">
+							<td><input type="checkbox" class="ss-session-check" value="<?php echo esc_attr( $s['id'] ); ?>"></td>
 							<td>
 								<strong><?php echo esc_html( $s['start_time'] ); ?></strong>
 								<span style="color:#999;">–</span>
@@ -604,6 +609,16 @@ function ss_agenda_render_settings() {
 					<td>
 						<input type="text" id="ss-timezone" name="timezone" value="<?php echo esc_attr( $agenda['timezone'] ); ?>" class="regular-text">
 						<p class="description"><?php esc_html_e( 'e.g. Europe/Madrid, America/New_York', 'sender-symposium' ); ?></p>
+					</td>
+				</tr>
+				<tr>
+					<th><?php esc_html_e( 'Speaker Links', 'sender-symposium' ); ?></th>
+					<td>
+						<label>
+							<input type="checkbox" name="show_speaker_links" value="1" <?php checked( ! empty( $agenda['show_speaker_links'] ) ); ?>>
+							<?php esc_html_e( 'Show speaker social media / website links on the agenda page', 'sender-symposium' ); ?>
+						</label>
+						<p class="description"><?php esc_html_e( 'When enabled, LinkedIn and website icons appear next to each speaker in the expanded session details.', 'sender-symposium' ); ?></p>
 					</td>
 				</tr>
 			</table>

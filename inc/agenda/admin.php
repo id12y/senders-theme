@@ -182,7 +182,8 @@ function ss_agenda_handle_actions() {
 		case 'save_settings':
 			check_admin_referer( 'ss_agenda_settings' );
 			$agenda = ss_get_agenda();
-			$agenda['timezone'] = isset( $_POST['timezone'] ) ? sanitize_text_field( wp_unslash( $_POST['timezone'] ) ) : $agenda['timezone'];
+			$agenda['timezone']           = isset( $_POST['timezone'] ) ? sanitize_text_field( wp_unslash( $_POST['timezone'] ) ) : $agenda['timezone'];
+			$agenda['show_speaker_links'] = ! empty( $_POST['show_speaker_links'] );
 			ss_save_agenda( $agenda );
 			$redirect = add_query_arg( array( 'tab' => 'settings', 'message' => 'settings_saved' ), $redirect );
 			break;
@@ -243,6 +244,26 @@ function ss_ajax_delete_session() {
 	wp_send_json_success();
 }
 add_action( 'wp_ajax_ss_delete_session_ajax', 'ss_ajax_delete_session' );
+
+/**
+ * Bulk delete sessions via AJAX.
+ */
+function ss_ajax_bulk_delete_sessions() {
+	check_ajax_referer( 'ss_agenda_admin', 'nonce' );
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_send_json_error( 'Unauthorized' );
+	}
+	$raw = isset( $_POST['ids'] ) ? sanitize_text_field( wp_unslash( $_POST['ids'] ) ) : '';
+	$ids = array_filter( array_map( 'sanitize_key', explode( ',', $raw ) ) );
+	if ( empty( $ids ) ) {
+		wp_send_json_error( 'No IDs' );
+	}
+	foreach ( $ids as $id ) {
+		ss_delete_session( $id );
+	}
+	wp_send_json_success( array( 'deleted' => count( $ids ) ) );
+}
+add_action( 'wp_ajax_ss_bulk_delete_sessions', 'ss_ajax_bulk_delete_sessions' );
 
 /* -------------------------------------------------------------------------
    Export Download Handlers (admin_init, early)
