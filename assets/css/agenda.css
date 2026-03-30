@@ -400,6 +400,21 @@
   color: var(--text-secondary);
 }
 
+.ss-agenda__participant-links {
+  display: inline-flex;
+  gap: var(--sp-1);
+  margin-top: 2px;
+}
+
+.ss-agenda__participant-link {
+  color: var(--text-secondary);
+  transition: color var(--duration-fast) var(--ease);
+}
+
+.ss-agenda__participant-link:hover {
+  color: var(--link-default);
+}
+
 /* --------------------------------------------------------------------------
    CTA
    -------------------------------------------------------------------------- */

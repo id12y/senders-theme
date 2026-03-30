@@ -182,7 +182,8 @@ function ss_agenda_handle_actions() {
 		case 'save_settings':
 			check_admin_referer( 'ss_agenda_settings' );
 			$agenda = ss_get_agenda();
-			$agenda['timezone'] = isset( $_POST['timezone'] ) ? sanitize_text_field( wp_unslash( $_POST['timezone'] ) ) : $agenda['timezone'];
+			$agenda['timezone']           = isset( $_POST['timezone'] ) ? sanitize_text_field( wp_unslash( $_POST['timezone'] ) ) : $agenda['timezone'];
+			$agenda['show_speaker_links'] = ! empty( $_POST['show_speaker_links'] );
 			ss_save_agenda( $agenda );
 			$redirect = add_query_arg( array( 'tab' => 'settings', 'message' => 'settings_saved' ), $redirect );
 			break;

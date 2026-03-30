@@ -611,6 +611,16 @@ function ss_agenda_render_settings() {
 						<p class="description"><?php esc_html_e( 'e.g. Europe/Madrid, America/New_York', 'sender-symposium' ); ?></p>
 					</td>
 				</tr>
+				<tr>
+					<th><?php esc_html_e( 'Speaker Links', 'sender-symposium' ); ?></th>
+					<td>
+						<label>
+							<input type="checkbox" name="show_speaker_links" value="1" <?php checked( ! empty( $agenda['show_speaker_links'] ) ); ?>>
+							<?php esc_html_e( 'Show speaker social media / website links on the agenda page', 'sender-symposium' ); ?>
+						</label>
+						<p class="description"><?php esc_html_e( 'When enabled, LinkedIn and website icons appear next to each speaker in the expanded session details.', 'sender-symposium' ); ?></p>
+					</td>
+				</tr>
 			</table>
 
 			<p class="submit">
