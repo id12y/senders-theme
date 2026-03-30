@@ -1004,6 +1004,13 @@
   gap: var(--sp-5);
 }
 
+/* 5–6 items → 3 columns on desktop to avoid a 4+2 / 4+1 orphan row */
+@media (min-width: 768px) {
+  .format-block:has(:nth-child(5)) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 .format-item {
   padding: var(--sp-5);
   background-color: var(--surface-card);
