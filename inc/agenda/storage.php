@@ -380,7 +380,7 @@ function ss_duplicate_session( $id ) {
  * @param string|null $editing_id ID of the session being edited (to exclude from conflict checks).
  * @return array Array of error strings. Empty = valid.
  */
-function ss_validate_session( $session, $all_sessions = array(), $editing_id = null ) {
+function ss_validate_session( $session, $all_sessions = array(), $editing_id = null, $lenient_speakers = false ) {
 	$errors = array();
 
 	/* Required title */
@@ -416,8 +416,9 @@ function ss_validate_session( $session, $all_sessions = array(), $editing_id = n
 		$errors[] = __( 'Room/location is required for this session type.', 'sender-symposium' );
 	}
 
-	/* Participant references */
-	if ( function_exists( 'ss_get_speaker' ) ) {
+	/* Participant references — skip validation when $lenient_speakers is true
+	   so that imports can proceed with missing speakers (admin adds them later). */
+	if ( ! $lenient_speakers && function_exists( 'ss_get_speaker' ) ) {
 		foreach ( $session['participants'] as $p ) {
 			if ( ! empty( $p['speaker_id'] ) && null === ss_get_speaker( $p['speaker_id'] ) ) {
 				/* translators: %s: speaker ID */

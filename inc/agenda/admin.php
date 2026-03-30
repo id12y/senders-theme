@@ -134,6 +134,9 @@ function ss_agenda_handle_actions() {
 			}
 			$tz = isset( $parsed['timezone'] ) ? $parsed['timezone'] : '';
 			ss_agenda_apply_import( $parsed['sessions'], $tz );
+			if ( ! empty( $parsed['warnings'] ) ) {
+				set_transient( 'ss_agenda_import_warnings', $parsed['warnings'], 120 );
+			}
 			$redirect = add_query_arg( array(
 				'tab'      => 'import',
 				'message'  => 'import_done',
@@ -159,6 +162,9 @@ function ss_agenda_handle_actions() {
 				break;
 			}
 			ss_agenda_apply_import( $parsed['sessions'] );
+			if ( ! empty( $parsed['warnings'] ) ) {
+				set_transient( 'ss_agenda_import_warnings', $parsed['warnings'], 120 );
+			}
 			$redirect = add_query_arg( array(
 				'tab'      => 'import',
 				'message'  => 'import_done',

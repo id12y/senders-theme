@@ -101,7 +101,11 @@ function ss_speakers_render_list() {
 		ss_speakers_render_form( $speaker );
 	}
 	?>
-	<p><a href="<?php echo esc_url( $url . '&action=add' ); ?>" class="button button-primary"><?php esc_html_e( 'Add Speaker', 'sender-symposium' ); ?></a></p>
+	<?php $export_url = wp_nonce_url( admin_url( 'admin.php?page=ss-speakers&ss_speakers_export=csv' ), 'ss_speakers_export' ); ?>
+	<p>
+		<a href="<?php echo esc_url( $url . '&action=add' ); ?>" class="button button-primary"><?php esc_html_e( 'Add Speaker', 'sender-symposium' ); ?></a>
+		<a href="<?php echo esc_url( $export_url ); ?>" class="button"><?php esc_html_e( 'Export CSV', 'sender-symposium' ); ?></a>
+	</p>
 	<?php
 	$speakers = ss_get_speakers();
 	usort( $speakers, function ( $a, $b ) { return ( $a['order'] ?? 0 ) - ( $b['order'] ?? 0 ); } );

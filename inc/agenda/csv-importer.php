@@ -174,13 +174,26 @@ function ss_agenda_parse_json_import( $json_string ) {
 	foreach ( $data['sessions'] as $i => $raw ) {
 		$row_num  = $i + 1;
 		$session  = ss_sanitize_session( $raw );
-		$errors   = ss_validate_session( $session, $result['sessions'] );
+		$errors   = ss_validate_session( $session, $result['sessions'], null, true );
 		if ( ! empty( $errors ) ) {
 			foreach ( $errors as $err ) {
 				/* translators: %1$d: row number, %2$s: error message */
 				$result['errors'][] = sprintf( __( 'Session %1$d ("%2$s"): %3$s', 'sender-symposium' ), $row_num, $session['title'], $err );
 			}
 		} else {
+			/* Warn about missing speakers so admin can add them later */
+			if ( function_exists( 'ss_get_speaker' ) ) {
+				foreach ( $session['participants'] as $p ) {
+					if ( ! empty( $p['speaker_id'] ) && null === ss_get_speaker( $p['speaker_id'] ) ) {
+						$result['warnings'][] = sprintf(
+							/* translators: %1$s: session title, %2$s: speaker ID */
+							__( 'Session "%1$s": participant key %2$s does not match an existing speaker.', 'sender-symposium' ),
+							$session['title'],
+							$p['speaker_id']
+						);
+					}
+				}
+			}
 			$result['sessions'][] = $session;
 		}
 	}
@@ -314,7 +327,7 @@ function ss_agenda_parse_csv_import( $file_path ) {
 		);
 
 		$session = ss_sanitize_session( $raw );
-		$errors  = ss_validate_session( $session, $result['sessions'] );
+		$errors  = ss_validate_session( $session, $result['sessions'], null, true );
 
 		if ( ! empty( $errors ) ) {
 			foreach ( $errors as $err ) {
@@ -322,6 +335,20 @@ function ss_agenda_parse_csv_import( $file_path ) {
 				$result['errors'][] = sprintf( __( 'Row %1$d ("%2$s"): %3$s', 'sender-symposium' ), $row_num, $session['title'], $err );
 			}
 		} else {
+			/* Warn about missing speakers so admin can add them later */
+			if ( function_exists( 'ss_get_speaker' ) ) {
+				foreach ( $session['participants'] as $p ) {
+					if ( ! empty( $p['speaker_id'] ) && null === ss_get_speaker( $p['speaker_id'] ) ) {
+						$result['warnings'][] = sprintf(
+							/* translators: %1$s: session title, %2$s: speaker ID */
+							__( 'Row %1$d ("%2$s"): participant key %3$s does not match an existing speaker.', 'sender-symposium' ),
+							$row_num,
+							$session['title'],
+							$p['speaker_id']
+						);
+					}
+				}
+			}
 			$result['sessions'][] = $session;
 		}
 	}

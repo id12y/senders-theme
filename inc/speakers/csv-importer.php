@@ -144,3 +144,62 @@ function ss_import_speakers_csv( $file_path, $always_new = false ) {
 function ss_csv_cell( $row, $map, $field ) {
 	return isset( $map[ $field ], $row[ $map[ $field ] ] ) ? trim( $row[ $map[ $field ] ] ) : '';
 }
+
+/* -------------------------------------------------------------------------
+   Export — CSV
+   ------------------------------------------------------------------------- */
+
+/**
+ * Export all speakers as a CSV string.
+ *
+ * The first column is `participant_key` (the spk_* ID used by the agenda
+ * module to link speakers to sessions).
+ *
+ * @return string CSV content.
+ */
+function ss_speakers_export_csv() {
+	$speakers = ss_get_speakers();
+	usort( $speakers, function ( $a, $b ) {
+		return ( $a['order'] ?? 0 ) - ( $b['order'] ?? 0 );
+	} );
+
+	$headers = array(
+		'participant_key',
+		'name',
+		'job_title',
+		'company',
+		'linkedin_url',
+		'website_url',
+		'image_url',
+		'topic',
+		'description',
+		'status',
+		'featured',
+	);
+
+	$output = fopen( 'php://temp', 'r+' );
+	fputcsv( $output, $headers );
+
+	foreach ( $speakers as $s ) {
+		$row = array(
+			$s['id'],
+			$s['name'],
+			$s['job_title'],
+			$s['company'],
+			$s['linkedin_url'],
+			$s['website_url'],
+			$s['image_url'] ?? '',
+			$s['topic'],
+			$s['description'],
+			$s['status'],
+			$s['featured'] ? 'yes' : 'no',
+		);
+		fputcsv( $output, $row );
+	}
+
+	rewind( $output );
+	$csv = stream_get_contents( $output );
+	fclose( $output );
+
+	return $csv;
+}
