@@ -76,6 +76,13 @@ if ( ! function_exists( 'elementor_theme_do_location' ) || ! elementor_theme_do_
 -->
 <?php endif; ?>
 
+<?php
+/* Announcement bar (footer position) */
+if ( ss_announcement_enabled() && get_option( 'ss_announcement_position', 'header' ) === 'footer' ) {
+	get_template_part( 'parts/announcement-bar' );
+}
+?>
+
 <?php wp_footer(); ?>
 </body>
 </html>

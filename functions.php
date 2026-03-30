@@ -783,6 +783,13 @@ function ss_announcement_enabled() {
 		&& ! empty( get_option( 'ss_announcement_text', '' ) );
 }
 
+add_filter( 'body_class', function ( $classes ) {
+	if ( ss_announcement_enabled() && get_option( 'ss_announcement_position', 'header' ) === 'footer' ) {
+		$classes[] = 'has-announcement-footer';
+	}
+	return $classes;
+} );
+
 /**
  * Check if the theme toggle should be displayed.
  */

@@ -23,8 +23,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 </a>
 
 <?php
-/* Announcement bar */
-if ( ss_announcement_enabled() ) {
+/* Announcement bar (header position) */
+if ( ss_announcement_enabled() && get_option( 'ss_announcement_position', 'header' ) === 'header' ) {
 	get_template_part( 'parts/announcement-bar' );
 }
 ?>
