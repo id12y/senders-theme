@@ -779,8 +779,13 @@ if ( is_admin() ) {
    ========================================================================== */
 
 function ss_announcement_enabled() {
-	return get_option( 'ss_announcement_enabled', 'off' ) === 'on'
-		&& ! empty( get_option( 'ss_announcement_text', '' ) );
+	if ( get_option( 'ss_announcement_enabled', 'off' ) !== 'on' || empty( get_option( 'ss_announcement_text', '' ) ) ) {
+		return false;
+	}
+	if ( get_option( 'ss_announcement_visibility', 'all' ) === 'homepage' && ! is_front_page() ) {
+		return false;
+	}
+	return true;
 }
 
 add_filter( 'body_class', function ( $classes ) {

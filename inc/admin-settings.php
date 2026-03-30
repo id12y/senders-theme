@@ -117,6 +117,9 @@ function ss_register_settings() {
 	register_setting( 'ss_tab_announcement', 'ss_announcement_icon', array(
 		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_announcement_icon', 'default' => 'none',
 	) );
+	register_setting( 'ss_tab_announcement', 'ss_announcement_visibility', array(
+		'type' => 'string', 'sanitize_callback' => 'ss_sanitize_announcement_visibility', 'default' => 'all',
+	) );
 
 	/* ── Dark Mode ── */
 	register_setting( 'ss_tab_darkmode', 'ss_dark_mode_default', array(
@@ -233,6 +236,12 @@ function ss_register_settings() {
 			'tag'       => esc_html__( 'Tag', 'sender-symposium' ),
 			'sparkle'   => esc_html__( 'Sparkle', 'sender-symposium' ),
 			'clock'     => esc_html__( 'Clock', 'sender-symposium' ),
+		),
+	) );
+	add_settings_field( 'ss_announcement_visibility', esc_html__( 'Visibility', 'sender-symposium' ), 'ss_field_select', 'ss_page_announcement', 'ss_section_announcement', array(
+		'id' => 'ss_announcement_visibility', 'options' => array(
+			'all'      => esc_html__( 'All pages', 'sender-symposium' ),
+			'homepage' => esc_html__( 'Homepage only', 'sender-symposium' ),
 		),
 	) );
 
@@ -354,6 +363,10 @@ function ss_sanitize_announcement_position( $value ) {
 function ss_sanitize_announcement_icon( $value ) {
 	$allowed = array( 'none', 'megaphone', 'tag', 'sparkle', 'clock' );
 	return in_array( $value, $allowed, true ) ? $value : 'none';
+}
+
+function ss_sanitize_announcement_visibility( $value ) {
+	return in_array( $value, array( 'all', 'homepage' ), true ) ? $value : 'all';
 }
 
 /* ── Field renderers ── */
