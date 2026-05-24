@@ -115,26 +115,39 @@ function ss_enqueue_assets() {
 		);
 	}
 
-	/* Hero Block CSS + optional countdown JS — front page */
+	/* Front page: holding mode loads only the holding stylesheet; full mode
+	   loads the hero block CSS (+ optional countdown). */
 	if ( is_front_page() ) {
-		wp_enqueue_style(
-			'ss-hero-block',
-			$uri . '/assets/css/hero-block.css',
-			array( 'ss-components' ),
-			ss_asset_version( $dir . '/assets/css/hero-block.css' )
-		);
+		$hp_front = function_exists( 'ss_get_homepage' ) ? ss_get_homepage() : array();
+		$is_holding = ( 'holding' === ( $hp_front['display_mode'] ?? 'full' ) );
 
-		$hero_pid = get_queried_object_id();
-		if ( $hero_pid ) {
-			$hero_s = ss_get_hero_settings( $hero_pid );
-			if ( $hero_s['countdown']['enabled'] && ! empty( $hero_s['countdown']['target_datetime'] ) ) {
-				wp_enqueue_script(
-					'ss-hero-countdown',
-					$uri . '/assets/js/hero-countdown.js',
-					array(),
-					ss_asset_version( $dir . '/assets/js/hero-countdown.js' ),
-					array( 'strategy' => 'defer', 'in_footer' => true )
-				);
+		if ( $is_holding ) {
+			wp_enqueue_style(
+				'ss-holding',
+				$uri . '/assets/css/holding.css',
+				array( 'ss-components' ),
+				ss_asset_version( $dir . '/assets/css/holding.css' )
+			);
+		} else {
+			wp_enqueue_style(
+				'ss-hero-block',
+				$uri . '/assets/css/hero-block.css',
+				array( 'ss-components' ),
+				ss_asset_version( $dir . '/assets/css/hero-block.css' )
+			);
+
+			$hero_pid = get_queried_object_id();
+			if ( $hero_pid ) {
+				$hero_s = ss_get_hero_settings( $hero_pid );
+				if ( $hero_s['countdown']['enabled'] && ! empty( $hero_s['countdown']['target_datetime'] ) ) {
+					wp_enqueue_script(
+						'ss-hero-countdown',
+						$uri . '/assets/js/hero-countdown.js',
+						array(),
+						ss_asset_version( $dir . '/assets/js/hero-countdown.js' ),
+						array( 'strategy' => 'defer', 'in_footer' => true )
+					);
+				}
 			}
 		}
 	}
@@ -623,6 +636,7 @@ add_action( 'plugins_loaded', 'ss_maybe_support_elementor' );
    ========================================================================== */
 
 require_once get_template_directory() . '/inc/homepage-settings.php';
+require_once get_template_directory() . '/inc/holding/signup.php';
 
 /* ==========================================================================
    8c. SPEAKERS MODULE
