@@ -559,8 +559,89 @@ function ss_render_tab_homepage() {
 		<?php wp_nonce_field( 'ss_save_homepage' ); ?>
 		<input type="hidden" name="ss_homepage_action" value="save" />
 
+		<?php /* ── Display Mode ── */ ?>
+		<h2><?php esc_html_e( 'Display Mode', 'sender-symposium' ); ?></h2>
+		<table class="form-table">
+			<tr>
+				<th><label for="ss_display_mode"><?php esc_html_e( 'Homepage shows', 'sender-symposium' ); ?></label></th>
+				<td>
+					<select id="ss_display_mode" name="hp[display_mode]">
+						<option value="holding" <?php selected( $hp['display_mode'], 'holding' ); ?>><?php esc_html_e( 'Holding page (post-event)', 'sender-symposium' ); ?></option>
+						<option value="full" <?php selected( $hp['display_mode'], 'full' ); ?>><?php esc_html_e( 'Full event homepage', 'sender-symposium' ); ?></option>
+					</select>
+					<p class="description"><?php esc_html_e( 'Switch between the post-event holding page and the full event homepage. Switching back to "Full event homepage" restores all the blocks below exactly as saved — nothing is deleted.', 'sender-symposium' ); ?></p>
+				</td>
+			</tr>
+		</table>
+
+		<hr />
+
+		<?php /* ── Holding Page ── */ ?>
+		<h2><?php esc_html_e( 'Holding Page', 'sender-symposium' ); ?></h2>
+		<p class="description"><?php esc_html_e( 'Shown when Display Mode is set to "Holding page (post-event)".', 'sender-symposium' ); ?></p>
+		<table class="form-table">
+			<tr><th><label for="ss_holding_heading"><?php esc_html_e( 'Heading', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" id="ss_holding_heading" name="hp[holding_heading]" value="<?php echo esc_attr( $hp['holding_heading'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label for="ss_holding_body"><?php esc_html_e( 'Body', 'sender-symposium' ); ?></label></th>
+				<td><textarea id="ss_holding_body" name="hp[holding_body]" class="large-text" rows="10"><?php echo esc_textarea( $hp['holding_body'] ); ?></textarea>
+					<p class="description"><?php esc_html_e( 'Separate paragraphs with a blank line.', 'sender-symposium' ); ?></p></td></tr>
+			<tr><th><label for="ss_holding_cta_text"><?php esc_html_e( 'Button Text', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" id="ss_holding_cta_text" name="hp[holding_cta_text]" value="<?php echo esc_attr( $hp['holding_cta_text'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label for="ss_holding_cta_url"><?php esc_html_e( 'Button URL', 'sender-symposium' ); ?></label></th>
+				<td><input type="url" id="ss_holding_cta_url" name="hp[holding_cta_url]" value="<?php echo esc_attr( $hp['holding_cta_url'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label for="ss_holding_event_line"><?php esc_html_e( 'Event Line', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" id="ss_holding_event_line" name="hp[holding_event_line]" value="<?php echo esc_attr( $hp['holding_event_line'] ); ?>" class="regular-text" /></td></tr>
+		</table>
+
+		<h3><?php esc_html_e( 'Email Capture Form', 'sender-symposium' ); ?></h3>
+		<table class="form-table">
+			<tr><th><?php esc_html_e( 'Enabled', 'sender-symposium' ); ?></th>
+				<td><input type="hidden" name="hp[holding_form_enabled]" value="0" /><label><input type="checkbox" name="hp[holding_form_enabled]" value="1" <?php checked( $hp['holding_form_enabled'] ); ?> /> <?php esc_html_e( 'Show the email capture form', 'sender-symposium' ); ?></label>
+					<p class="description"><?php esc_html_e( 'Untick to hide the form entirely (the rest of the holding page still shows).', 'sender-symposium' ); ?></p></td></tr>
+			<tr><th><label for="ss_holding_form_prompt"><?php esc_html_e( 'Prompt', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" id="ss_holding_form_prompt" name="hp[holding_form_prompt]" value="<?php echo esc_attr( $hp['holding_form_prompt'] ); ?>" class="large-text" /></td></tr>
+			<tr><th><label for="ss_holding_form_button"><?php esc_html_e( 'Submit Button Label', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" id="ss_holding_form_button" name="hp[holding_form_button]" value="<?php echo esc_attr( $hp['holding_form_button'] ); ?>" class="regular-text" /></td></tr>
+			<tr><th><label for="ss_holding_form_success"><?php esc_html_e( 'Success Message', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" id="ss_holding_form_success" name="hp[holding_form_success]" value="<?php echo esc_attr( $hp['holding_form_success'] ); ?>" class="large-text" /></td></tr>
+			<tr><th><label for="ss_holding_form_error"><?php esc_html_e( 'Error Message', 'sender-symposium' ); ?></label></th>
+				<td><input type="text" id="ss_holding_form_error" name="hp[holding_form_error]" value="<?php echo esc_attr( $hp['holding_form_error'] ); ?>" class="large-text" /></td></tr>
+		</table>
+
+		<?php
+		$ss_signups      = function_exists( 'ss_holding_get_signups' ) ? ss_holding_get_signups() : array();
+		$ss_signup_count = count( $ss_signups );
+		?>
+		<h3><?php esc_html_e( 'Captured Signups', 'sender-symposium' ); ?></h3>
+		<p class="description">
+			<?php
+			printf(
+				/* translators: %d: number of captured email signups. */
+				esc_html( _n( '%d email captured. Submissions are stored here and emailed to the site admin.', '%d emails captured. Submissions are stored here and emailed to the site admin.', $ss_signup_count, 'sender-symposium' ) ),
+				(int) $ss_signup_count
+			);
+			?>
+		</p>
+		<?php if ( $ss_signup_count > 0 ) : ?>
+		<table class="widefat striped" style="max-width:600px;">
+			<thead><tr><th><?php esc_html_e( 'Email', 'sender-symposium' ); ?></th><th><?php esc_html_e( 'Date', 'sender-symposium' ); ?></th></tr></thead>
+			<tbody>
+			<?php foreach ( array_slice( array_reverse( $ss_signups ), 0, 25 ) as $row ) : ?>
+				<tr><td><?php echo esc_html( $row['email'] ?? '' ); ?></td><td><?php echo esc_html( $row['time'] ?? '' ); ?></td></tr>
+			<?php endforeach; ?>
+			</tbody>
+		</table>
+			<?php if ( $ss_signup_count > 25 ) : ?>
+			<p class="description"><?php esc_html_e( 'Showing the 25 most recent.', 'sender-symposium' ); ?></p>
+			<?php endif; ?>
+		<?php endif; ?>
+
+		<hr />
+
+		<?php /* ── Full Homepage Blocks (Full mode only) ── */ ?>
+		<h2><?php esc_html_e( 'Full Homepage Blocks', 'sender-symposium' ); ?></h2>
 		<p class="description" style="margin-bottom:20px;">
-			<?php esc_html_e( 'Edit the front-page content blocks below. Disable any section to hide it. Elementor/Gutenberg content from the homepage editor appears between the event strip and the audience block.', 'sender-symposium' ); ?>
+			<?php esc_html_e( 'These blocks appear only when Display Mode is "Full event homepage". Disable any section to hide it. Elementor/Gutenberg content from the homepage editor appears between the event strip and the audience block.', 'sender-symposium' ); ?>
 		</p>
 
 		<?php /* ── Event Strip ── */ ?>

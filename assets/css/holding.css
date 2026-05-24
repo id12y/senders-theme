@@ -1,0 +1,97 @@
+/* ==========================================================================
+   HOLDING PAGE — Sender Symposium (post-event)
+   Layout only. All colour/spacing/typography comes from design tokens.
+   ========================================================================== */
+
+.ss-holding__inner {
+  max-width: 760px;
+  margin-inline: auto;
+}
+
+.ss-holding__heading {
+  text-align: center;
+  margin-bottom: var(--sp-6);
+}
+
+.ss-holding__body {
+  font-size: var(--text-body-lg);
+  line-height: var(--lh-body-lg);
+  color: var(--text-secondary);
+}
+
+.ss-holding__body p {
+  max-width: none;
+}
+
+/* --- Primary call to action --- */
+.ss-holding__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--sp-3);
+  margin-top: var(--sp-7);
+  text-align: center;
+}
+
+.ss-holding__event-line {
+  margin: 0;
+  color: var(--text-muted);
+}
+
+/* --- Notify / email-capture --- */
+.ss-holding__notify {
+  margin-top: var(--sp-8);
+  padding-top: var(--sp-7);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.ss-holding__form {
+  max-width: 480px;
+  margin-inline: auto;
+}
+
+.ss-holding__form-prompt {
+  font-size: var(--text-h4);
+  line-height: var(--lh-h4);
+  text-align: center;
+  margin-bottom: var(--sp-4);
+}
+
+.ss-holding__field {
+  margin-bottom: var(--sp-3);
+}
+
+.ss-holding__submit {
+  width: 100%;
+}
+
+/* --- Accessible status feedback --- */
+.ss-holding__status {
+  max-width: none;
+  margin: 0 0 var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border-left: 4px solid var(--border-strong);
+  border-radius: var(--radius-btn);
+  background-color: var(--surface-card);
+  font-size: var(--text-small);
+  line-height: var(--lh-small);
+}
+
+.ss-holding__status--success {
+  border-left-color: var(--status-success);
+  color: var(--status-success);
+}
+
+.ss-holding__status--error {
+  border-left-color: var(--status-error);
+  color: var(--status-error);
+}
+
+/* --- Honeypot: removed from view and the accessibility tree --- */
+.ss-holding__hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

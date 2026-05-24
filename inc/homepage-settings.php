@@ -17,6 +17,25 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function ss_homepage_defaults() {
 	return array(
+		/* ── Display Mode ──
+		 * 'full'    → render the full event homepage blocks below.
+		 * 'holding' → render the post-event holding page (parts/holding-page.php).
+		 * Defaults to 'holding'; flip to 'full' in admin to restore the event homepage.
+		 */
+		'display_mode' => 'holding',
+
+		/* ── Holding Page (post-event) ── */
+		'holding_heading'      => 'Sender Symposium',
+		'holding_body'         => "In April 2026, Sender Symposium brought CRM, lifecycle and sender leaders into one focused room in Barcelona — no theatre, no expo floor, just the people who take email seriously, talking honestly about where it's heading.\n\nIt was exactly the room we hoped it would be.\n\nWhat comes next for Sender Symposium, we'll share here when the time is right. In the meantime, the conversation doesn't stop.\n\nThis November, emailexpert Forum brings the whole of email together in London — CRM and marketing alongside deliverability, infrastructure and anti-abuse. If Sender Symposium was your kind of room, Forum is where you'll find that crowd next.",
+		'holding_cta_text'     => 'Discover Forum →',
+		'holding_cta_url'      => 'https://forum.emailexpert.org/',
+		'holding_event_line'   => 'emailexpert Forum · London · 16–17 November 2026',
+		'holding_form_enabled' => true,
+		'holding_form_prompt'  => "Want to know when Sender Symposium returns? Leave your email and we'll be in touch.",
+		'holding_form_button'  => 'Notify me',
+		'holding_form_success' => "Thank you — we'll be in touch when there's news to share.",
+		'holding_form_error'   => 'Please enter a valid email address.',
+
 		/* ── Event Info Strip ── */
 		'event_strip_enabled' => true,
 		'event_strip'         => array(
@@ -102,14 +121,31 @@ function ss_get_homepage() {
 function ss_save_homepage( $raw ) {
 	$clean = array();
 
+	/* Display mode */
+	$mode = $raw['display_mode'] ?? 'holding';
+	$clean['display_mode'] = in_array( $mode, array( 'full', 'holding' ), true ) ? $mode : 'holding';
+
 	/* Booleans (checkboxes) */
 	$toggles = array(
 		'event_strip_enabled', 'audience_enabled', 'values_enabled',
 		'format_enabled', 'credibility_enabled', 'cta_enabled',
+		'holding_form_enabled',
 	);
 	foreach ( $toggles as $key ) {
 		$clean[ $key ] = ! empty( $raw[ $key ] );
 	}
+
+	/* Holding page — scalar text fields */
+	$holding_text = array(
+		'holding_heading', 'holding_cta_text', 'holding_event_line',
+		'holding_form_prompt', 'holding_form_button',
+		'holding_form_success', 'holding_form_error',
+	);
+	foreach ( $holding_text as $key ) {
+		$clean[ $key ] = sanitize_text_field( $raw[ $key ] ?? '' );
+	}
+	$clean['holding_body']    = sanitize_textarea_field( $raw['holding_body'] ?? '' );
+	$clean['holding_cta_url'] = esc_url_raw( $raw['holding_cta_url'] ?? '' );
 
 	/* Scalar text fields */
 	$text_fields = array(

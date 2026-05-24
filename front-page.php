@@ -15,7 +15,19 @@
 
 get_header();
 
-$hp            = ss_get_homepage();
+$hp = ss_get_homepage();
+
+/* ── Holding Page mode ──
+ * When Display Mode is "holding", render the post-event holding page and
+ * stop — the event homepage blocks below are skipped (but remain saved,
+ * so flipping Display Mode back to "full" restores them unchanged).
+ */
+if ( 'holding' === ( $hp['display_mode'] ?? 'full' ) ) {
+	get_template_part( 'parts/holding-page' );
+	get_footer();
+	return;
+}
+
 $hero_settings = ss_get_hero_settings( get_the_ID() );
 $hero_position = $hero_settings['position'] ?? 'above';
 
