@@ -1,0 +1,77 @@
+<?xml version="1.0"?>
+<ruleset name="emailexpert-events">
+	<description>WordPress Coding Standards for the emailexpert Events plugin.</description>
+
+	<file>emailexpert-events.php</file>
+	<file>src</file>
+	<file>tests</file>
+
+	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>node_modules/*</exclude-pattern>
+
+	<arg value="sp"/>
+	<arg name="extensions" value="php"/>
+	<arg name="parallel" value="8"/>
+
+	<config name="minimum_wp_version" value="6.4"/>
+	<config name="testVersion" value="8.1-"/>
+
+	<rule ref="WordPress">
+		<!-- Short array syntax is used throughout; WPCS still prefers long form but modern WP core allows both. -->
+		<exclude name="Universal.Arrays.DisallowShortArraySyntax"/>
+		<!-- PSR-4 file naming (Class.php) instead of class-*.php: the plugin ships its own PSR-4 autoloader per the spec. -->
+		<exclude name="WordPress.Files.FileName"/>
+		<!--
+			The spec mandates the `eex_` prefix for options, meta, hooks and CLI,
+			but WPCS rejects prefixes under four characters outright, which also
+			voids its prefixed-name matching for hooks and constants. Namespaced
+			code is covered by the Emailexpert\Events prefix below; eex_-prefixed
+			hook and EEX_ constant discipline is enforced in review.
+		-->
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.ShortPrefixPassed"/>
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound"/>
+		<exclude name="WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound"/>
+	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="emailexpert-events"/>
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<properties>
+			<property name="prefixes" type="array">
+				<element value="Emailexpert\Events"/>
+			</property>
+		</properties>
+	</rule>
+
+	<!-- Tests run outside WordPress with local shims; relax WP-runtime sniffs there. -->
+	<rule ref="WordPress.WP.AlternativeFunctions">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Generic.Commenting">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Universal.Files.SeparateFunctionsFromOO">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="Generic.CodeAnalysis.UnusedFunctionParameter">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.PHP.DevelopmentFunctions">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.PHP.DiscouragedPHPFunctions">
+		<exclude-pattern>tests/*</exclude-pattern>
+	</rule>
+</ruleset>
