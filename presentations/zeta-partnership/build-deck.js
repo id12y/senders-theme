@@ -294,7 +294,7 @@ function bl(items, size, color, spaceAfter) {
   );
   s.addText(bl([
     "Proactive identification of opportunities aligned with Zeta priorities and ICP — emailexpert brings ideas to Zeta rather than waiting for requests",
-    "Formats include curated introductions, webinars, private sessions, roundtables, joint programme participation and relevant partner or JV opportunities",
+    "Formats include curated introductions, webinars, private sessions, roundtables, joint programme participation, relevant partner or JV opportunities and comparable meaningful ecosystem engagement",
     "Selected discretionary event access where useful and appropriate",
   ], 10.5, BODY, 7), {
     x: RX + 0.3, y: CY + 1.4, w: RW - 0.6, h: 1.82, margin: 0, valign: "top",
@@ -314,11 +314,13 @@ function bl(items, size, color, spaceAfter) {
   s.addNotes(
     "Left column is contractual — present it as what Zeta can rely on, never as goodwill. The 9 tickets carry the only " +
     "attributed value here (£3,555 at the conservative £395 benchmark); the 4 London places come out of the 9, so nothing " +
-    "is valued twice. Right column is voluntary: the 12 activations are the annual partnership baseline. London is " +
-    "expected to deliver a concentrated block of 6–9 within that baseline, while separately sponsored activations such " +
-    "as Breakfast or Gala increase the total opportunity set. Emphasise that emailexpert brings ideas proactively. No " +
-    "monetary value is placed on the 12 activations. The additional commitments are for the 2026/27 term and do not " +
-    "renew automatically — say this warmly, as a launch-year investment in making the relationship succeed."
+    "is valued twice. Right column is voluntary: the minimum 12 activations are the annual Strategic Partnership " +
+    "baseline. London is expected to provide a concentrated block of 6–9 within that baseline. Separately sponsored " +
+    "programmes can create additional inventory, experiences and/or activation capacity beyond the baseline depending " +
+    "on what is agreed. Note the annual definition is deliberately broad — a partnership activation is not necessarily " +
+    "a one-to-one introduction. Emphasise that emailexpert brings ideas proactively. No monetary value is placed on " +
+    "the 12 activations. The additional commitments are for the 2026/27 term and do not renew automatically — say " +
+    "this warmly, as a launch-year investment in making the relationship succeed."
   );
 }
 
@@ -531,7 +533,7 @@ function bl(items, size, color, spaceAfter) {
     "Photocall, badge, screen and stage recognition as provided in the agreement",
     "Prominent pre-event, onsite and post-event recognition",
     "20–30 minute programme session",
-    "6 observer passes for invited prospects, clients and partners — not additional delegate inventory",
+    "6 observer passes for invited prospects, clients and partners",
   ], 10.5, BODY, 5), {
     x: LX + 0.3, y: CY + 0.52, w: LW - 0.6, h: 2.25, margin: 0, valign: "top",
   });
@@ -563,31 +565,47 @@ function bl(items, size, color, spaceAfter) {
   card(s, RX + 0.3, CY + 1.32, RW - 0.6, 1.32, PAPER, WARM_LINE);
   s.addText([
     { text: "London activation", options: { bold: true, color: INK, fontSize: 10.5, breakLine: true, paraSpaceAfter: 3 } },
-    { text: "A facilitated introduction or curated conversation between a named Zeta representative and a named qualified attendee, agreed in advance and delivered onsite or in the run-up to the Forum.", options: { color: SLATE, fontSize: 10 } },
+    { text: "A facilitated introduction or curated conversation between a named Zeta representative and a named qualified attendee, intentionally targeted or agreed in advance and delivered onsite or in the run-up to the Forum.", options: { color: SLATE, fontSize: 10 } },
   ], {
     x: RX + 0.48, y: CY + 1.44, w: RW - 0.96, h: 1.1, margin: 0, fontFace: SANS, valign: "top", lineSpacingMultiple: 1.1,
   });
-  s.addText("A complimentary ticket being accepted does not itself count as an activation.", {
-    x: RX + 0.3, y: CY + 2.84, w: RW - 0.6, h: 0.5, margin: 0,
-    fontFace: SANS, fontSize: 11, bold: true, color: INK, valign: "middle", lineSpacingMultiple: 1.1,
-  });
-  hline(s, RX + 0.3, CY + 3.48, RW - 0.6, WARM_LINE, 1);
   s.addText(
-    "The 6–9 London activations may count toward the minimum 12 meaningful partnership activations across the membership year. Separately sponsored activations, such as Breakfast or Gala, increase the total opportunity set.",
+    "A complimentary registration or attendance alone does not count as an activation. Where that attendee is subsequently brought into a facilitated conversation with Zeta, that conversation counts as one activation.",
     {
-      x: RX + 0.3, y: CY + 3.62, w: RW - 0.6, h: 1.5, margin: 0,
+      x: RX + 0.3, y: CY + 2.78, w: RW - 0.6, h: 0.92, margin: 0,
+      fontFace: SANS, fontSize: 10.5, bold: true, color: INK, valign: "middle", lineSpacingMultiple: 1.1,
+    }
+  );
+  hline(s, RX + 0.3, CY + 3.82, RW - 0.6, WARM_LINE, 1);
+  s.addText(
+    "The 6–9 London activations may count toward the minimum 12 meaningful partnership activations across the membership year. Separately sponsored programmes, such as Breakfast or Gala, can add further inventory, experiences and activation capacity beyond that baseline.",
+    {
+      x: RX + 0.3, y: CY + 3.96, w: RW - 0.6, h: 1.25, margin: 0,
       fontFace: SANS, fontSize: 10.5, color: BODY, valign: "top", lineSpacingMultiple: 1.15,
     }
   );
 
   s.addNotes(
-    "Keep the contractual Platinum package distinct from the additional London commitment. Observer passes are for " +
-    "guests Zeta invites — prospects, clients and partners — not staff tickets, they are not additional delegate " +
-    "inventory, and no value is attributed to them. The session is flexible in format but substantive in character. " +
-    "On the right: the 6–9 facilitated London activations are a concentrated block within the annual commitment of 12 — " +
-    "if London delivers 9, at least 3 remain committed across the rest of the term. Separately sponsored activations, " +
-    "such as the Breakfast or Gala, sit above that baseline and increase the total opportunity set. An accepted " +
-    "complimentary ticket alone never counts as an activation, and no monetary value is placed on the 6–9 activations. " +
+    "Keep the contractual Platinum package distinct from the additional London commitment. Observer passes are " +
+    "contractual passes for guests Zeta invites — prospects, clients and partners — not staff tickets and not " +
+    "additional delegate inventory; deliberately no value is attributed to them and they are outside the £11,825. " +
+    "The session is flexible in format but substantive in character. On the right: the 6–9 facilitated London " +
+    "activations are a concentrated block within the annual commitment of 12 — if London delivers 9 qualifying " +
+    "activations, at least 3 further meaningful partnership activations remain across the wider term. There is no " +
+    "automatic promise of 12 + 9. The London definition is intentionally narrower than the annual partnership-activation " +
+    "definition. Separately sponsored programmes (Breakfast, Gala) can add inventory, experiences and activation " +
+    "capacity beyond the baseline depending on what is agreed — additional inventory is not automatically an activation. " +
+    "No monetary value is placed on the 6–9 activations.\n\n" +
+    "Counting principle — one substantive facilitated engagement equals one activation. We do not count research, " +
+    "invitation, registration, attendance and introduction as separate activations merely because they are separate " +
+    "steps in the same relationship journey. Examples: (A) Research a senior CRM leader, invite them, complimentary " +
+    "registration, attendee arrives, emailexpert deliberately introduces them to Lalitha for a substantive " +
+    "conversation — one complimentary delegate place AND one activation; legitimate because the two metrics measure " +
+    "different things. (B) Invite, registration and attendance but no facilitated Zeta conversation — one complimentary " +
+    "place, zero activations. (C) Research, email, follow-up, registration, attendance, introduction — one activation, " +
+    "not six. (D) The same individual later takes part in a genuinely separate, substantive engagement with a different " +
+    "purpose or context — that may be another activation where genuinely distinct; simply continuing the same " +
+    "conversation is not. Keep this human — the partnership should never feel like a points-counting exercise.\n\n" +
     "The standard delegate directory (name, job title, organisation, subject to opt-out) is separate from the sponsored " +
     "landing-page data flow."
   );
@@ -667,7 +685,7 @@ function bl(items, size, color, spaceAfter) {
   const AY = 5.34, AH = 1.06;
   s.addText([
     { text: "ADDITIONAL OPPORTUNITIES", options: { fontSize: 10.5, bold: true, charSpacing: 2, color: GOLD_TEXT } },
-    { text: "   Separate paid opportunities — not included in the £11,825 value total. Separately sponsored activations sit above the annual partnership baseline and increase the total opportunity set.", options: { fontSize: 9.5, italic: true, color: SLATE } },
+    { text: "   Separate paid opportunities — not included in the £11,825 value total. Separately sponsored opportunities sit above the annual partnership baseline and can unlock further inventory, hospitality, experiences and activation capacity according to the package agreed.", options: { fontSize: 9.5, italic: true, color: SLATE } },
   ], {
     x: MX, y: AY - 0.36, w: CONTENT_W, h: 0.3, margin: 0, fontFace: SANS, valign: "middle",
   });
@@ -675,14 +693,14 @@ function bl(items, size, color, spaceAfter) {
   card(s, MX, AY, HW1, AH, WARM_CARD, WARM_LINE);
   s.addText([
     { text: "Zeta-hosted Breakfast", options: { bold: true, color: INK, fontSize: 10.5, breakLine: true, paraSpaceAfter: 2 } },
-    { text: "Currently being scoped with Caroline. A high-quality Zeta-hosted experience rather than simply refreshments — dedicated space, catering, teas and coffees, seating and networking format, branding, and a sponsored registration route. Separate investment — options and costs to follow.", options: { color: BODY, fontSize: 9 } },
+    { text: "Currently being scoped with Caroline. A high-quality Zeta-hosted experience rather than simply refreshments — dedicated space, catering, teas and coffees, hosted networking and seating format, branding, sponsored registration, and appropriate activation opportunities where agreed. Separate investment — options and costs to follow.", options: { color: BODY, fontSize: 9 } },
   ], {
     x: MX + 0.24, y: AY + 0.1, w: HW1 - 0.48, h: AH - 0.2, margin: 0, fontFace: SANS, valign: "top", lineSpacingMultiple: 1.05,
   });
   card(s, MX + HW1 + 0.25, AY, HW2, AH, WARM_CARD, WARM_LINE);
   s.addText([
     { text: "Gala Dinner Partnership", options: { bold: true, color: INK, fontSize: 10.5, breakLine: true, paraSpaceAfter: 2 } },
-    { text: "The opportunity to sponsor and host the Gala Dinner as an additional customer and prospect hospitality experience. Separate investment — proposal and pricing to follow.", options: { color: BODY, fontSize: 9 } },
+    { text: "Sponsorship and hosting rights, customer and prospect hospitality, branding, additional dinner places and — where agreed — additional facilitated engagement. Separate investment — proposal and pricing to follow.", options: { color: BODY, fontSize: 9 } },
   ], {
     x: MX + HW1 + 0.49, y: AY + 0.1, w: HW2 - 0.48, h: AH - 0.2, margin: 0, fontFace: SANS, valign: "top", lineSpacingMultiple: 1.05,
   });
@@ -706,14 +724,18 @@ function bl(items, size, color, spaceAfter) {
     "named outreach owner), landing-page inputs before launch, and programme inputs. Then the two contractual dates: " +
     "18 September (brand assets, speaker name and title, initial session outline, company profile) and 30 October " +
     "(final session materials, pass nominations). The Breakfast (being scoped with Caroline) and the Gala Dinner are " +
-    "separate paid opportunities and sit outside the £11,825 total — as separately sponsored activations they sit " +
-    "above the annual partnership baseline and increase the total opportunity set. Introduce them as natural " +
-    "extensions, not an upsell. End on the closing statement: we are not metering goodwill; substantial bespoke " +
-    "projects get scoped separately and transparently."
+    "separate paid opportunities and sit outside the £11,825 total. Separately sponsored opportunities sit above the " +
+    "annual partnership baseline: additional investment can unlock further inventory, hospitality, experiences and/or " +
+    "activation capacity according to the package agreed. Additional inventory is not automatically an activation — " +
+    "four additional Gala places are four hospitality places, not four activations; where emailexpert then facilitates " +
+    "substantive Zeta conversations with qualifying guests as part of an agreed activation programme, those " +
+    "conversations may count. Do not promise a fixed number of incremental introductions unless separately agreed. " +
+    "Introduce these as natural extensions, not an upsell. End on the closing statement: we are not metering goodwill; " +
+    "substantial bespoke projects get scoped separately and transparently."
   );
 }
 
 // ------------------------------------------------------------------ write --
-pptx.writeFile({ fileName: "zeta-emailexpert-partnership-2026.pptx" }).then((f) => {
+pptx.writeFile({ fileName: "zeta-emailexpert-partnership-2026-final.pptx" }).then((f) => {
   console.log("Wrote", f);
 });
