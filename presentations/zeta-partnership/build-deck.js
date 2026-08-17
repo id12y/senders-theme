@@ -286,10 +286,10 @@ function bl(items, size, color, spaceAfter) {
     fontFace: SERIF, fontSize: 48, bold: true, color: GOLD_TEXT, valign: "middle",
   });
   s.addText(
-    "Minimum 12 meaningful partnership activations across the membership year — excluding the London activation.",
+    "Minimum 12 meaningful partnership activations across the membership year, with the London Forum expected to deliver a concentrated block of 6–9 within that commitment.",
     {
-      x: RX + 1.45, y: CY + 0.18, w: RW - 1.75, h: 0.95, margin: 0,
-      fontFace: SANS, fontSize: 12.5, bold: true, color: INK, valign: "middle", lineSpacingMultiple: 1.1,
+      x: RX + 1.45, y: CY + 0.16, w: RW - 1.75, h: 1.1, margin: 0,
+      fontFace: SANS, fontSize: 11.5, bold: true, color: INK, valign: "middle", lineSpacingMultiple: 1.1,
     }
   );
   s.addText(bl([
@@ -297,7 +297,7 @@ function bl(items, size, color, spaceAfter) {
     "Formats include curated introductions, webinars, private sessions, roundtables, joint programme participation and relevant partner or JV opportunities",
     "Selected discretionary event access where useful and appropriate",
   ], 10.5, BODY, 7), {
-    x: RX + 0.3, y: CY + 1.28, w: RW - 0.6, h: 1.85, margin: 0, valign: "top",
+    x: RX + 0.3, y: CY + 1.4, w: RW - 0.6, h: 1.82, margin: 0, valign: "top",
   });
 
   // definition box
@@ -314,10 +314,11 @@ function bl(items, size, color, spaceAfter) {
   s.addNotes(
     "Left column is contractual — present it as what Zeta can rely on, never as goodwill. The 9 tickets carry the only " +
     "attributed value here (£3,555 at the conservative £395 benchmark); the 4 London places come out of the 9, so nothing " +
-    "is valued twice. Right column is voluntary: a minimum of 12 meaningful partnership activations across the year, " +
-    "excluding London. Emphasise that emailexpert brings ideas proactively. No monetary value is placed on the 12 " +
-    "activations. The additional commitments are for the 2026/27 term and do not renew automatically — say this warmly, " +
-    "as a launch-year investment in making the relationship succeed."
+    "is valued twice. Right column is voluntary: the 12 activations are the annual partnership baseline. London is " +
+    "expected to deliver a concentrated block of 6–9 within that baseline, while separately sponsored activations such " +
+    "as Breakfast or Gala increase the total opportunity set. Emphasise that emailexpert brings ideas proactively. No " +
+    "monetary value is placed on the 12 activations. The additional commitments are for the 2026/27 term and do not " +
+    "renew automatically — say this warmly, as a launch-year investment in making the relationship succeed."
   );
 }
 
@@ -555,9 +556,9 @@ function bl(items, size, color, spaceAfter) {
     x: RX + 0.3, y: CY + 0.2, w: 1.35, h: 0.95, margin: 0,
     fontFace: SERIF, fontSize: 44, bold: true, color: GOLD_TEXT, valign: "middle",
   });
-  s.addText("facilitated London activations — on top of the wider 12-month partnership commitment", {
-    x: RX + 1.75, y: CY + 0.2, w: RW - 2.05, h: 0.95, margin: 0,
-    fontFace: SANS, fontSize: 12.5, bold: true, color: INK, valign: "middle", lineSpacingMultiple: 1.1,
+  s.addText("facilitated London activations — a concentrated London block within the annual partnership commitment", {
+    x: RX + 1.75, y: CY + 0.14, w: RW - 2.05, h: 1.08, margin: 0,
+    fontFace: SANS, fontSize: 11.5, bold: true, color: INK, valign: "middle", lineSpacingMultiple: 1.1,
   });
   card(s, RX + 0.3, CY + 1.32, RW - 0.6, 1.32, PAPER, WARM_LINE);
   s.addText([
@@ -572,7 +573,7 @@ function bl(items, size, color, spaceAfter) {
   });
   hline(s, RX + 0.3, CY + 3.48, RW - 0.6, WARM_LINE, 1);
   s.addText(
-    "The 6–9 London activations are additional to the minimum 12 meaningful partnership activations across the wider membership term. London does not consume the annual partnership commitment.",
+    "The 6–9 London activations may count toward the minimum 12 meaningful partnership activations across the membership year. Separately sponsored activations, such as Breakfast or Gala, increase the total opportunity set.",
     {
       x: RX + 0.3, y: CY + 3.62, w: RW - 0.6, h: 1.5, margin: 0,
       fontFace: SANS, fontSize: 10.5, color: BODY, valign: "top", lineSpacingMultiple: 1.15,
@@ -583,10 +584,12 @@ function bl(items, size, color, spaceAfter) {
     "Keep the contractual Platinum package distinct from the additional London commitment. Observer passes are for " +
     "guests Zeta invites — prospects, clients and partners — not staff tickets, they are not additional delegate " +
     "inventory, and no value is attributed to them. The session is flexible in format but substantive in character. " +
-    "On the right: 6–9 facilitated London activations sit on top of the annual 12 — London does not consume the " +
-    "partnership commitment — and an accepted complimentary ticket alone never counts as an activation. No monetary " +
-    "value is placed on the 6–9 activations. The standard delegate directory (name, job title, organisation, subject " +
-    "to opt-out) is separate from the sponsored landing-page data flow."
+    "On the right: the 6–9 facilitated London activations are a concentrated block within the annual commitment of 12 — " +
+    "if London delivers 9, at least 3 remain committed across the rest of the term. Separately sponsored activations, " +
+    "such as the Breakfast or Gala, sit above that baseline and increase the total opportunity set. An accepted " +
+    "complimentary ticket alone never counts as an activation, and no monetary value is placed on the 6–9 activations. " +
+    "The standard delegate directory (name, job title, organisation, subject to opt-out) is separate from the sponsored " +
+    "landing-page data flow."
   );
 }
 
@@ -664,7 +667,7 @@ function bl(items, size, color, spaceAfter) {
   const AY = 5.34, AH = 1.06;
   s.addText([
     { text: "ADDITIONAL OPPORTUNITIES", options: { fontSize: 10.5, bold: true, charSpacing: 2, color: GOLD_TEXT } },
-    { text: "   Separate paid opportunities — not included in the £11,825 value total.", options: { fontSize: 10, italic: true, color: SLATE } },
+    { text: "   Separate paid opportunities — not included in the £11,825 value total. Separately sponsored activations sit above the annual partnership baseline and increase the total opportunity set.", options: { fontSize: 9.5, italic: true, color: SLATE } },
   ], {
     x: MX, y: AY - 0.36, w: CONTENT_W, h: 0.3, margin: 0, fontFace: SANS, valign: "middle",
   });
@@ -703,9 +706,10 @@ function bl(items, size, color, spaceAfter) {
     "named outreach owner), landing-page inputs before launch, and programme inputs. Then the two contractual dates: " +
     "18 September (brand assets, speaker name and title, initial session outline, company profile) and 30 October " +
     "(final session materials, pass nominations). The Breakfast (being scoped with Caroline) and the Gala Dinner are " +
-    "separate paid opportunities and sit outside the £11,825 total — introduce them as natural extensions, not an " +
-    "upsell. End on the closing statement: we are not metering goodwill; substantial bespoke projects get scoped " +
-    "separately and transparently."
+    "separate paid opportunities and sit outside the £11,825 total — as separately sponsored activations they sit " +
+    "above the annual partnership baseline and increase the total opportunity set. Introduce them as natural " +
+    "extensions, not an upsell. End on the closing statement: we are not metering goodwill; substantial bespoke " +
+    "projects get scoped separately and transparently."
   );
 }
 
